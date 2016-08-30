@@ -12,10 +12,6 @@
 			<list>
                 <!--<ref bean="mobilePushMsgTrigger" />-->
                 <!--<ref bean="receiveEmailTrigger" />-->
-                <!--<ref bean="receiveSinaTrigger" />-->
-                <!--<ref bean="receiveSmsTrigger" />-->
-                <!--<ref bean="allocateTrigger" />-->
-                <ref bean="weixinRefreshTrigger" />
 			</list>
 		</property>
 		<!-- Quartz配置, 本地运行无需单独的quartz.properties文件，在此简单配置即可 -->
@@ -51,49 +47,5 @@
 		<property name="targetMethod" value="init" />
 		<property name="concurrent" value="false" />
 	</bean>
-
-    <!-- sinaWeibo-->
-    <bean id="receiveSinaTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="receiveSinaDetail" />
-        <property name="cronExpression" value="31 0/1 * * * ?" />
-    </bean>
-    <bean id="receiveSinaDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-        <property name="targetObject" ref="sinaReceiveJob" />
-        <property name="targetMethod" value="init" />
-        <property name="concurrent" value="false" />
-    </bean>
-
-    <!-- SMS-->
-    <bean id="receiveSmsTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="smsReceiveDetail" />
-        <property name="cronExpression" value="7 0/1 * * * ?" />
-    </bean>
-    <bean id="smsReceiveDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-        <property name="targetObject" ref="smsReceiveJob" />
-        <property name="targetMethod" value="init" />
-        <property name="concurrent" value="false" />
-    </bean>
-
-    <!-- Allocate-->
-    <bean id="allocateTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="allocateDetail" />
-        <property name="cronExpression" value="0/2 * * * * ?" />
-    </bean>
-    <bean id="allocateDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-        <property name="targetObject" ref="allocateJob" />
-        <property name="targetMethod" value="init" />
-        <property name="concurrent" value="false" />
-    </bean>
-
-    <!--刷新授权公众号的接口调用凭据-->
-    <bean id="weixinRefreshTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="weixinRefreshDetail" />
-        <property name="cronExpression" value="0 0 0/1 * * ?" />
-    </bean>
-    <bean id="weixinRefreshDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-        <property name="targetObject" ref="weixinRefreshJob" />
-        <property name="targetMethod" value="init" />
-        <property name="concurrent" value="false" />
-    </bean>
 
 </beans>

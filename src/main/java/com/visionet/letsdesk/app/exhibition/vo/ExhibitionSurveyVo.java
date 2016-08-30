@@ -1,23 +1,16 @@
-package com.visionet.letsdesk.app.exhibition.entity;
+package com.visionet.letsdesk.app.exhibition.vo;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.Lists;
-import com.visionet.letsdesk.app.base.entity.IdEntity;
 import com.visionet.letsdesk.app.base.entity.JsonDateSerializer;
+import com.visionet.letsdesk.app.base.vo.BaseVo;
 import com.visionet.letsdesk.app.common.cache.UserCache;
+import com.visionet.letsdesk.app.exhibition.entity.ExhibitionSurveyPublicShow;
 
-import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-/**
- * 展厅
- *
- * @author xt
- */
-@Entity
-@Table(name = "s_exhibition_survey")
-public class ExhibitionSurvey extends IdEntity{
+public class ExhibitionSurveyVo extends BaseVo{
 
     private Long brand;                             //品牌
     private Integer floor;                          //楼层
@@ -63,6 +56,9 @@ public class ExhibitionSurvey extends IdEntity{
     private Date createDate;                //创建时间
     private Date updateDate;                //修改时间
 
+    /*----------VO------------*/
+    private String queryBeginDate;
+    private String queryEndDate;
 
     public Long getBrand() {
         return brand;
@@ -88,7 +84,6 @@ public class ExhibitionSurvey extends IdEntity{
         this.floorPosition = floorPosition;
     }
 
-    @Transient
     public List<Integer> getPeripheryFacility() {
         return peripheryFacility;
     }
@@ -105,9 +100,6 @@ public class ExhibitionSurvey extends IdEntity{
         this.exhibitionArea = exhibitionArea;
     }
 
-    @OneToMany(cascade= CascadeType.ALL,fetch= FetchType.EAGER)
-    @JoinColumn(name = "surveyId")
-    @OrderBy("id")
     public List<ExhibitionSurveyPublicShow> getPublicShowList() {
         return publicShowList;
     }
@@ -116,7 +108,6 @@ public class ExhibitionSurvey extends IdEntity{
         this.publicShowList = publicShowList;
     }
 
-    @Transient
     public List<Integer> getPublicAdType() {
         return publicAdType;
     }
@@ -125,7 +116,6 @@ public class ExhibitionSurvey extends IdEntity{
         this.publicAdType = publicAdType;
     }
 
-    @Transient
     public List<Integer> getBrandSponsorType() {
         return brandSponsorType;
     }
@@ -134,7 +124,6 @@ public class ExhibitionSurvey extends IdEntity{
         this.brandSponsorType = brandSponsorType;
     }
 
-    @Transient
     public List<Integer> getHygiene() {
         return hygiene;
     }
@@ -167,7 +156,6 @@ public class ExhibitionSurvey extends IdEntity{
         this.smell = smell;
     }
 
-    @Transient
     public List<Integer> getWorkbenchHygiene() {
         return workbenchHygiene;
     }
@@ -184,7 +172,6 @@ public class ExhibitionSurvey extends IdEntity{
         this.workbenchImage = workbenchImage;
     }
 
-    @Transient
     public List<Integer> getDiscussionAreas() {
         return discussionAreas;
     }
@@ -193,7 +180,6 @@ public class ExhibitionSurvey extends IdEntity{
         this.discussionAreas = discussionAreas;
     }
 
-    @Transient
     public List<Integer> getBackgroundWallHygiene() {
         return backgroundWallHygiene;
     }
@@ -202,7 +188,6 @@ public class ExhibitionSurvey extends IdEntity{
         this.backgroundWallHygiene = backgroundWallHygiene;
     }
 
-    @Transient
     public List<Integer> getDesignAreaHygiene() {
         return designAreaHygiene;
     }
@@ -219,7 +204,6 @@ public class ExhibitionSurvey extends IdEntity{
         this.designAreaImage = designAreaImage;
     }
 
-    @Transient
     public List<Integer> getBrandImagePlace() {
         return brandImagePlace;
     }
@@ -228,7 +212,6 @@ public class ExhibitionSurvey extends IdEntity{
         this.brandImagePlace = brandImagePlace;
     }
 
-    @Transient
     public List<Integer> getSalesPromotionMaterials() {
         return salesPromotionMaterials;
     }
@@ -253,7 +236,6 @@ public class ExhibitionSurvey extends IdEntity{
         this.designer = designer;
     }
 
-    @Transient
     public List<Integer> getShopEmployeesImage() {
         return shopEmployeesImage;
     }
@@ -286,7 +268,6 @@ public class ExhibitionSurvey extends IdEntity{
         this.smileHello = smileHello;
     }
 
-    @Transient
     public List<Integer> getViolations() {
         return violations;
     }
@@ -335,7 +316,6 @@ public class ExhibitionSurvey extends IdEntity{
         this.guestInOut = guestInOut;
     }
 
-    @Transient
     public List<Integer> getGuestSnack() {
         return guestSnack;
     }
@@ -344,7 +324,6 @@ public class ExhibitionSurvey extends IdEntity{
         this.guestSnack = guestSnack;
     }
 
-    @Transient
     public List<Integer> getGuestDrink() {
         return guestDrink;
     }
@@ -353,7 +332,6 @@ public class ExhibitionSurvey extends IdEntity{
         this.guestDrink = guestDrink;
     }
 
-    @Transient
     public List<Integer> getPromotionType() {
         return promotionType;
     }
@@ -362,7 +340,6 @@ public class ExhibitionSurvey extends IdEntity{
         this.promotionType = promotionType;
     }
 
-    @Transient
     public List<Integer> getPromotionStyle() {
         return promotionStyle;
     }
@@ -412,6 +389,7 @@ public class ExhibitionSurvey extends IdEntity{
         this.createDate = createDate;
     }
 
+    @JsonSerialize(using = JsonDateSerializer.class)
     public Date getUpdateDate() {
         return updateDate;
     }
@@ -420,7 +398,22 @@ public class ExhibitionSurvey extends IdEntity{
         this.updateDate = updateDate;
     }
 
-    @Transient
+    public String getQueryBeginDate() {
+        return queryBeginDate;
+    }
+
+    public void setQueryBeginDate(String queryBeginDate) {
+        this.queryBeginDate = queryBeginDate;
+    }
+
+    public String getQueryEndDate() {
+        return queryEndDate;
+    }
+
+    public void setQueryEndDate(String queryEndDate) {
+        this.queryEndDate = queryEndDate;
+    }
+
     public String getCreateByName() {
         return UserCache.getUserName(this.createBy);
     }

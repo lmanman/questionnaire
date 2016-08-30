@@ -11,5 +11,6 @@ public interface ExhibitionSurveyFieldDao extends CrudRepository<ExhibitionSurve
     List<ExhibitionSurveyField> findByTableName(String tableName);
 
     @Query("select f.fieldName from ExhibitionSurveyField f where f.fieldFormat = ?1 and f.tableName = ?2")
-    List<String> findByFieldFormatAndTableName(String fieldFormat,String tableName);
+    List<String> findFieldNameByFieldFormatAndTableName(String fieldFormat,String tableName);
+
 }

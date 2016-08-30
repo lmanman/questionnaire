@@ -31,10 +31,10 @@ public class ExhibitionInfoController extends BaseController{
      *
      * @apiParam {String} name 展厅名称(模糊查询)
      * @apiParam {String} address 展厅地址
-     * @apiSuccess {Dealer} dealer 经销商
-     * @apiSuccess {BrandVo} dealer 品牌
-     * @apiSuccess {Market} dealer 商场
-     * @apiSuccess {City} dealer 城市
+     * @apiParam {Dealer} dealer 经销商
+     * @apiParam {BrandVo} dealer 品牌
+     * @apiParam {Market} dealer 商场
+     * @apiParam {City} dealer 城市
      *
      * @apiParamExample {json} 输入:
      *   {
@@ -291,8 +291,8 @@ public class ExhibitionInfoController extends BaseController{
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<?> save(@RequestBody Exhibition brand) throws Exception{
-        exhibitionInfoService.save(brand);
+    public ResponseEntity<?> save(@RequestBody Exhibition exhibition) throws Exception{
+        exhibitionInfoService.save(exhibition);
         return new ResponseEntity<Map<String,String>>(GetSuccMap() , HttpStatus.OK);
     }
 
