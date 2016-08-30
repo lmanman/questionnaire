@@ -1,0 +1,168 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0，user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="description" content="{{projectName}}"/>
+    <link href="../image/snapshot.min.css" rel="stylesheet">
+
+    <style>
+        img{width:100%;margin:5px 0px;}
+        body{margin:5px 10px;;}
+        .info{color:#aaaaaa;font-weight:bold;font-size:13px;}
+        .title{font-size:22px;font-weight:bold;margin-top:30px;margin-bottom:10px;}
+        .content{margin:10px 0px;font-size:17px;line-height:25px;font-family:"黑体";}
+        .logo {
+            padding:14.5px 12px;
+            border-style:solid;
+            border-color:#cccccc;
+            border-width:1px;
+            background-color:#ffffff;
+            font-size:20px;
+            line-height: 35px;
+        }
+        .logo a{text-decoration:none;}
+        .logo img{
+            margin:0px;
+            padding:0px;
+            width:auto;
+            max-height:35px;
+            vertical-align:middle;
+        }
+        .logo .app{
+            margin-left:20px;
+        }
+        .download-panel{
+            position: fixed;
+            bottom: 0px;
+            height: 60px;
+            margin: 0px 10px 0px 0px;
+            padding: 15px 10px 40px 10px;
+            background-color: rgb(255, 200, 200);
+            white-space: normal;
+            white-wrap: break-word;
+            word-break: break-all;
+        }
+    </style>
+
+    <title>{{projectName}}</title>
+</head>
+<body>
+
+<input type="hidden" id="createBy" value="{{createBy}}">
+<input type="hidden" id="targetId" value="{{id}}">
+<input type="hidden" id="iosUrl" value="{{iosUrl}}">
+<input type="hidden" id="androidUrl" value="{{androidUrl}}">
+<input type="hidden" id="iosPlist" value="{{iosPlist}}">
+
+<div class="title">{{title }}</div>
+<div class="info">
+    <span>{{createDate}}</span>
+    作者:{{createName }}
+</div>
+<div class="content">{{{content}}}</div>
+
+<div class="logo">
+    <a href="{{domain}}">
+        <img src="logo_1.png">
+        {{projectName}}
+    </a>
+    <a id="ios-link"><img class="app" src="../image/apple_icon_snapshot.png" alt="App Store" title="App Store"></a>
+    <a id="android-link"><img class="app" src="../image/android_icon_snapshot.png" alt="APK" title="APK"></a>
+</div>
+
+<script type="text/javascript" src="../image/jquery.min.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript">
+    (function(window,document){
+        loadXMLDoc();
+
+        wx.ready(function(){
+            wx.onMenuShareAppMessage({
+                title: "{{title}}",
+                desc: "{{contentText}}",
+                imgUrl: "{{imgUrl}}"
+            });
+        });
+
+
+        function loadXMLDoc(){
+            var xmlhttp = new XMLHttpRequest();
+
+            xmlhttp.onreadystatechange=function(){
+                if (xmlhttp.readyState==4 && xmlhttp.status==200){
+                    var config = JSON.parse(xmlhttp.responseText);
+                    wx.config(config);
+                }
+            }
+            xmlhttp.open("GET","{{domain}}weixin/config",true);
+
+            xmlhttp.send();
+        }
+
+    })(window,document);
+
+
+    $(document).ready(function(){
+        var iosUrl = $('#iosUrl').val();
+        var androidUrl = $('#androidUr').val();
+        var preLink = window.location.href + '?pre';
+        var createrId = $('#createBy').val();
+        var blogId = $('#targetId').val();
+        var iosDownload = !!(localStorage && (localStorage.getItem('iosDownload') == '1'));
+        var androidDownload = !!(localStorage && (localStorage.getItem('androidDownload') == '1'));
+
+        if(navigator.userAgent.toLowerCase().match(/(iphone|ipad)/)){
+            iosUrl = $('#iosPlist').val();
+        }
+
+        var iosLinkEle = $('#ios-link');
+        var androidLinkEle = $('#android-link');
+
+        if(window.location.href.indexOf('?pre') != -1){
+            iosLinkEle.attr('href',iosUrl);
+            androidLinkEle.attr('href',androidUrl);
+
+            iosLinkEle.on('click',function(){
+                if(!iosDownload){
+                    appStatFn('IOS');
+                    iosDownload = true;
+                    localStorage && localStorage.setItem('iosDownload','1');
+                }
+            });
+            androidLinkEle.on('click',function(){
+                if(!androidDownload){
+                    appStatFn('Android');
+                    androidDownload = true;
+                    localStorage && localStorage.setItem('androidDownload','1');
+                }
+            });
+        }else{
+            iosLinkEle.on('click',showPanel);
+            androidLinkEle.on('click',showPanel);
+        }
+
+        function appStatFn(platform){
+            $.ajax({
+                url: 'stat/down/'+ createrId +'/'+ blogId +'/' + platform,
+                type: 'get',
+                dataType: 'json',
+                success: function(result){
+                    //alert(result);
+                }
+            });
+        }
+
+        function showPanel(content){
+            var content = '请复制该链接： <span style="text-decoration:underline">'+ preLink +'</span> 到手机浏览器地址栏中进行下载';
+            var panel = $('<div class="download-panel">');
+
+            panel.html('<p style="margin:0px;padding:0px;">' + content + '</p>');
+            $(document.body).append(panel);
+        }
+    });
+</script>
+
+</body>
+</html>

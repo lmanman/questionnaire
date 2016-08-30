@@ -1,0 +1,14 @@
+{
+  "name": "apidoc-questionnaire",
+  "version": "2.0.0",
+  "description": "apiDoc questionnaire project",
+  "title": "questionnaire REST API",
+  "url" : "",
+  "order": [
+      "Define"
+  ],
+  "template": {
+  	"withCompare": true,
+  	"withGenerator": true
+  }
+}

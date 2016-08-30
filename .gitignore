@@ -1,12 +1,26 @@
+﻿# 可以被 git 忽略的文件列表
+*.iml
+*.tmp
 *.class
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+.classpath
+.project
+.settings
+.tomcatplugin
 
-# Package Files #
-*.jar
-*.war
-*.ear
+.idea/
+.externalToolBuilders/
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+src/main/webapp/META-INF/MANIFEST.MF
+src/main/resources/application-local.properties
+
+_out/
+_tmp/
+logs/
+work/
+build/
+wardir/
+target/
+classes/
+downloadFile/
+uploadFile/
