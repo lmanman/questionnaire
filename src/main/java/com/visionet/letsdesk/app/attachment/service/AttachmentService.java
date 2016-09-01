@@ -15,10 +15,10 @@ import com.visionet.letsdesk.app.common.file.FileUtil;
 import com.visionet.letsdesk.app.common.modules.ImageUtil;
 import com.visionet.letsdesk.app.common.modules.props.PropsKeys;
 import com.visionet.letsdesk.app.common.modules.props.PropsUtil;
+import com.visionet.letsdesk.app.common.modules.string.StringPool;
 import com.visionet.letsdesk.app.common.modules.time.DateUtil;
 import com.visionet.letsdesk.app.common.modules.validate.Validator;
 import com.visionet.letsdesk.app.common.utils.UploadUtil;
-import com.visionet.letsdesk.app.foundation.service.FileUploadService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,17 +43,28 @@ public class AttachmentService extends BaseService{
     private VideoDao videoDao;
 
 
-    public List<Map<String,Object>> upload(Map<String, MultipartFile> fileMap,Long refId,Map<String,String> fieldMap) throws Exception{
+    /**
+     * 附件上传及数据保存
+     * @param fileMap
+     * @param refId
+     * @return
+     * @throws Exception
+     */
+    public List<Map<String,Object>> upload(Map<String, MultipartFile> fileMap,Long refId) throws Exception{
         List<Map<String, Object>> resultList = Lists.newArrayList();
         for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
 //            String[] filePath = FileUploadService.Upload();
+            String fieldName = entity.getKey();
+            if(fieldName.contains(StringPool.UNDERLINE)){
+                fieldName = fieldName.substring(0,fieldName.indexOf(StringPool.UNDERLINE));
+            }
             MultipartFile file = entity.getValue();
+            System.out.println(fieldName+"-------------"+file.getOriginalFilename());
             String fileName = URLDecoder.decode(file.getOriginalFilename(), "UTF-8");
             String[] filePath = UploadUtil.GetCreatePathWithSuffix(fileName, null);
             File file1 = new File(filePath[0]);
             file.transferTo(file1);
-            String refType = fieldMap.get(filePath[5]);
-            if(Validator.isNull(refType)){
+            if(Validator.isNull(fieldName)){
                 Map<String,Object> map = Maps.newHashMap();
                 map.put(MobileKey.CODE, BusinessStatus.REQUIRE);
                 map.put(MobileKey.MSG, "fieldMap.key not exist:"+filePath[5]);
@@ -61,13 +72,13 @@ public class AttachmentService extends BaseService{
                 continue;
             }
 
-            if(filePath[0].equals(UploadUtil.PHOTO)) {
+            if(filePath[3].equals(UploadUtil.PHOTO)) {
                 Photo photo = new Photo();
                 photo.setFileType(filePath[4]);
-                photo.setFileUrl(PropsUtil.getProperty(PropsKeys.UPLOAD_FILE_DOWNLOAD_PATH + filePath[1]));
+                photo.setFileUrl( filePath[1]);
                 photo.setRealName(filePath[5]);
                 photo.setRefId(refId);
-                photo.setRefType(refType);
+                photo.setRefType(fieldName);
                 photo.setSize(file.getSize());
 
                 try{
@@ -83,45 +94,43 @@ public class AttachmentService extends BaseService{
                 Map<String,Object> map = Maps.newHashMap();
                 map.put(MobileKey.CODE, BusinessStatus.OK);
                 map.put("url", photo.getFileUrl());
-                map.put("type", filePath[3]);
+                map.put("type",photo.getDownloadFileUri());
                 map.put("id",id);
                 resultList.add(map);
 
-            }else if(filePath[0].equals(UploadUtil.VIDEO)){
+            }else if(filePath[3].equals(UploadUtil.VIDEO)){
                 Video video = new Video();
                 video.setFileType(filePath[4]);
-                video.setFileUrl(PropsUtil.getProperty(PropsKeys.UPLOAD_FILE_DOWNLOAD_PATH + filePath[1]));
+                video.setFileUrl( filePath[1]);
                 video.setRealName(filePath[5]);
                 video.setRefId(refId);
-                video.setRefType(refType);
+                video.setRefType(fieldName);
                 video.setSize(file.getSize());
                 Long id = this.save(video);
 
                 Map<String,Object> map = Maps.newHashMap();
                 map.put(MobileKey.CODE, BusinessStatus.OK);
                 map.put("url", video.getFileUrl());
-                map.put("type", filePath[3]);
+                map.put("type", video.getDownloadFileUri());
                 map.put("id",id);
                 resultList.add(map);
-            }else if(filePath[0].equals(UploadUtil.AUDIO)){
+            }else if(filePath[3].equals(UploadUtil.AUDIO)){
                 Audio audio = new Audio();
                 audio.setFileType(filePath[4]);
-                audio.setFileUrl(PropsUtil.getProperty(PropsKeys.UPLOAD_FILE_DOWNLOAD_PATH + filePath[1]));
+                audio.setFileUrl( filePath[1]);
                 audio.setRealName(filePath[5]);
                 audio.setRefId(refId);
-                audio.setRefType(refType);
+                audio.setRefType(fieldName);
                 audio.setSize(file.getSize());
                 Long id = this.save(audio);
 
                 Map<String,Object> map = Maps.newHashMap();
                 map.put(MobileKey.CODE, BusinessStatus.OK);
-                map.put("url", audio.getFileUrl());
+                map.put("url", audio.getDownloadFileUri());
                 map.put("type", filePath[3]);
                 map.put("id",id);
                 resultList.add(map);
             }
-
-
         }
 
         return resultList;

@@ -33,10 +33,10 @@
 	</mvc:annotation-driven>
 	
 	<mvc:interceptors>
-		<mvc:interceptor>
-	        <mvc:mapping path="/**" />
-	        <bean class="com.visionet.letsdesk.app.interceptor.UserLogInterceptor"></bean>
-	    </mvc:interceptor>
+		<!--<mvc:interceptor>-->
+	        <!--<mvc:mapping path="/**" />-->
+	        <!--<bean class="com.visionet.letsdesk.app.interceptor.UserLogInterceptor"></bean>-->
+	    <!--</mvc:interceptor>-->
 		<mvc:interceptor>
 	        <mvc:mapping path="/mobile/**" />
 	        <bean class="com.visionet.letsdesk.app.interceptor.MobileInterceptor"></bean>

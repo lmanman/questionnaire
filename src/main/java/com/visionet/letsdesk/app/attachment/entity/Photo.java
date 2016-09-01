@@ -1,9 +1,12 @@
 package com.visionet.letsdesk.app.attachment.entity;
 
 import com.visionet.letsdesk.app.base.entity.IdEntity;
+import com.visionet.letsdesk.app.common.modules.props.PropsKeys;
+import com.visionet.letsdesk.app.common.modules.props.PropsUtil;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.Date;
 
 /**
@@ -113,5 +116,14 @@ public class Photo extends IdEntity{
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    @Transient
+    public String getDownloadFileUri() {
+        if(fileUrl==null){
+            return null;
+        }else {
+            return PropsUtil.getProperty(PropsKeys.UPLOAD_FILE_DOWNLOAD_PATH) + fileUrl;
+        }
     }
 }
