@@ -1,0 +1,199 @@
+<!-- first -->
+<ul class="nav">
+    <!--Navigation-->
+    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+        <span translate="aside.nav.HEADER">Navigation</span>
+    </li>
+    <li>
+        <a ui-sref="app.dashboard">
+            <i class="fa fa-dashboard icon text-info-lter"></i>
+            <span class="font-bold" translate="aside.nav.DASHBOARD">Dashboard</span>
+        </a>
+    </li>
+    <li class="line dk"></li>
+
+  <!--Exhibition-->
+  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+    <span translate="aside.nav.exhibition.EXHIBITION">Exhibition</span>
+  </li>
+  <!--<li >-->
+      <!--<a ui-sref="app.exhibition.surveyInput({id:0})">-->
+          <!--<i class="glyphicon glyphicon-edit icon"></i>-->
+          <!--<span class="font-bold" translate="aside.nav.exhibition.EXHIBITION_SURVEY_INPUT">ExhibitionSurveyInput</span>-->
+      <!--</a>-->
+  <!--</li>-->
+
+  <li >
+    <a ui-sref="app.exhibition.surveyList">
+          <i class="glyphicon glyphicon-list icon"></i>
+          <b class="label bg-primary pull-right">2</b>
+          <span class="font-bold" translate="aside.nav.exhibition.EXHIBITION_SURVEY_LIST">ExhibitionSurveyList</span>
+    </a>
+  </li>
+    <li >
+        <a ui-sref="app.chart">
+            <i class="glyphicon glyphicon-stats icon"></i>
+            <span class="font-bold" translate="aside.nav.exhibition.EXHIBITION_REPORT">ExhibitionSurveyReport</span>
+        </a>
+    </li>
+  <li class="line dk"></li>
+
+  <!--Mall-->
+  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+    <span translate="aside.nav.mall.MALL">Mall</span>
+  </li>
+
+    <!--<li >-->
+        <!--<a ui-sref="access.404">-->
+            <!--<i class="fa fa-edit icon"></i>-->
+            <!--<span class="font-bold text-dark-lter" translate="aside.nav.mall.MALL_SURVEY_INPUT">MallSurveyInput</span>-->
+        <!--</a>-->
+    <!--</li>-->
+    <li >
+        <a ui-sref="access.404">
+            <i class="icon icon-list icon"></i>
+            <span class="font-bold text-dark-lter" translate="aside.nav.mall.MALL_SURVEY_INPUT">MallSurveyList</span>
+        </a>
+    </li>
+    <li >
+        <a ui-sref="access.404">
+            <i class="icon icon-bar-chart icon"></i>
+            <span class="font-bold text-dark-lter" translate="aside.nav.mall.MALL_REPORT">MallSurveyReport</span>
+        </a>
+    </li>
+  <li class="line dk"></li>
+
+    <!--Statistics-->
+    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+        <span translate="aside.nav.report.REPORT">Statistics</span>
+    </li>
+
+    <li >
+        <a ui-sref="app.ui.jvectormap">
+            <i class="icon icon-map icon"></i>
+            <span class="font-bold" translate="aside.nav.report.STATS_MAP">StatsMap</span>
+        </a>
+    </li>
+    <li class="line dk"></li>
+
+
+    <!--Console-->
+    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+        <span translate="aside.nav.console.CONSOLE">Console</span>
+    </li>
+
+    <li ng-class="{active:$state.includes('app.console.user')}">
+        <a href class="auto">
+            <span class="pull-right text-muted">
+              <i class="fa fa-fw fa-angle-right text"></i>
+              <i class="fa fa-fw fa-angle-down text-active"></i>
+            </span>
+            <i class="icon icon-users icon"></i>
+            <span translate="aside.nav.console.user_info.USER_INFO">UserInfo</span>
+        </a>
+        <ul class="nav nav-sub dk">
+            <li ui-sref-active="active">
+                <a ui-sref="app.console.userList">
+                    <span class="font-bold" translate="aside.nav.console.user_info.USER">User</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.console.roleList">
+                    <span class="font-bold" translate="aside.nav.console.user_info.ROLE">Role</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.console.permissionTree">
+                    <span class="font-bold" translate="aside.nav.console.user_info.PERMISSION">Permission</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+
+
+    <li ng-class="{active:$state.includes('app.console.foundation')}">
+        <a href class="auto">
+            <span class="pull-right text-muted">
+              <i class="fa fa-fw fa-angle-right text"></i>
+              <i class="fa fa-fw fa-angle-down text-active"></i>
+            </span>
+            <i class="icon icon-puzzle icon"></i>
+            <span translate="aside.nav.console.foundation.FOUNDATION">FoundationInfo</span>
+        </a>
+        <ul class="nav nav-sub dk">
+            <li ui-sref-active="active">
+                <a ui-sref="app.console.brandList">
+                    <span class="font-bold" translate="aside.nav.console.foundation.BRAND">Brand</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.console.categoryList">
+                    <span class="font-bold" translate="aside.nav.console.foundation.CATEGORY">Category</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.console.manufacturerList">
+                    <span class="font-bold" translate="aside.nav.console.foundation.MANUFACTURER">Manufacturer</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li ng-class="{active:$state.includes('app.console.customer')}">
+        <a href class="auto">
+            <span class="pull-right text-muted">
+              <i class="fa fa-fw fa-angle-right text"></i>
+              <i class="fa fa-fw fa-angle-down text-active"></i>
+            </span>
+            <i class="icon icon-star icon"></i>
+            <span translate="aside.nav.console.customer.CUSTOMER">CustomerInfo</span>
+        </a>
+        <ul class="nav nav-sub dk">
+            <li ui-sref-active="active">
+                <a ui-sref="app.console.exhibitionList">
+                    <span class="font-bold" translate="aside.nav.console.customer.EXHIBITION">ExhibitionInfo</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.console.mallList">
+                    <span class="font-bold text-dark-lter" translate="aside.nav.console.customer.MALL">Mall</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.console.dealerList">
+                    <span class="font-bold" translate="aside.nav.console.customer.DEALER_LIST">DealerList</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li ng-class="{active:$state.includes('app.console.survey')}">
+        <a href class="auto">
+            <span class="pull-right text-muted">
+              <i class="fa fa-fw fa-angle-right text"></i>
+              <i class="fa fa-fw fa-angle-down text-active"></i>
+            </span>
+            <i class="fa fa-list-alt icon"></i>
+            <span translate="aside.nav.console.survey.SURVEY">SurveyType</span>
+        </a>
+        <ul class="nav nav-sub dk">
+            <li ui-sref-active="active">
+                <a ui-sref="app.console.exhibitionSurveyTypeList">
+                    <span class="font-bold" translate="aside.nav.console.survey.EXHIBITION_SURVEY_LIST">ExhibitionSurveyList</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.console.mallSurveyTypeList">
+                    <span class="font-bold text-dark-lter" translate="aside.nav.console.survey.MALL_SURVEY_LIST">MallSurveyList</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.console.publicShowList">
+                    <span class="font-bold" translate="aside.nav.console.survey.PUBLIC_SHOW">PublicShow</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    <li class="line dk hidden-folded"></li>
+
+</ul>
+<!-- / third -->

@@ -57,7 +57,6 @@ public class User extends IdEntity {
 	private Set<Role> roleSet = Sets.newHashSet();
 
 	@Transient
-    @JsonIgnore
 	public String getPlainPassword() {
 		return plainPassword;
 	}
@@ -193,7 +192,7 @@ public class User extends IdEntity {
 	@OrderBy("id ASC")
 	// 缓存策略
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-	@JsonIgnore
+//	@JsonIgnore
 	public Set<Role> getRoleSet() {
 		return roleSet;
 	}

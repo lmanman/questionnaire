@@ -27,7 +27,7 @@ public class AttachementController extends BaseController {
 
     /**
      * @apiDescription 问卷附件上传
-     * @api {post} /mobile/attachment/upload/:refId /mobile/attachment/upload/:refId
+     * @api {post} /common/attachment/upload/:refId /common/attachment/upload/:refId
      * @apiVersion 2.0.0
      * @apiName upload
      * @apiGroup Common

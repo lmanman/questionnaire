@@ -8,9 +8,10 @@ import java.util.List;
 
 public interface ExhibitionSurveyFieldDao extends CrudRepository<ExhibitionSurveyField, Long> {
 
-    List<ExhibitionSurveyField> findByTableName(String tableName);
+    @Query("select f from ExhibitionSurveyField f where f.formId = ?1 and f.delFlag = 0 order by f.orderId")
+    List<ExhibitionSurveyField> findByFormId(Long formId);
 
-    @Query("select f.fieldName from ExhibitionSurveyField f where f.fieldFormat = ?1 and f.tableName = ?2")
-    List<String> findFieldNameByFieldFormatAndTableName(String fieldFormat,String tableName);
+    @Query("select f.fieldName from ExhibitionSurveyField f where f.fieldFormat = ?1 ")
+    List<String> findFieldNameByFieldFormat(String fieldFormat);
 
 }

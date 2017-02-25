@@ -1,0 +1,109 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">用户详情</h1>
+</div>
+<div class="wrapper-md" ng-controller="UserCtrl"  ng-init="init()">
+    <div class="row">
+        <div class="col-sm-6" >
+            <ng-form name="infoForm" class="form-validation" >
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        基本信息
+                    </div>
+                    <div class="list-group bg-white">
+                        <li class="list-group-item">
+                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-star"></i></span>
+                            <div class="media-body">
+                                <input type="text" name="loginName" ng-model="userInfo.loginName" class="input-sm form-control" placeholder="登录账号('a-zA-Z0-9', 长度3-20)" ng-pattern="/^[a-zA-Z0-9]{3,20}$/" required>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-user"></i></span>
+                            <div class="media-body">
+                                <input type="text" name="aliasName" ng-model="userInfo.aliasName" class="input-sm form-control" placeholder="用户名" required>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item" ng-show="uid == 0">
+                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-lock"></i></span>
+                            <div class="media-body">
+                                <input type="password" class="form-control" name="password2" ng-model="password2" placeholder="登录密码" required >
+                            </div>
+                        </li>
+                        <li class="list-group-item" ng-show="uid == 0">
+                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-lock"></i></span>
+                            <div class="media-body">
+                                <input type="password" class="form-control" name="confirm_password2" required ng-model="confirm_password2" ui-validate=" '$value==password2' " ui-validate-watch=" 'password2' " placeholder="密码确认">
+                                <span ng-show='infoForm.confirm_password2.$error.validator'>密码不匹配!</span>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-mobile-phone"></i></span>
+                            <div class="media-body">
+                                <input type="text" ng-model="userInfo.phoneNumber" class="input-sm form-control" placeholder="手机" ng-pattern="/^1[34578]\d{9}$/" >
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-envelope"></i></span>
+                            <div class="media-body">
+                                <input type="email" ng-model="userInfo.email" class="input-sm form-control" placeholder="邮箱" >
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-key"></i></span>
+                            <div class="row">
+                                <div class="col-md-4" ng-repeat="role in userInfo.roleList">
+                                    <label class="i-checks" >
+                                        <input type="checkbox" value="{{role.id}}" ng-checked="role.hasRole" ng-model="roles[$index]" ng-true-value="{{role.id}}" ng-false-value="false">
+                                        <i></i> {{role.roleDesc}}
+                                    </label>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-pencil-square-o"></i></span>
+                            <div class="media-body">
+                                <input type="text" ng-model="userInfo.remark" class="input-sm form-control" placeholder="备注">
+                            </div>
+                        </li>
+                    </div>
+                    <footer class="panel-footer text-left bg-light lter">
+                        <span class="pull-left thumb-sm">&nbsp;</span>
+                        <button type="button" class="btn btn-sm btn-primary" ng-disabled="infoForm.$invalid" ng-click="saveInfo()">保存</button>
+                    </footer>
+                </div>
+            </ng-form>
+        </div>
+
+        <div class="col-sm-6" ng-show="uid>0">
+            <ng-form name="pwdForm" class="form-validation" >
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        密码修改
+                    </div>
+                    <div class="list-group bg-white">
+                        <li class="list-group-item">
+                            <strong>登录密码：</strong>
+                            <div class="media-body">
+                                <input type="password" class="form-control" name="password" ng-model="password" required >
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>密码确认：</strong>
+                            <div class="media-body">
+                                <input type="password" class="form-control" name="confirm_password" required ng-model="confirm_password" ui-validate=" '$value==password' " ui-validate-watch=" 'password' ">
+                                <span ng-show='pwdForm.confirm_password.$error.validator'>密码不匹配!</span>
+                            </div>
+                        </li>
+                    </div>
+                    <footer class="panel-footer text-left bg-light lter">
+                        <span class="pull-left thumb-sm">&nbsp;</span>
+                        <button type="button" class="btn btn-sm btn-primary" ng-disabled="pwdForm.$invalid" ng-click="savePwd()">保存</button>
+                    </footer>
+                </div>
+            </ng-form>
+        </div>
+    </div>
+
+
+</div>

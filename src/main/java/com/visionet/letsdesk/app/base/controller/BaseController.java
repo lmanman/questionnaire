@@ -100,9 +100,9 @@ public class BaseController {
 	public static String getCurrentUserName() {
 		ShiroUser user = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
 		if(user==null) return null;
-		if(isAgency()){
-			return user.secName;
-		}
+//		if(isAgency()){
+//			return user.secName;
+//		}
 		return user.aliasName;
 	}
 

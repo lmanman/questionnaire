@@ -1,9 +1,12 @@
 package com.visionet.letsdesk.app.user.service;
 
+import com.google.common.collect.Lists;
 import com.visionet.letsdesk.app.base.service.BaseService;
 import com.visionet.letsdesk.app.common.constant.BusinessStatus;
+import com.visionet.letsdesk.app.common.constant.SysConstants;
 import com.visionet.letsdesk.app.common.modules.persistence.DynamicSpecifications;
 import com.visionet.letsdesk.app.common.modules.persistence.SearchFilter;
+import com.visionet.letsdesk.app.common.utils.BeanConvertMap;
 import com.visionet.letsdesk.app.common.utils.PageInfo;
 import com.visionet.letsdesk.app.common.utils.SearchFilterUtil;
 import com.visionet.letsdesk.app.user.entity.Resource;
@@ -19,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class RoleService extends BaseService {
@@ -44,6 +48,9 @@ public class RoleService extends BaseService {
     }
 
 
+    public List<Role> allRoles(){
+        return roleDao.findCommonRole();
+    }
 
     public Page<Role> searchRoles(RoleVo vo) throws Exception{
         Map<String, Object> searchParams = SearchFilterUtil.convertBean(vo);
@@ -84,6 +91,16 @@ public class RoleService extends BaseService {
 		return resourceDao.findAllPermission();
 	}
 	
-
+    public List<RoleVo> getUserRoleList(Set<Role> userRoleSet){
+        List<RoleVo> list = Lists.newArrayList();
+        roleDao.findAll().forEach(r->{
+            if(!r.getName().equals(SysConstants.ADMINISTRATOR)) {
+                RoleVo vo = BeanConvertMap.map(r, RoleVo.class);
+                vo.setHasRole(userRoleSet.parallelStream().anyMatch(ur -> r.getId().longValue() == ur.getId().longValue()));
+                list.add(vo);
+            }
+        });
+        return list;
+    }
 
 }

@@ -1,0 +1,52 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">公区摆展题目维护</h1>
+</div>
+<div class="wrapper-md" ng-controller="SurveyTypeCtrl">
+    <div class="row">
+        <form name="form" class="form-validation">
+            <div class="col-sm-6 connected" ui-jq="sortable" ui-options="{items:'.panel', handle:'.panel-heading', connectWith:'.connected'}"
+                 ng-repeat="field in publicFieldList">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        {{field.fieldName}}
+                        <i ng-click="pubFieldDel($index)" class="glyphicon glyphicon-trash pull-right"></i>
+                    </div>
+                    <div class="panel-body list-group alt bg-white">
+                        <li class="list-group-item">
+                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-sort-alpha-asc"></i></span>
+                            <div class="media-body">
+                                <input type="text" ng-model="field.fieldDesc" class="input-sm form-control" placeholder="字段描述">
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-sort-alpha-asc"></i></span>
+                            <div class="media-body">
+                                <select  ng-model="field.fieldFormat" data-placeholder="字段类型" class="form-control input-sm w-sm">
+                                    <option value="radio">单选</option>
+                                    <option value="checkbox">多选</option>
+                                    <option value="number">数字</option>
+                                </select>
+                            </div>
+                        </li>
+                        <li class="list-group-item" ng-show="field.fieldFormat!='number'">
+                            <accordion close-others="oneAtATime">
+                                <accordion-group  is-open="status.open">
+                                    <accordion-heading>
+                                        选项明细 <i class="pull-right fa fa-angle-right" ng-class="{'fa-angle-down': status.open, 'fa-angle-right': !status.open}"></i>
+                                    </accordion-heading>
+                                    <button class="btn btn-default btn-sm" ng-click="addItem(field)">Add</button>
+                                    <div class="list-group m-t">
+                                        <div ng-repeat="sundry in field.optionList" class="list-group-item">
+                                            <span ng-show="sundry.id>0">{{sundry.name}}<i ng-click="sundryDel(field,sundry.id)" class="fa fa-minus-square pull-right"></i></span>
+                                            <span ng-show="sundry.id==0"><input ng-model="temp"> <i ng-click="sundrySave(sundry,temp)" class="fa fa-check-square pull-right"></i> </span>
+                                        </div>
+                                    </div>
+                                </accordion-group>
+                            </accordion>
+                        </li>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

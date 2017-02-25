@@ -1,6 +1,6 @@
 package com.visionet.letsdesk.app.exhibition.vo;
 
-import com.visionet.letsdesk.app.dictionary.entity.Sundry;
+import com.visionet.letsdesk.app.dictionary.vo.SundryVo;
 
 import java.util.List;
 
@@ -14,7 +14,11 @@ public class ExhibitionSurveyFieldVo {
     private String fieldName;
     private String fieldDesc;
     private String fieldFormat;		//radio,checkbox,textarea
-    private List<Sundry> optionList;
+    private String indicator;       //指标
+    private String relationData;
+    private Long formId;
+    private Float orderId;
+    private List<SundryVo> optionList;
 
 //    private static class Option {
 //        Long id;
@@ -51,11 +55,43 @@ public class ExhibitionSurveyFieldVo {
         this.fieldFormat = fieldFormat;
     }
 
-    public List<Sundry> getOptionList() {
+    public String getIndicator() {
+        return indicator;
+    }
+
+    public void setIndicator(String indicator) {
+        this.indicator = indicator;
+    }
+
+    public String getRelationData() {
+        return relationData;
+    }
+
+    public void setRelationData(String relationData) {
+        this.relationData = relationData;
+    }
+
+    public Long getFormId() {
+        return formId;
+    }
+
+    public void setFormId(Long formId) {
+        this.formId = formId;
+    }
+
+    public Float getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Float orderId) {
+        this.orderId = orderId;
+    }
+
+    public List<SundryVo> getOptionList() {
         return optionList;
     }
 
-    public void setOptionList(List<Sundry> optionList) {
+    public void setOptionList(List<SundryVo> optionList) {
         this.optionList = optionList;
     }
 }

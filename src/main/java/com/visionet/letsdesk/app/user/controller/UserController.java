@@ -2,21 +2,30 @@ package com.visionet.letsdesk.app.user.controller;
 
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.visionet.letsdesk.app.base.controller.BaseController;
 import com.visionet.letsdesk.app.base.rest.RestException;
+import com.visionet.letsdesk.app.common.cache.UserCache;
 import com.visionet.letsdesk.app.common.constant.BusinessStatus;
+import com.visionet.letsdesk.app.common.constant.MobileKey;
 import com.visionet.letsdesk.app.common.constant.SysConstants;
 import com.visionet.letsdesk.app.common.modules.MessageSourceHelper;
 import com.visionet.letsdesk.app.common.modules.mapper.BeanMapper;
+import com.visionet.letsdesk.app.common.modules.string.StringPool;
+import com.visionet.letsdesk.app.common.modules.utils.Collections3;
 import com.visionet.letsdesk.app.common.modules.validate.Validator;
 import com.visionet.letsdesk.app.common.utils.BeanConvertMap;
 import com.visionet.letsdesk.app.common.utils.SearchFilterUtil;
 import com.visionet.letsdesk.app.foundation.KeyWord;
+import com.visionet.letsdesk.app.user.entity.Role;
 import com.visionet.letsdesk.app.user.entity.User;
 import com.visionet.letsdesk.app.user.service.AccountService;
+import com.visionet.letsdesk.app.user.service.RoleService;
 import com.visionet.letsdesk.app.user.service.SessionManageService;
 import com.visionet.letsdesk.app.user.service.UserService;
 import com.visionet.letsdesk.app.user.vo.UserVo;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +46,8 @@ public class UserController extends BaseController {
 
 	@Autowired
 	private UserService userService;
+    @Autowired
+    private RoleService roleService;
     @Autowired
     private SessionManageService sessionManageService;
 
@@ -156,9 +167,10 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/{id}", method= RequestMethod.GET)
     public ResponseEntity<?> userDetail(@PathVariable Long id){
         User user = userService.getUser(id);
-        CheckOrgId(user.getOrgId());
+//        CheckOrgId(user.getOrgId());
 
         UserVo vo = BeanMapper.map(user, UserVo.class);
+        vo.setRoleList(roleService.getUserRoleList(user.getRoleSet()));
 
         return new ResponseEntity<UserVo>(vo, HttpStatus.OK);
     }
@@ -353,19 +365,19 @@ public class UserController extends BaseController {
 	@RequestMapping(value = "/update/passwd", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<?> updateSelfPasswd(@RequestBody User user){
-
-		User old = userService.getUser(getCurrentUserId());
+        System.out.println(user.getPlainPassword());
 
         if(Validator.isNull(user.getPlainPassword())){
             throwException(BusinessStatus.REQUIRE,"password is null!");
         }
+        User old = userService.getUser(getCurrentUserId());
 
-        if(!old.getPassword().equals(UserService.getEntryptPassword(user.getPassword(), old.getPasswordSalt()))){
-            throw new RestException(MessageSourceHelper.GetMessages("app.web.account.UserRestController.passwd.error"));
-        }
-        if(old.getPassword().equals(UserService.getEntryptPassword(user.getPlainPassword(), old.getPasswordSalt()))){
-            throw new RestException(MessageSourceHelper.GetMessages("app.web.account.UserRestController.passwd.same"));
-        }
+//        if(!old.getPassword().equals(UserService.getEntryptPassword(user.getPassword(), old.getPasswordSalt()))){
+//            throw new RestException(MessageSourceHelper.GetMessages("app.web.account.UserRestController.passwd.error"));
+//        }
+//        if(old.getPassword().equals(UserService.getEntryptPassword(user.getPlainPassword(), old.getPasswordSalt()))){
+//            throw new RestException(MessageSourceHelper.GetMessages("app.web.account.UserRestController.passwd.same"));
+//        }
 
         old.setPassword(user.getPlainPassword());
         old.setPlainPassword(user.getPlainPassword());
@@ -453,5 +465,161 @@ public class UserController extends BaseController {
         return new ResponseEntity<List<User>>(onlineUsers , HttpStatus.OK);
     }
 
+
+    /**
+     * @apiDescription 管理员注册用户
+     * @api {post} /mobile/user/register /mobile/user/register
+     * @apiVersion 2.0.0
+     * @apiName register
+     * @apiGroup console-user
+     * @apiPermission subadmin
+     *
+     * @apiParam {String} aliasName 用户昵称(必填)
+     * @apiParam {String} plainPassword 登录密码,明文(必填)
+     * @apiParam {String} loginName 登录名(必填)
+     * @apiParam {String} trueName 分机号
+     * @apiParam {String} jobNumber 工号
+     * @apiParam {String} phoneNumber 电话
+     * @apiParam {String} email 邮箱
+     * @apiParam {String} userType 经理模式:M;客服模式:K
+     * @apiParam {String} userStatus 忙闲状态（B:忙;I:闲）
+     * @apiParam {Role} roleSet 权限集合（查询集合内任意一个权限）(默认客服坐席)
+     *
+     * @apiParamExample {json} 输入:
+     *{
+     *      "loginName": "test3",
+     *      "aliasName": "测试3",
+     *      "trueName": "A0932",
+     *      "roleSet": [
+     *        {
+     *          "id": 3
+     *        }
+     *      ],
+     *      "phoneNumber": "13511111111",
+     *      "email": "test3@visionet.com.cn",
+     *      "plainPassword":"111111"
+     *}
+     *
+     * @apiSuccess {Long} id PK
+     * @apiSuccess {String} loginName 登录名
+     * @apiSuccess {String} aliasName 昵称
+     * @apiSuccess {String} trueName 分机号
+     * @apiSuccess {String} jobNumber 工号
+     * @apiSuccess {String} avatar 头像url
+     * @apiSuccess {String} locale 语言
+     * @apiSuccess {String} phoneNumber 电话
+     * @apiSuccess {String} email 邮箱
+     * @apiSuccess {String} firstLetter 首字母
+     * @apiSuccess {String} userType 经理模式:M;客服模式:K
+     * @apiSuccess {String} userStatus 忙闲状态（B:忙;I:闲）
+     * @apiSuccess {Long} softphoneGroupId 软电话坐席组（有此字段则同步软电话接口）(值来自于/console/channel/info/search的查询结果:phoneGroupId)
+     * @apiSuccess {String} remark 备注
+     * @apiSuccess {String} orgId 公司ID
+     * @apiSuccess {String} isLock 是否注销(1:是)
+     * @apiSuccess {String} lastLogin 最后登录日期
+     * @apiSuccess {Role} roleSet 用户权限
+     *
+     * @apiSuccessExample User:
+     *{
+     *  "id": 10,
+     *  "loginName": "test3",
+     *  "aliasName": "测试3",
+     *  "trueName": "A0932",
+     *  "plainPassword": "111111",
+     *  "userType": "K",
+     *  "userStatus": null,
+     *  "avatar": null,
+     *  "locale": "zh",
+     *  "firstLetter": "CS3",
+     *  "phoneNumber": "13511111111",
+     *  "email": "test3@visionet.com.cn",
+     *  "softphoneGroupId":2,
+     *  "remark": null,
+     *  "orgId": 1,
+     *  "isLock": 0,
+     *  "lastLogin": null,
+     *  "roleSet": [
+     *    {
+     *      "id": 3,
+     *      "name": null,
+     *      "roleDesc": null,
+     *      "type": null,
+     *      "permissions": null,
+     *      "defaultUrl": null
+     *    }
+     *  ],
+     *  "roleNames": ""
+     *}
+     *
+     * @apiErrorExample Error-Response:
+     *     {"code":"10008","msg":"该登录名已注册!"}
+     */
+    @RequiresRoles(value = {SysConstants.ADMINISTRATOR, SysConstants.SUBADMIN}, logical = Logical.OR)
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ResponseEntity<?> register(@RequestBody User user) throws Exception{
+        user.setId(null);
+
+        if (user.getLoginName() == null) {
+            throwException(BusinessStatus.REQUIRE, "loginName is null!");
+        }
+        if (user.getPlainPassword() == null) {
+            throwException(BusinessStatus.REQUIRE, "plainPassword is null!");
+        }
+        if (user.getAliasName() == null) {
+            throwException(BusinessStatus.REQUIRE, "aliasName is null!");
+        }
+        if (!AccountService.isSupervisor(getCurrentUserId())) {
+            user.setOrgId(getCurrentOrgId());
+        } else if (Validator.isNull(user.getOrgId())) {
+            throwException(BusinessStatus.REQUIRE, "orgId is null!");
+        }
+
+        // bind roleList
+        if (Collections3.isEmpty(user.getRoleSet())) {
+            Role role = new Role(roleService.findRoleIdByName(SysConstants.CUSTOMER_SERVICE));
+            user.getRoleSet().add(role);
+        }
+
+
+        user.setOrgId(getCurrentOrgId());
+        user.setIsLock(SysConstants.USER_ACTIVITY_ENABLED);
+        user.setLocale(getLocale());
+        UserService.entryptPassword(user);
+        //确保登录名唯一
+        userService.registerUser(user);
+
+        Map<String,Object> map = Maps.newHashMap();
+        map.put("id",user.getId());
+        map.put(MobileKey.CODE, BusinessStatus.OK);
+
+        return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
+    }
+
+
+    /**
+     * @apiDescription 管理员户锁定或解锁用户
+     * @api {get} /mobile/user/disable/:id/:isLock /mobile/user/disable/:id/:isLock
+     * @apiVersion 2.0.0
+     * @apiName disableUser
+     * @apiGroup console-user
+     * @apiPermission subadmin
+     *
+     * @apiParam {Long} id 用户ID
+     * @apiParam {Integer} isLock 1:注销;0:恢复 (注：恢复注销用户时，软电话坐席此时不会自动恢复，需要再调修改密码接口才能恢复)
+     *
+     * @apiSuccess {String} code 成功标志
+     *
+     * @apiSuccessExample {json} Map<String,String>
+     *  {
+     *     "code": "10000"
+     *  }
+     */
+    @RequiresRoles(value = {SysConstants.ADMINISTRATOR, SysConstants.SUBADMIN}, logical = Logical.OR)
+    @RequestMapping(value = "/disable/{id}/{isLock}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<?> disableUser(@PathVariable("id") Long id, @PathVariable("isLock") Integer isLock) throws RestException, Exception {
+        userService.lockUser(id, isLock);
+        return new ResponseEntity<Map<String, String>>(GetSuccMap(), HttpStatus.OK);
+    }
 
 }

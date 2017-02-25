@@ -1,0 +1,73 @@
+{
+  "header" : {
+    "name":"EMSS 1.1",
+    "navbar" : {
+      "UPLOAD" : "Upload",
+      "new" : {
+        "NEW" : "New",
+        "PROJECT" : "Projects",
+        "TASK" : "Task",
+        "USER" : "User",
+        "EMAIL" : "Email"
+      },
+      "NOTIFICATIONS" : "Notifications"
+    }
+  },
+  "aside" : {
+    "nav" : {
+      "HEADER" : "首页",
+      "DASHBOARD" : "统计",
+      "exhibition" : {
+          "EXHIBITION": "展厅问卷",
+          "EXHIBITION_SURVEY_INPUT": "展厅问卷录入",
+          "EXHIBITION_SURVEY_LIST": "展厅问卷查询",
+          "EXHIBITION_REPORT": "展厅问卷报表"
+      },
+      "mall" : {
+        "MALL" : "卖场问卷",
+        "MALL_SURVEY_INPUT": "卖场问卷录入",
+        "MALL_SURVEY_INPUT": "卖场问卷查询",
+        "MALL_REPORT": "卖场问卷报表"
+      },
+      "report" : {
+        "REPORT" : "数据统计",
+        "STATS_MAP": "业务统计地图"
+      },
+      "console" : {
+        "CONSOLE": "管理",
+        "user_info": {
+          "USER_INFO": "用户管理",
+          "USER": "用户",
+          "ROLE": "角色",
+          "PERMISSION": "链接分配"
+        },
+        "foundation": {
+          "FOUNDATION": "基础分类维护",
+          "BRAND": "品牌",
+          "CATEGORY": "品类",
+          "MANUFACTURER": "厂商",
+          "SUNDRY": "字典杂项"
+        },
+        "customer": {
+          "CUSTOMER": "客户信息维护",
+          "EXHIBITION": "门店/展厅信息",
+          "MALL": "商场信息",
+          "DEALER_LIST": "经销商"
+        },
+        "survey": {
+          "SURVEY": "问卷类型维护",
+          "EXHIBITION_SURVEY_LIST": "展厅问卷类型",
+          "MALL_SURVEY_LIST": "商场问卷类型",
+          "PUBLIC_SHOW": "公区摆展"
+        }
+      },
+      "your_stuff" : {
+        "YOUR_STUFF": "资料",
+        "PROFILE" : "简况",
+        "DOCUMENTS" : "文档"
+      }
+    },
+    "MILESTONE" : "Milestone",
+    "RELEASE" : "Release"
+  }
+}

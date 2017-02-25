@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/console/2.0/role")
+@RequestMapping("/console/role")
 public class CsRoleController extends BaseController {
     private static Logger logger = LoggerFactory.getLogger(CsRoleController.class);
 
@@ -39,13 +39,18 @@ public class CsRoleController extends BaseController {
     private ResourceService resourceService;
 
     @RequiresRoles(value = { SysConstants.ADMINISTRATOR, SysConstants.SUBADMIN}, logical = Logical.OR)
-    @RequestMapping(value ="/list", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value ="/search", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<?> searchUser(@RequestBody RoleVo vo) throws Exception {
+    public ResponseEntity<?> search(@RequestBody RoleVo vo) throws Exception {
         Page<Role> users = roleService.searchRoles(vo);
         return new ResponseEntity<Page<Role>>(users, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "list", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<?> list() {
+        return new ResponseEntity<List<Role>>(roleService.allRoles(), HttpStatus.OK);
+    }
 
     @RequestMapping(value = "allPermissions", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody

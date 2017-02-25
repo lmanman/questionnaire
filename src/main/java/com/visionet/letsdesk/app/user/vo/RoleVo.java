@@ -15,7 +15,7 @@ public class RoleVo extends BaseVo {
 	private String type;
 	private String permissions;
 	private String defaultUrl;
-	
+	private Boolean hasRole;
 
 
 	public RoleVo(){
@@ -76,6 +76,13 @@ public class RoleVo extends BaseVo {
 		this.defaultUrl = defaultUrl;
 	}
 
+	public Boolean getHasRole() {
+		return hasRole;
+	}
+
+	public void setHasRole(Boolean hasRole) {
+		this.hasRole = hasRole;
+	}
 
 	@Override
 	public String toString() {

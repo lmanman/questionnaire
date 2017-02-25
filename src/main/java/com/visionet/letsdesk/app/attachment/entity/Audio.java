@@ -24,7 +24,7 @@ public class Audio extends IdEntity{
     private Long refId;
     private String refType;
     private Long size;          //文件大小
-    private Integer duration;   //播放时长
+    private Integer duration;   //播放时长(秒)
     private String remark;
     private Date createDate;
 

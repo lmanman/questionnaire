@@ -42,8 +42,6 @@ public class ExhibitionSurveyService extends BaseService{
     @Autowired
     private ExhibitionDao exhibitionDao;
     @Autowired
-    private SundryDao sundryDao;
-    @Autowired
     private ExhibitionSurveyMultiselectDao exhibitionSurveyMultiselectDao;
     @Autowired
     private ExhibitionSurveyPublicShowDao exhibitionSurveyPublicShowDao;
@@ -120,29 +118,7 @@ public class ExhibitionSurveyService extends BaseService{
         vo.setPublicShowList(exhibitionSurveyPublicShowDao.findBySurveyId(vo.getId()));
     }
 
-    /**
-     * 展厅问卷字段项
-     * @return
-     */
-    public List<ExhibitionSurveyFieldVo> findExhibitionField(){
-        List<ExhibitionSurveyFieldVo> voList = Lists.newArrayList();
-        List<ExhibitionSurveyField> fieldList = exhibitionSurveyFieldDao.findByTableName(KeyWord.SURVEY_FIELD_TABLE_BRAND);
-        for(ExhibitionSurveyField field:fieldList){
-            ExhibitionSurveyFieldVo vo = BeanConvertMap.map(field,ExhibitionSurveyFieldVo.class);
-            vo.setOptionList(this.findSundry(vo.getFieldName()));
-            voList.add(vo);
-        }
-        return voList;
-    }
 
-    /**
-     * 展厅问卷某字段选项说明
-     * @param type 字段名
-     * @return
-     */
-    public List<Sundry> findSundry(String type){
-        return sundryDao.findByType(type);
-    }
 
     /**
      * 展厅问卷保存
@@ -164,8 +140,8 @@ public class ExhibitionSurveyService extends BaseService{
             exhibitionSurveyDao.save(survey);
 
             //多选项保存
-            List<String> checkboxNameList = exhibitionSurveyFieldDao.findFieldNameByFieldFormatAndTableName
-                    (KeyWord.FIELD_FORMAT_CHECKBOX, KeyWord.SURVEY_FIELD_TABLE_SURVEY);
+            List<String> checkboxNameList = exhibitionSurveyFieldDao.findFieldNameByFieldFormat
+                    (KeyWord.FIELD_FORMAT_CHECKBOX);
             BeanInfo beanInfo = Introspector.getBeanInfo(survey.getClass());
             PropertyDescriptor[] propertyDescriptors =  beanInfo.getPropertyDescriptors();
             for (int i = 0; i< propertyDescriptors.length; i++) {
@@ -218,8 +194,8 @@ public class ExhibitionSurveyService extends BaseService{
             pageInfo = new PageInfo();
         }
 
-        List<String> checkboxNameList = exhibitionSurveyFieldDao.findFieldNameByFieldFormatAndTableName
-                (KeyWord.FIELD_FORMAT_CHECKBOX, KeyWord.SURVEY_FIELD_TABLE_SURVEY);
+        List<String> checkboxNameList = exhibitionSurveyFieldDao.findFieldNameByFieldFormat
+                (KeyWord.FIELD_FORMAT_CHECKBOX);
         Page<ExhibitionSurvey> page = exhibitionSurveyDaoImpl.searchByCondition(query, checkboxNameList, pageInfo);
 
         List<ExhibitionSurveyVo> voList = Lists.newArrayList();

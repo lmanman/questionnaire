@@ -1,0 +1,87 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">用户</h1>
+</div>
+<div class="wrapper-md" ng-controller="UserCtrl">
+    <form name="form" class="form-validation" ng-submit="query()" ng-init="query()">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            用户列表
+        </div>
+        <div class="row wrapper">
+            <div class="col-sm-3">
+                <div class="input-group">
+                  <input type="text" class="input-sm form-control" ng-model="queryName" placeholder="姓名/邮箱/电话">
+                  <span class="input-group-btn">
+                      <button class="btn btn-sm btn-default btn-info" type="submit"><i class="fa fa-fw fa-search"></i></button>
+                  </span>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped b-t b-light table-hover" >
+                <thead>
+                <tr>
+                    <th>账号</th>
+                    <th>用户名</th>
+                    <th>邮箱</th>
+                    <th>电话</th>
+                    <th style="width:10%;">备注</th>
+                    <th style="width:30px;"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="item in list">
+                    <td ><a class="text-info-dker block" ui-sref="app.console.userInfo({uid:item.id})" >
+                        <span >{{item.loginName}}</span> <br>
+                        <span class="label bg-success" title="{{item.roleDesc}}">{{item.roleDesc}}</span>
+                    </a></td>
+                    <td>{{item.aliasName}}</td>
+                    <td>{{item.email}}</td>
+                    <td>{{item.phoneNumber}}</td>
+                    <td>{{item.remark}}</td>
+                    <td>
+                        <a href ng-click="delete($index,item.id)"><i class="fa fa-times text-danger text"></i></a>
+                    </td>
+                </tr>
+                <tr ng-show="list.length <= 0">
+                    <td colspan="5" class="text-center">
+                        <h4>暂无数据</h4>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <footer class="panel-footer">
+            <div class="row">
+                <div class="col-sm-4 hidden-xs">
+                    <button class="btn btn-sm btn-default"ui-sref="app.console.userInfo({uid:0})" >注册新用户</button>
+                </div>
+                <div class="col-sm-4 text-center">
+                    <small class="text-muted inline m-t-sm m-b-sm">{{number * totalPages + 1}}-{{number * totalPages + numberOfElements}} 共 {{total}}</small>
+                </div>
+                <div class="col-sm-4 text-right text-center-xs" ng-if="list.length > 0">
+                    <ul class="pagination pagination-sm m-t-none m-b-none">
+                        <li class="footable-page-arrow disabled"><a data-page="first" href="#first">«</a></li>
+                        <li class="footable-page-arrow disabled"><a data-page="prev" href="#prev">‹</a></li>
+                        <li><a href>1</a></li>
+                        <li class="footable-page-arrow"><a data-page="next" href="#next">›</a></li>
+                        <li class="footable-page-arrow"><a data-page="last" href="#last">»</a></li>
+                    </ul>
+                </div>
+                <!--
+                <div class="col-sm-4 text-right text-center-xs" ng-if="list.length > 0">
+                    <pagination total-items="vm.totalItems" ng-model="vm.currentPage" ng-change="vm.pageChanged()"
+                                previous-text="‹" next-text="›" max-size="5"></pagination>
+                </div>
+                <div class="col-sm-4 text-right text-center-xs" ng-if="list.length > 0">
+                    <ul uib-pagination boundary-links="true" total-items="total"
+                        ng-model="formData.pageInfo.pageNumber" items-per-page="formData.pageInfo.pageSize"
+                        ng-change="queryUser()"></ul>
+                </div>
+                -->
+            </div>
+
+        </footer>
+    </div>
+    </form>
+</div>

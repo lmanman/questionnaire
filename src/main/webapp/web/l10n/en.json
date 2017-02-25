@@ -1,0 +1,73 @@
+{
+    "header" : {
+        "name":"EMSS 1.1",
+        "navbar" : {
+            "UPLOAD" : "Upload",
+            "new" : {
+                "NEW" : "New",
+                "PROJECT" : "Projects",
+                "TASK" : "Task",
+                "USER" : "User",
+                "EMAIL" : "Email"
+            },
+            "NOTIFICATIONS" : "Notifications"
+        }
+    },
+    "aside" : {
+        "nav" : {
+            "HEADER" : "Navigation",
+            "DASHBOARD" : "Dashboard",
+            "exhibition" : {
+              "EXHIBITION": "ExhibitionSurvey",
+              "EXHIBITION_SURVEY_INPUT": "ESInput",
+              "EXHIBITION_SURVEY_LIST": "ESList",
+              "EXHIBITION_REPORT": "ESReport"
+            },
+            "mall" : {
+              "MALL" : "MallSurvey",
+              "MALL_SURVEY_INPUT": "MallSurveyInput",
+              "MALL_SURVEY_LIST": "MallSurveyList",
+              "MALL_REPORT": "MallSurveyReport"
+            },
+            "report" : {
+              "REPORT" : "Report",
+              "STATS_MAP": "StatsMap"
+            },
+            "console" : {
+              "CONSOLE": "Console",
+              "user_info": {
+                "USER_INFO": "UserInfo",
+                "USER": "User",
+                "ROLE": "Role",
+                "PERMISSION": "Permission"
+              },
+              "foundation": {
+                "FOUNDATION": "FoundationInfo",
+                "BRAND": "Brand",
+                "CATEGORY": "Category",
+                "MANUFACTURER": "Manufacturer",
+                "SUNDRY": "Sundry"
+              },
+              "customer": {
+                "CUSTOMER": "CustomerInfo",
+                "EXHIBITION": "ExhibitionInfo",
+                "MALL": "Mall",
+                "DEALER_LIST": "DealerList"
+              },
+              "survey": {
+                "SURVEY": "SurveyType",
+                "EXHIBITION_SURVEY_LIST": "ESFieldList",
+                "MALL_SURVEY_LIST": "MallSurveyFieldList",
+                "PUBLIC_SHOW": "PublicShow"
+              }
+            },
+            "your_stuff" : {
+                "YOUR_STUFF": "Your Stuff",
+                "PROFILE" : "User",
+                "DOCUMENTS" : "Foundation"
+            }
+        },
+        "MILESTONE" : "Milestone",
+        "RELEASE" : "Release"
+    }
+}

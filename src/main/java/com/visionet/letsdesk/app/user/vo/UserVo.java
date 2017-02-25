@@ -39,6 +39,7 @@ public class UserVo extends BaseVo{
     private String queryName;
     private List<String> roleNameList;
     private Integer talkingNum;
+    private List<RoleVo> roleList;
 
 
     public String getLoginName() {
@@ -212,5 +213,13 @@ public class UserVo extends BaseVo{
 
     public void setTalkingNum(Integer talkingNum) {
         this.talkingNum = talkingNum;
+    }
+
+    public List<RoleVo> getRoleList() {
+        return roleList;
+    }
+
+    public void setRoleList(List<RoleVo> roleList) {
+        this.roleList = roleList;
     }
 }

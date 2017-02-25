@@ -16,7 +16,7 @@ public class Category extends IdEntity{
 
     private Integer level;
     private String name;
-    private Long parentId;                  //上级品类
+    private String type;                  //功能,材质,风格,是否进口
 
     public Integer getLevel() {
         return level;
@@ -34,11 +34,11 @@ public class Category extends IdEntity{
         this.name = name;
     }
 
-    public Long getParentId() {
-        return parentId;
+    public String getType() {
+        return type;
     }
 
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
+    public void setType(String type) {
+        this.type = type;
     }
 }

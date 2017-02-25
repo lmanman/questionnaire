@@ -1,0 +1,45 @@
+
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+    <!-- main -->
+    <div class="col" ng-controller="FoundationCtrl">
+        <!-- main header -->
+        <div class="bg-light lter b-b wrapper-md">
+            <div class="row">
+                <div class="col-sm-6 col-xs-12">
+                    <h1 class="m-n font-thin h3 text-black">品牌</h1>
+                    <small class="text-muted">32家入驻品牌</small>
+                </div>
+            </div>
+        </div>
+        <!-- / main header -->
+        <div class="wrapper-md" >
+            <!-- stats -->
+            <div class="row">
+                <div class="col-md-3" ng-repeat="item in brandTree">
+                    <div class="text-center col-xs-12" >
+                        <a href ui-sref="app.console.brandDetail({id:item.id})" ng-class="{2: 'block panel padder-v bg item', 1: 'block panel padder-v bg-info item',3:'block panel padder-v bg-success item',4:'block panel padder-v bg-primary item'}[item.mainId]">
+                            <span ng-class="{true: 'font-thin h1 block', false: 'text-white font-thin h1 block'}[item.mainId==2]" >{{item.name}}</span>
+                            <span class="text-muted text-xs">{{item.mainName}}</span>
+                            <span class="bottom text-right w-full">
+                              <i class="fa fa-pencil-square text-muted m-r-sm"></i>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-3" >
+                    <div class="text-center col-xs-12" >
+                        <a href ui-sref="app.console.brandDetail(0)" class="block panel padder-v bg item">
+                            <span class="text-white font-thin h1 block" ><i class="fa fa-plus-circle text-muted m-r-sm"></i></span>
+                            <span class="text-muted text-xs">添加</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- / stats -->
+        </div>
+    </div>
+    <!-- / main -->
+    <!-- right col -->
+    <!-- / right col -->
+</div>

@@ -1,0 +1,89 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">展厅问卷查询</h1>
+</div>
+<div class="wrapper-md" ng-controller="SurveyQueryCtrl">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            问卷列表
+        </div>
+        <div class="row wrapper">
+            <div class="col-sm-4">
+                <div class="input-group">
+                    <input type="text" class="input-sm form-control" placeholder="展厅名/品牌/经销商">
+                    <span class="input-group-btn">
+                      <button class="btn btn-sm btn-default btn-info" type="button"><i class="fa fa-fw fa-search"></i></button>
+                  </span>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped b-t b-light table-hover" >
+                <thead>
+                <tr>
+                    <th>展厅名</th>
+                    <th>品牌</th>
+                    <th>经销商</th>
+                    <th>城市</th>
+                    <!--<th>状态</th>-->
+                    <th>完成度</th>
+                    <th>提交人</th>
+                    <th>提交日期</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="item in exhibitionSurveyList">
+                    <td ><a class="text-info-dker block" ui-sref="app.exhibition.surveyInput({id:item.id})" >
+                        <span >{{item.exhibitionName}}</span>
+                    </a></td>
+                    <td>{{item.brandName}}</td>
+                    <td>
+                        <span >{{item.dealerName}}</span><br>
+                        <span>{{item.address}}</span>
+                    </td>
+                    <td>{{item.cityName}}</td>
+                    <td>
+                        <!--{{item.schedule}}-->
+                        <progressbar max="item.schedule[1]" value="item.schedule[0]" ng-init="type1=dynamicType(item.schedule[0],item.schedule[1])" type="{{type1}}" class="progress-sm m-t-sm"><span style="white-space:nowrap;">{{item.schedule[0]}} / {{item.schedule[1]}}</span></progressbar>
+                    </td>
+                    <td>{{item.userName}}</td>
+                    <td>{{item.updateDate}}</td>
+                </tr>
+                <tr ng-show="dealerList.length <= 0">
+                    <td colspan="5" class="text-center">
+                        <h4>暂无数据</h4>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <footer class="panel-footer">
+            <div class="row">
+                <div class="col-sm-4 hidden-xs">
+                    <!--<button class="btn btn-sm btn-default" ui-sref="app.exhibition.surveyInput({id:0})">填写新问卷</button>-->
+                    <button class="btn btn-sm btn-default" ui-toggle-class="show inline" target="#spin" ng-click="newSurvey()">
+                        <span class="text">填写新问卷</span>
+                        <span class="text-active">问卷打开中...</span>
+                    </button>
+                    <i class="fa fa-spin fa-spinner hide" id="spin"></i>
+                </div>
+                <div class="col-sm-4 text-center">
+                    <small class="text-muted inline m-t-sm m-b-sm">20-30 共 50</small>
+                </div>
+                <div class="col-sm-4 text-right text-center-xs" ng-if="dealerList.length > 0">
+                    <ul class="pagination pagination-sm m-t-none m-b-none">
+                        <li class="footable-page-arrow disabled"><a data-page="first" href>«</a></li>
+                        <li class="footable-page-arrow disabled"><a data-page="prev" href>‹</a></li>
+                        <li><a href>1</a></li>
+                        <li><a href>2</a></li>
+                        <li><a href>3</a></li>
+                        <li><a href>4</a></li>
+                        <li><a href>5</a></li>
+                        <li class="footable-page-arrow"><a data-page="next" href>›</a></li>
+                        <li class="footable-page-arrow"><a data-page="last" href>»</a></li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>

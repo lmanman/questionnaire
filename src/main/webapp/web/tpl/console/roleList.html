@@ -1,0 +1,50 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">角色</h1>
+</div>
+<div class="wrapper-md" ng-controller="RoleCtrl">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            角色列表
+        </div>
+        <div class="panel-body b-b b-light">
+            <div class="col-sm-4"><div class="input-group">
+                <input id="filter" type="text" class="form-control input-sm w-sm inline m-r" />
+                <span class="input-group-btn">
+                    <button class="btn btn-sm btn-default btn-info" type="button"><i class="fa fa-fw fa-search"></i></button>
+                </span>
+            </div></div>
+        </div>
+        <div class="table-responsive">
+            <table class="table m-b-none table-hover" ui-jq="footable" data-filter="#filter">
+                <thead>
+                <tr>
+                    <th>角色名称</th>
+                    <th>分配用户</th>
+                </tr>
+                </thead>
+                <tbody>
+                <script type="text/ng-template" id="roleEdit.html">
+                    <div ng-include="'tpl/console/roleInfo.html'"></div>
+                </script>
+                <tr ng-repeat="item in list" ng-click="open('sm',item)">
+                    <td width="40%"><a class="text-info-dker block" href>{{item.roleName}}</a></td>
+                    <td>{{item.userNames}}</td>
+                </tr>
+                <tr ng-show="list.length <= 0">
+                    <td colspan="5" class="text-center">
+                        <h4>暂无数据</h4>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <footer class="panel-footer">
+            <div class="row">
+                <div class="col-sm-4 hidden-xs">
+                    <button class="btn btn-sm btn-default" >添加</button>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>

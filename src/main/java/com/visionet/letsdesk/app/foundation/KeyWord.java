@@ -20,6 +20,12 @@ public interface KeyWord {
     public static int BRAND_TYPE_SUB=2;		    //子品牌
     public static int BRAND_TYPE_SERIES=3;		//品牌系列
 
+    /*------------------ Category -----------------------*/
+    public static String CATEGORY_TYPE_FUNCTION="function";		//功能
+    public static String CATEGORY_TYPE_MATERIAL="material";	    //材质
+    public static String CATEGORY_TYPE_STYLE="style";		    //风格
+    public static String CATEGORY_TYPE_import="import";		    //是否进口
+
     /*------------------ SurveyField -----------------------*/
 
     public static String SURVEY_FIELD_TABLE_BRAND="Brand";

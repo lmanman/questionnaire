@@ -17,8 +17,11 @@ public class ExhibitionSurveyField extends IdEntity{
     private String fieldName;
     private String fieldDesc;
     private String fieldFormat;		//radio,checkbox,textarea
-    private String tableName;
+    private String relationData;
     private String indicator;       //指标
+    private Integer delFlag;
+    private Long formId;
+    private Float orderId;
 
     public String getFieldName() {
         return fieldName;
@@ -44,12 +47,12 @@ public class ExhibitionSurveyField extends IdEntity{
         this.fieldFormat = fieldFormat;
     }
 
-    public String getTableName() {
-        return tableName;
+    public String getRelationData() {
+        return relationData;
     }
 
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
+    public void setRelationData(String relationData) {
+        this.relationData = relationData;
     }
 
     public String getIndicator() {
@@ -58,5 +61,29 @@ public class ExhibitionSurveyField extends IdEntity{
 
     public void setIndicator(String indicator) {
         this.indicator = indicator;
+    }
+
+    public Integer getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(Integer delFlag) {
+        this.delFlag = delFlag;
+    }
+
+    public Long getFormId() {
+        return formId;
+    }
+
+    public void setFormId(Long formId) {
+        this.formId = formId;
+    }
+
+    public Float getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Float orderId) {
+        this.orderId = orderId;
     }
 }

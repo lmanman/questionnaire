@@ -135,7 +135,7 @@ public class UserService extends BaseController{
      * 设定安全的密码，生成随机的salt并经过1024次 sha-1 hash
      * CAS 接口不支持salt
      */
-    protected static void entryptPassword(User user) {
+    public static void entryptPassword(User user) {
         byte[] salt = Digests.generateSalt(SALT_SIZE);
         user.setPasswordSalt(Encodes.encodeHex(salt));
 
@@ -224,4 +224,34 @@ public class UserService extends BaseController{
         }
     }
 
+    @Transactional(readOnly = false)
+    public void registerUser(User user) {
+        this.checkUserInfo(user);
+        if(user.getId()!=null) {
+            throwException(BusinessStatus.ILLEGAL,"id exist!");
+        }
+        user.setFirstLetter(CnToSpell.getPinYinHeadChar(user.getAliasName()).toUpperCase());
+        userDao.save(user);
+        EhcacheUtil.SetUser(user);
+    }
+
+
+    /**
+     * 逻辑delete用户
+     * @param userId
+     */
+    @Transactional(readOnly = false)
+    public void lockUser(Long userId,Integer isLock){
+        User user = userDao.findOne(userId);
+        if(user.getIsLock().intValue() == isLock.intValue()){
+            if(isLock == KeyWord.DEL_STATUS){
+                throwException(BusinessStatus.ILLEGAL,MessageSourceHelper.GetMessages("app.user.service.UserService.user.lock.already"));
+            }else {
+                throwException(BusinessStatus.ILLEGAL,MessageSourceHelper.GetMessages("app.user.service.UserService.user.unlock.already"));
+            }
+        }
+        user.setIsLock(isLock);
+
+        userDao.save(user);
+    }
 }

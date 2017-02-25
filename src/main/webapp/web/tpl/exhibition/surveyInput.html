@@ -1,0 +1,215 @@
+<div class="bg-light lter b-b wrapper-md" ng-controller="ExhibitionSurveyCtrl" ng-init="init()">
+    <h1 class="m-n font-thin h3">
+        <span ng-show="id==0">展厅问卷录入</span>
+        <span ng-show="id!=0">展厅问卷修改</span>
+    </h1>
+</div>
+<div class="wrapper-md">
+    <div ng-controller="ExhibitionSurveyCtrl" ng-init="init()">
+        <form name="myForm" class="form-validation" ng-submit="surveySubmit()">
+            <div class="row ">
+                <div class="col-sm-10">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <span class="h4">展厅环境</span>
+                        </div>
+                        <div class="panel-body" ng-repeat="field1 in surveyFieldList1 ">
+                            <!--<p class="text-muted">Need support? please fill the fields below.</p>-->
+                            <div class="form-group">
+                                <label ng-init="maxNo[0]=$index+1">{{$index+1}}. {{field1.fieldDesc}}</label>
+                                <div ng-show="field1.fieldFormat=='input'">
+                                    <span ng-show="field1.fieldName!='exhibitionCity'">
+                                        <input type="text" ng-model="fieldName" class="input-sm form-control" placeholder="{{field1.fieldDesc}}">
+                                    </span>
+                                    <span ng-show="field1.fieldName=='exhibitionCity'">
+                                        <input type="text" ng-model="province" class="col-sm-3 input-sm form-control w-xs" placeholder="省">
+                                        <input type="text" ng-model="city" class="col-sm-3 input-sm form-control w-xs" placeholder="市">
+                                        <input type="text" ng-model="area" class="col-sm-3 input-sm form-control w-xs" placeholder="区">
+                                    </span>
+                                </div>
+                                <div ng-show="field1.fieldFormat=='number'">
+                                    <div class="form-group col-sm-3">
+                                        <input type="number" ng-model="fieldName" class="input-sm form-control" placeholder="{{field1.fieldDesc}}">
+                                    </div>
+                                </div>
+                                <div ng-show="field1.fieldFormat=='select'">
+                                    <div class="form-group col-sm-3" ng-show="field1.relationData!='d_brand'">
+                                        <select ui-jq="chosen" data-placeholder="{{field1.fieldDesc}}" ng-model="field1.fieldName" class="form-control m-b">
+                                            <option ng-repeat="item in field1.optionList" value="{{item.id}}">{{item.name}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-sm-6" ng-show="field1.relationData=='d_brand'">
+                                        <div class="col-sm-4">
+                                            <select ui-jq="chosen" class="w-md" ng-model="brandList" data-placeholder="{{field1.fieldDesc}}" ng-change="childChange($index,brandList)">
+                                                <optgroup ng-repeat="item in field1.optionList" label="{{item.name}}">
+                                                    <option ng-repeat="child in item.childDataList" value="{{child.id}}">{{child.name}}</option>
+                                                </optgroup>
+                                                <option value="0"></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-4 pull-right" ng-show="grandchildDataList.length>0">
+                                            <select  ng-model="grandchildData" data-placeholder="品牌系列" class="form-control input-sm w-sm">
+                                                <option value=""></option>
+                                                <option ng-repeat="item in grandchildDataList" value="{{item.id}}">{{item.name}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="radio list-group-item wrapper bg-light clearfix" ng-show="field1.fieldFormat=='radio'">
+                                    <div ng-class="{true: 'form-group col-sm-5', false: 'form-group col-sm-3'}[field1.optionList.length<=2]" ng-repeat="item in field1.optionList">
+                                        <label class="i-checks" ng-show="item.code!='Z'">
+                                            <input type="radio" ng-model="field1.fieldName" ng-value="item.id" ng-click="showSelect(item.code)">
+                                            <i></i>
+                                            {{item.name}}
+                                        </label>
+                                        <div ng-show="item.code=='Z'">
+                                            <input placeholder="{{item.name}}" ng-model="other" >
+                                        </div>
+                                        <span ng-show="item.childDataList!=null" >
+                                            <select ui-jq="chosen"  data-placeholder="{{item.name}}" class="form-control input-sm w-sm" ng-disabled="{{disabledSelect=='Y'}}">
+                                                <option ng-repeat="child in item.childDataList" value="{{child.id}}">{{child.name}}</option>
+                                            </select>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="checkbox list-group-item wrapper bg-light clearfix" ng-show="field1.fieldFormat=='checkbox'">
+                                    <div ng-class="{true: 'form-group', false: 'form-group col-sm-3'}[field1.optionList.length<=2]" ng-repeat="item in field1.optionList">
+                                        <label class="i-checks" ng-show="item.code!='Z'">
+                                            <input type="checkbox" ng-model="fieldName"  ng-true-value="{{item.id}}" ng-false-value="false">
+                                            <i></i>
+                                            {{item.name}}
+                                        </label>
+                                        <div ng-show="item.code=='Z'">
+                                            <input placeholder="{{item.name}}" ng-model="other" >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg pull-in"></div>
+                        </div>
+                        <!--<footer class="panel-footer text-right bg-light lter">-->
+                            <!--<button type="button" class="btn btn-success">Save</button>-->
+                        <!--</footer>-->
+                    </div>
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <strong>人员服务</strong>
+                        </div>
+                        <div class="panel-body" ng-repeat="field1 in surveyFieldList2">
+                            <!--<p class="text-muted">Need support? please fill the fields below.</p>-->
+                            <div class="form-group">
+                                <label ng-init="maxNo[1]=$index+1+maxNo[0]">{{$index+1+maxNo[0]}}. {{field1.fieldDesc}}</label>
+                                <div ng-show="field1.fieldFormat=='input'">
+                                    <input type="text" ng-model="fieldName" class="input-sm form-control" placeholder="{{field1.fieldDesc}}">
+                                </div>
+                                <div ng-show="field1.fieldFormat=='number'">
+                                    <div class="form-group col-sm-3">
+                                        <input type="number" ng-model="fieldName" class="input-sm form-control" placeholder="{{field1.fieldDesc}}">
+                                    </div>
+                                </div>
+                                <div ng-show="field1.fieldFormat=='select'">
+                                    <div class="form-group col-sm-3" >
+                                        <select ui-jq="chosen" data-placeholder="{{field1.fieldDesc}}" ng-model="field1.fieldName" class="form-control m-b">
+                                            <option ng-repeat="item in field1.optionList" value="{{item.id}}">{{item.name}}</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="radio list-group-item wrapper bg-light clearfix" ng-show="field1.fieldFormat=='radio'">
+                                    <div ng-class="{true: 'form-group col-sm-4', false: 'form-group col-sm-3'}[field1.optionList.length<=2]" ng-repeat="item in field1.optionList">
+                                        <label class="i-checks" ng-show="item.code!='Z'">
+                                            <input type="radio" ng-model="field1.fieldName" ng-value="item.id" ng-click="showSelect(item.code)">
+                                            <i></i>
+                                            {{item.name}}
+                                        </label>
+                                        <div ng-show="item.code=='Z'">
+                                            <input placeholder="{{item.name}}" ng-model="other" >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="checkbox list-group-item wrapper bg-light clearfix" ng-show="field1.fieldFormat=='checkbox'">
+                                    <div ng-class="{true: 'form-group', false: 'form-group col-sm-3'}[field1.optionList.length<=2]" ng-repeat="item in field1.optionList">
+                                        <label class="i-checks"  ng-show="item.code!='Z'">
+                                            <input type="checkbox" ng-model="fieldName"  ng-true-value="{{item.id}}" ng-false-value="false">
+                                            <i></i>
+                                            {{item.name}}
+                                        </label>
+                                        <div ng-show="item.code=='Z'">
+                                            <input placeholder="{{item.name}}" ng-model="other" >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg pull-in"></div>
+                        </div>
+                        <!--<footer class="panel-footer text-right bg-light lter">-->
+                            <!--<button type="button" class="btn btn-success">Save</button>-->
+                        <!--</footer>-->
+                    </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <strong>公区摆展</strong>
+                        </div>
+                        <div class="panel-body" ng-repeat="field1 in surveyFieldList3 ">
+                            <!--<p class="text-muted">Need support? please fill the fields below.</p>-->
+                            <div class="form-group">
+                                <label>{{$index+1+maxNo[1]}}. {{field1.fieldDesc}}</label>
+                                <div ng-show="field1.fieldFormat=='input'">
+                                    <input type="text" ng-model="fieldName" class="input-sm form-control" placeholder="{{field1.fieldDesc}}">
+                                </div>
+                                <div ng-show="field1.fieldFormat=='number'">
+                                    <div class="form-group col-sm-3">
+                                        <input type="number" ng-model="fieldName" class="input-sm form-control" placeholder="{{field1.fieldDesc}}">
+                                    </div>
+                                </div>
+                                <div ng-show="field1.fieldFormat=='select'">
+                                    <div class="form-group col-sm-3">
+                                        <select ui-jq="chosen" data-placeholder="{{field1.fieldDesc}}" ng-model="field1.fieldName" class="form-control m-b">
+                                            <option ng-repeat="item in field1.optionList" value="{{item.id}}">{{item.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="radio list-group-item wrapper bg-light clearfix" ng-show="field1.fieldFormat=='radio'">
+                                    <div ng-class="{true: 'form-group col-sm-4', false: 'form-group col-sm-3'}[field1.optionList.length<=2]" ng-repeat="item in field1.optionList">
+                                        <label class="i-checks"  ng-show="item.code!='Z'" >
+                                            <input type="radio" ng-model="field1.fieldName" ng-value="item.id" ng-click="showSelect(item.code)">
+                                            <i></i>
+                                            {{item.name}}
+                                        </label>
+                                        <div ng-show="item.code=='Z'">
+                                            <input placeholder="{{item.name}}" ng-model="other" >
+                                        </div>
+                                        <span ng-show="item.childDataList!=null" >
+                                            <select ui-jq="chosen"  data-placeholder="{{item.name}}" class="form-control input-sm w-sm" ng-disabled="{{disabledSelect=='Y'}}">
+                                                <option ng-repeat="child in item.childDataList" value="{{child.id}}">{{child.name}}</option>
+                                            </select>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="checkbox list-group-item wrapper bg-light clearfix" ng-show="field1.fieldFormat=='checkbox'">
+                                    <div ng-class="{true: 'form-group', false: 'form-group col-sm-3'}[field1.optionList.length<=2]" ng-repeat="item in field1.optionList">
+                                        <label class="i-checks" ng-show="item.code!='Z'">
+                                            <input type="checkbox" ng-model="fieldName"  ng-true-value="{{item.id}}" ng-false-value="false">
+                                            <i></i>
+                                            {{item.name}}
+                                        </label>
+                                        <div ng-show="item.code=='Z'">
+                                            <input placeholder="{{item.name}}" ng-model="other" >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg pull-in"></div>
+                        </div>
+                        <footer class="panel-footer text-left bg-light lter">
+                            <button type="submit" class="btn btn-success" ui-sref="app.exhibition.surveyList">提交</button>
+                            <button type="submit" class="btn btn-danger" ui-sref="app.exhibition.surveyList" ng-if="id!=0">删除</button>
+                        </footer>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

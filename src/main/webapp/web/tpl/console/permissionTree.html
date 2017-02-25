@@ -1,0 +1,154 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">权限分配</h1>
+</div>
+<div class="wrapper-md" ng-controller="PermissionCtrl">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>角色</strong>
+        </div>
+        <div class="panel-body">
+            <div class="col-sm-4">
+                <select class="form-control m-b-sm" ng-model="form.roleId" ng-change="searchRole(form.roleId)"
+                    ng-options="item.id as item.roleName for item in roles | orderBy : 'id'"></select>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>权限</strong>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div ui-jq="nestable" class="dd">
+                        <ol class="dd-list">
+                            <li class="dd-item dd3-item" data-id="14">
+                                <div class="dd-handle2 dd3-handle">≡</div><div class="dd3-content h4">展厅问卷</div>
+                            </li>
+
+                            <li class="dd-item dd3-item" data-id="14">
+                                <div class="dd-handle2 dd3-handle"><input type="checkbox" value="option1"></div><div class="dd3-content">展厅问卷录入</div>
+                            </li>
+                            <li class="dd-item dd3-item" data-id="14">
+                                <div class="dd-handle2 dd3-handle"><input type="checkbox" value="option1"></div><div class="dd3-content">展厅问卷查询</div>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div ui-jq="nestable" class="dd">
+                        <ol class="dd-list">
+                            <li class="dd-item dd3-item" data-id="14">
+                                <div class="dd-handle2 dd3-handle">≡</div><div class="dd3-content h4">卖场问卷</div>
+                            </li>
+
+                            <li class="dd-item dd3-item" data-id="14">
+                                <div class="dd-handle2 dd3-handle"><input type="checkbox" value="option1"></div><div class="dd3-content">卖场问卷录入</div>
+                            </li>
+                            <li class="dd-item dd3-item" data-id="14">
+                                <div class="dd-handle2 dd3-handle"><input type="checkbox" value="option1"></div><div class="dd3-content">卖场问卷查询</div>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="line line-dashed b-b line-lg pull-in"></div>
+
+            <div class="row">
+                <div class="col-sm-4">
+                    <div ui-jq="nestable" class="dd">
+                        <ol class="dd-list">
+                            <li class="dd-item dd3-item" data-id="14">
+                                <div class="dd-handle2 dd3-handle">≡</div><div class="dd3-content h4">统计报表</div>
+                            </li>
+
+                            <li class="dd-item dd3-item" data-id="14">
+                                <div class="dd-handle2 dd3-handle"><input type="checkbox" value="option1"></div><div class="dd3-content">展厅统计报表</div>
+                            </li>
+                            <li class="dd-item dd3-item" data-id="14">
+                                <div class="dd-handle2 dd3-handle"><input type="checkbox" value="option1"></div><div class="dd3-content">卖场统计报表</div>
+                            </li>
+                            <li class="dd-item dd3-item" data-id="14">
+                                <div class="dd-handle2 dd3-handle"><input type="checkbox" value="option1"></div><div class="dd3-content">业务统计地图</div>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div ui-jq="nestable" class="dd">
+                        <ol class="dd-list">
+                            <li class="dd-item dd3-item" data-id="14">
+                                <div class="dd-handle2 dd3-handle">≡</div><div class="dd3-content h4">管理</div>
+                            </li>
+                            <li class="dd-item dd3-item" data-id="15">
+                                <div class="dd-handle2 dd3-handle"><input type="checkbox" value="option2"></div><div class="dd3-content">用户管理</div>
+                                <ol class="dd-list">
+                                    <li class="dd-item dd3-item" data-id="16">
+                                        <div class="dd-handle2 dd3-handle"><input type="checkbox" value="option3"></div><div class="dd3-content">用户</div>
+                                    </li>
+                                    <li class="dd-item dd3-item" data-id="17">
+                                        <div class="dd-handle2 dd3-handle"><input type="checkbox" value="option4"></div><div class="dd3-content">角色</div>
+                                    </li>
+                                    <li class="dd-item dd3-item" data-id="18">
+                                        <div class="dd-handle2 dd3-handle"><input type="checkbox" value="option5"></div><div class="dd3-content">链接分配</div>
+                                    </li>
+                                </ol>
+                            </li>
+                            <li class="dd-item dd3-item" data-id="15">
+                                <div class="dd-handle2 dd3-handle"><input type="checkbox" value="option2"></div><div class="dd3-content">基础分类维护</div>
+                                <ol class="dd-list">
+                                    <li class="dd-item dd3-item" data-id="16">
+                                        <div class="dd-handle2 dd3-handle"><input type="checkbox" value="option3"></div><div class="dd3-content">品牌</div>
+                                    </li>
+                                    <li class="dd-item dd3-item" data-id="17">
+                                        <div class="dd-handle2 dd3-handle"><input type="checkbox" value="option4"></div><div class="dd3-content">品类</div>
+                                    </li>
+                                    <li class="dd-item dd3-item" data-id="18">
+                                        <div class="dd-handle2 dd3-handle"><input type="checkbox" value="option5"></div><div class="dd3-content">厂商</div>
+                                    </li>
+                                    <li class="dd-item dd3-item" data-id="18">
+                                        <div class="dd-handle2 dd3-handle"><input type="checkbox" value="option5"></div><div class="dd3-content">字典杂项</div>
+                                    </li>
+                                </ol>
+                            </li>
+                            <li class="dd-item dd3-item" data-id="15">
+                                <div class="dd-handle2 dd3-handle"><input type="checkbox" value="option2"></div><div class="dd3-content">客户信息维护</div>
+                                <ol class="dd-list">
+                                    <li class="dd-item dd3-item" data-id="16">
+                                        <div class="dd-handle2 dd3-handle"><input type="checkbox" value="option3"></div><div class="dd3-content">门店/展厅信息</div>
+                                    </li>
+                                    <li class="dd-item dd3-item" data-id="17">
+                                        <div class="dd-handle2 dd3-handle"><input type="checkbox" value="option4"></div><div class="dd3-content">商场信息</div>
+                                    </li>
+                                    <li class="dd-item dd3-item" data-id="18">
+                                        <div class="dd-handle2 dd3-handle"><input type="checkbox" value="option5"></div><div class="dd3-content">经销商</div>
+                                    </li>
+                                </ol>
+                            </li>
+                            <li class="dd-item dd3-item" data-id="15">
+                                <div class="dd-handle2 dd3-handle"><input type="checkbox" value="option2"></div><div class="dd3-content">问卷类型维护</div>
+                                <ol class="dd-list">
+                                    <li class="dd-item dd3-item" data-id="16">
+                                        <div class="dd-handle2 dd3-handle"><input type="checkbox" value="option3"></div><div class="dd3-content">展厅问卷类型</div>
+                                    </li>
+                                    <li class="dd-item dd3-item" data-id="17">
+                                        <div class="dd-handle2 dd3-handle"><input type="checkbox" value="option4"></div><div class="dd3-content">商场问卷类型</div>
+                                    </li>
+                                    <li class="dd-item dd3-item" data-id="18">
+                                        <div class="dd-handle2 dd3-handle"><input type="checkbox" value="option5"></div><div class="dd3-content">公区摆展</div>
+                                    </li>
+                                </ol>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

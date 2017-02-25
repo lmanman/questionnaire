@@ -47,7 +47,7 @@ public interface SysConstants {
     public static final String MANAGER = "manager";
     //组长
 //	public static final String TEAM_LEADER = "teamLeader";
-    //客服
+    //调查员
     public static final String CUSTOMER_SERVICE = "customService";
     //手机客服
 	public static final String MOBILE_SERVICE = "mobileService";

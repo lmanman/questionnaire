@@ -165,8 +165,8 @@ public class DictionaryService extends BaseService{
             if(Validator.isNull(category.getLevel())){
                 throwException(BusinessStatus.REQUIRE,"level is null!");
             }
-            if(Validator.isNull(category.getParentId())){
-                throwException(BusinessStatus.REQUIRE,"parentId is null!");
+            if(Validator.isNull(category.getType())){
+                throwException(BusinessStatus.REQUIRE,"type is null!");
             }
             categoryDao.save(category);
         }else{

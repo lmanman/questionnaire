@@ -59,7 +59,7 @@
         <property name="sessionIdCookieEnabled" value="true"/>
         <property name="sessionIdCookie" ref="sessionIdCookie"/>
     </bean>
-    
+
 	
 	<!-- Shiro Filter -->
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
@@ -69,17 +69,10 @@
 		<property name="unauthorizedUrl" value="/error/403.jsp"/>
 		<property name="filterChainDefinitions">
 			<value>
-                /loginjsp/** = anon
-				/snap/** = anon
 				/api/** = anon
+				/web/** = anon
                 /open/** = anon
-				/help/** = anon
-				/register/** = anon
-				/downloadFile/** = anon
-				/uploadFile/** = anon
-				/weblogin = anon
 				/mobilelogin = anon
-				/weixin/* = anon
 				/helpdesk/** = authcBasic
 				/mobile/** = user
 				/login = authc

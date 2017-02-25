@@ -1,0 +1,72 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">门店/展厅详情</h1>
+</div>
+<div class="wrapper-md" ng-controller="CustomerCtrl">
+    <div class="col-sm-12">
+        <form name="form" class="form-validation" ng-submit="submit()" ng-init="init()">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span class="h4">&nbsp;</span>
+                </div>
+                <div class="panel-body">
+                    <!--<p class="text-muted">Please fill the information to continue</p>-->
+                    <div class="form-group  pull-in ">
+                        <div class="col-sm-4">
+                            <label>名称 </label>
+                            <input type="text" class="form-control" ng-model="exhibitionList[id-1].name" required >
+                        </div>
+                        <div class="col-sm-4">
+                            <label>地址</label>
+                            <input type="text" class="form-control" ng-model="exhibitionList[id-1].address" required >
+                        </div>
+                    </div>
+                    <div class="line line-dashed b-b line-lg pull-in"></div>
+                    <div class="form-group pull-in clearfix">
+                        <div class="col-sm-4">
+                            <label>经销商</label>
+                            <select  ui-jq="chosen" ng-model="exhibitionList[id-1].dealerId" data-placeholder="经销商" class="form-control input-sm w-sm">
+                                <option value=""></option>
+                                <option ng-repeat="dealer in dealerList" value="{{dealer.id}}">{{dealer.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <label>品牌</label>
+                            <select  ui-jq="chosen" ng-model="exhibitionList[id-1].brandId" data-placeholder="品牌" class="form-control input-sm w-sm">
+                                <option value=""></option>
+                                <option ng-repeat="brand in brandList" value="{{brand.id}}">{{brand.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="line line-dashed b-b line-lg pull-in"></div>
+                    <div class="form-group  pull-in ">
+                        <div class="col-sm-4">
+                            <label>商场</label>
+                            <select  ui-jq="chosen" ng-model="exhibitionList[id-1].marketId" data-placeholder="商场" class="form-control input-sm w-sm">
+                                <option value=""></option>
+                                <option ng-repeat="market in marketList" value="{{market.id}}">{{market.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <label>城市</label>
+                            <select  ui-jq="chosen" ng-model="exhibitionList[id-1].cityId" data-placeholder="城市" class="form-control input-sm w-sm">
+                                <option value=""></option>
+                                <option ng-repeat="city in cityList" value="{{city.id}}">{{city.cityName}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="line line-dashed b-b line-lg pull-in"></div>
+                    <div class="form-group  pull-in ">
+                        <div class="col-sm-8">
+                            <label>备注</label>
+                            <textarea ng-model="exhibitionList[id-1].remark" class="form-control" rows="2" placeholder="个人备注"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <footer class="panel-footer text-left bg-light lter">
+                    <button type="submit" class="btn btn-success" ng-disabled="form.$invalid" onClick="history.back()">保存</button>
+                    <button ui-sref="app.console.exhibitionList" type="button" class="btn btn-success" >返回</button>
+                </footer>
+            </div>
+        </form>
+    </div>
+</div>

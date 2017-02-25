@@ -1,0 +1,25 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">品类维护</h1>
+</div>
+<div class="wrapper-md" ng-controller="FoundationCtrl">
+    <div class="row">
+        <form name="form" class="form-validation">
+            <div class="col-sm-4" ng-repeat="category in categoryList">
+                <div ng-class="{true: 'panel panel-info', false: 'panel panel-success'}[category.level==1]" >
+                    <div class="panel-heading">
+                        {{category.typeName}} &nbsp; ({{category.level}}级)
+                        <i ng-click="categoryAdd(category.type)" class="fa fa-plus-square pull-right"></i>
+                    </div>
+                    <div class="list-group bg-white">
+                        <a href class="list-group-item" ng-repeat="item in category.item">
+                            <span class="badge badge-empty"></span>
+                            <li ng-show="item.id>0">{{item.name}} <i ng-click="categoryDel(category.type,item.id)" class="fa fa-minus-square pull-right"></i> </li>
+                            <li ng-show="item.id==0"><input ng-model="temp"> <i ng-click="categorySave(category.type,temp)" class="fa fa-check-square pull-right"></i> </li>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>

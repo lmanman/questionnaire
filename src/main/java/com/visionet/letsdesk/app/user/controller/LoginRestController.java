@@ -117,7 +117,7 @@ public class LoginRestController extends BaseController {
 //				CookieUtil.saveCookie(entry.getKey(), EscapeUnescape.escape(entry.getValue()), response, request);
 //			}
 
-          String clientFlag = mapUser.get(SysConstants.CLIENT_FLAG)==null? SysConstants.CLIENT_ANDROID:mapUser.get(SysConstants.CLIENT_FLAG);
+            String clientFlag = mapUser.get(SysConstants.CLIENT_FLAG)==null? SysConstants.CLIENT_ANDROID:mapUser.get(SysConstants.CLIENT_FLAG);
 			resourceService.updateLastLoginOn(getCurrentUserId(), DateUtil.getCurrentDate(),clientFlag);
 		}catch(UnknownAccountException uae){
 			log.error("mobilelogin UnknownAccount: "+uae.toString());
@@ -140,8 +140,9 @@ public class LoginRestController extends BaseController {
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put(MobileKey.CODE, BusinessStatus.OK);
 		map.put("id", getCurrentUserId().toString());
-		map.put("apkpath", PropsUtil.getProperty(PropsKeys.SERVICE_DOMAIN)+ UploadUtil.GetAPKDownloadPath());
-        map.put("iospath", UploadUtil.GetSMSIOSDownloadPath());
+        map.put("aliasName", getCurrentUserName());
+//		map.put("apkpath", PropsUtil.getProperty(PropsKeys.SERVICE_DOMAIN)+ UploadUtil.GetAPKDownloadPath());
+//        map.put("iospath", UploadUtil.GetSMSIOSDownloadPath());
 //		map.put(MobileKey.VER, mobileClientService.getLastVersion(clientFlag).getClientVersion());
         return new ResponseEntity<Map<String,Object>>(map ,HttpStatus.OK);
 	}
@@ -285,12 +286,16 @@ public class LoginRestController extends BaseController {
 
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public ResponseEntity<?> login(HttpServletResponse response) {
-        Map<String,String> result = Maps.newHashMap();
-        result.put("code", BusinessStatus.SESSION_INVALID);
-        result.put("msg", MessageSourceHelper.GetMessages("common.session.invalid"));
-        response.setHeader("sessionInvalid", "true");
-        return new ResponseEntity(result ,HttpStatus.OK);
+    public String login() {
+        return "redirect:/web/#/access/signin";
+    }
+
+    @RequestMapping(value="/weblogout")
+    public String webLogout() throws Exception {
+//            resourceService.updateLastLogout(getCurrentUserId());
+        SecurityUtils.getSubject().logout();
+
+        return this.login();
     }
 
 }

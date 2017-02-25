@@ -1,0 +1,91 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">展厅问卷题目维护</h1>
+</div>
+<div class="wrapper-md" ng-controller="SurveyTypeCtrl" ng-init="exhibitionSurveyInit()">
+    <div class="row">
+        <form name="form" class="form-validation">
+            <div class="col-sm-6 connected" ui-jq="sortable" ui-options="{items:'.panel', handle:'.panel-heading', connectWith:'.connected'}"
+                 ng-repeat="field in surveyFieldList">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        {{field.fieldName}}
+                        <i ng-click="surveyFieldDel($index)" class="glyphicon glyphicon-trash pull-right"></i>
+                    </div>
+                    <div class="panel-body list-group alt bg-white">
+                        <li class="list-group-item">
+                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-sort-alpha-asc"></i></span>
+                            <div class="media-body">
+                                <input type="text" ng-model="field.fieldDesc" class="input-sm form-control" placeholder="字段描述">
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-sort-alpha-asc"></i></span>
+                            <div class="media-body">
+                                <select  ng-model="field.fieldFormat" data-placeholder="字段类型" class="form-control input-sm w-sm">
+                                    <option value="radio">单选</option>
+                                    <option value="checkbox">多选</option>
+                                    <option value="select">下拉框</option>
+                                    <option value="number">数字</option>
+                                    <option value="input">输入框</option>
+                                </select>
+                            </div>
+                        </li>
+                        <li class="list-group-item" ng-show="field.fieldFormat=='radio' || field.fieldFormat=='checkbox'">
+                            <accordion close-others="oneAtATime">
+                                <accordion-group  is-open="status.open">
+                                    <accordion-heading>
+                                        选项明细 <i class="pull-right fa fa-angle-right" ng-class="{'fa-angle-down': status.open, 'fa-angle-right': !status.open}"></i>
+                                    </accordion-heading>
+                                    <button class="btn btn-default btn-sm" ng-click="addItem(field)">Add</button>
+                                    <div class="list-group m-t">
+                                        <div ng-repeat="sundry in field.optionList" class="list-group-item">
+                                            <span ng-show="sundry.id>0 && sundry.childDataList==null">{{sundry.name}}<i ng-click="sundryDel(field,sundry.id)" class="fa fa-minus-square pull-right"></i></span>
+                                            <span ng-show="sundry.id==0 && sundry.childDataList==null"><input ng-model="temp"> <i ng-click="sundrySave(sundry,temp)" class="fa fa-check-square pull-right"></i> </span>
+                                            <span ng-show="sundry.id>0 && sundry.childDataList!=null">
+                                                <select ui-jq="chosen"  data-placeholder="{{sundry.name}}" class="form-control input-sm w-sm">
+                                                    <option ng-repeat="item in sundry.childDataList" value="{{item.id}}">{{item.name}}</option>
+                                                </select>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </accordion-group>
+                            </accordion>
+                        </li>
+                        <li class="list-group-item" ng-show="field.fieldFormat=='select'">
+                            <div ng-show="field.relationData!='d_brand'">
+                                <span class="pull-left thumb-sm"><i class="fa  fa-toggle-down"></i></span>
+                                <select  ui-jq="chosen" ng-model="field.optionList" data-placeholder="{{field.fieldDesc}}" class="form-control input-sm w-sm">
+                                    <option value=""></option>
+                                    <option ng-repeat="item in field.optionList" value="{{item.id}}">{{item.name}}</option>
+                                </select>
+                            </div>
+                            <div class="row wrapper" ng-show="field.relationData=='d_brand'">
+                                <span class="pull-left thumb-sm"><i class="fa  fa-toggle-down"></i></span>
+                                <div class="col-sm-4">
+                                    <select ui-jq="chosen" class="w-md" ng-model="brandList" data-placeholder="{{field.fieldDesc}}" ng-change="childChange($index,brandList)">
+                                        <optgroup ng-repeat="item in field.optionList" label="{{item.name}}">
+                                            <option ng-repeat="child in item.childDataList" value="{{child.id}}">{{child.name}}</option>
+                                        </optgroup>
+                                        <option value="0"></option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4 pull-right" ng-show="grandchildDataList.length>0">
+                                    <select  ng-model="grandchildData" data-placeholder="品牌系列" class="form-control input-sm w-sm">
+                                        <option ng-repeat="item in grandchildDataList" value="{{item.id}}">{{item.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item" ng-show="field.fieldFormat=='input'">
+                            <span class="pull-left thumb-sm"><i class="icon-pencil icon-pencil"></i></span>
+                            <div class="media-body">
+                                <input type="text"  class="input-sm form-control" placeholder="用户输入框" disabled>
+                            </div>
+                        </li>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
