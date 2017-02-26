@@ -21,6 +21,7 @@
             <table class="table table-striped b-t b-light table-hover" >
                 <thead>
                 <tr>
+                    <!--<th></th>-->
                     <th>账号</th>
                     <th>用户名</th>
                     <th>邮箱</th>
@@ -31,6 +32,8 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="item in list">
+                    <!--<td><label class="i-checks m-b-none"><input type="checkbox" ng-model="chkVal[item.id]"  ng-true-value="{{item.id}}" ng-false-value="false"><i></i></label></td>-->
+                    <!--<td><p>xx: {{chkVal}}</p></td>-->
                     <td ><a class="text-info-dker block" ui-sref="app.console.userInfo({uid:item.id})" >
                         <span >{{item.loginName}}</span> <br>
                         <span class="label bg-success" title="{{item.roleDesc}}">{{item.roleDesc}}</span>

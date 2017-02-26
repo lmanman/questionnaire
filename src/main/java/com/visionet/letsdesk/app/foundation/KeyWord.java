@@ -36,6 +36,11 @@ public interface KeyWord {
     public static String FIELD_FORMAT_RADIO="radio";
     public static String FIELD_FORMAT_TEXTAREA="textarea";
 
+    public static String FIELD_INDICATOR_BASE="base";
+    public static String FIELD_INDICATOR_ENVIRONMENT="environment";
+    public static String FIELD_INDICATOR_PROMOTION="promotion";
+    public static String FIELD_INDICATOR_RECEPTION="reception";
+    public static String FIELD_INDICATOR_PUBLIC_RESOURCE="publicResource";
     /*------------------ Tag -----------------------*/
 
 

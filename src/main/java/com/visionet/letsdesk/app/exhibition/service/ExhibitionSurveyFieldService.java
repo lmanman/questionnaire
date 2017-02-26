@@ -87,7 +87,19 @@ public class ExhibitionSurveyFieldService extends BaseService{
             } else if("d_manufacturer".equals(relationData)){   //厂商
                 return ((List<Manufacturer>)manufacturerDao.findAll()).parallelStream().map(m -> new SundryVo(m.getId(),m.getName())).collect(Collectors.toList());
             } else if("s_dealer".equals(relationData)){ //经销商
-                return ((List<Dealer>)dealerDao.findAll()).parallelStream().map(m -> new SundryVo(m.getId(),m.getName())).collect(Collectors.toList());
+                List<SundryVo> sundryVoList = BeanConvertMap.mapList(sundryDao.findByType(type), SundryVo.class);
+                for(SundryVo svo : sundryVoList){
+                    if(svo.getCode().equals("N")){
+                        List<Dealer> dlist = ((List<Dealer>)dealerDao.findAll());
+                        svo.setChildDataList(dlist.stream().map(d -> {
+                            SundryVo.ChildData sc = new SundryVo.ChildData();
+                            sc.setId(d.getId());
+                            sc.setName(d.getName());
+                            return sc;
+                        }).collect(Collectors.toList()));
+                    }
+                }
+                return sundryVoList;
             }
         }
         return BeanConvertMap.mapList(sundryDao.findByType(type), SundryVo.class);

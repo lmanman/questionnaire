@@ -1,9 +1,12 @@
 package com.visionet.letsdesk.app.exhibition.entity;
 
+import com.google.common.collect.Lists;
 import com.visionet.letsdesk.app.base.entity.IdEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import java.util.List;
 
 /**
  * 公区摆展
@@ -15,10 +18,12 @@ import javax.persistence.Table;
 public class ExhibitionSurveyPublicShow extends IdEntity{
 
     private Long surveyId;
-    private Integer publicExhibitionPriceTag;
-    private Integer publicExhibitionArea;
-    private Integer publicExhibitionFloor;
+    private Integer publicExhibitionPriceTag;                               //公区摆展是否有有价签
+    private Integer publicExhibitionArea;                                   //公区摆展面积
+    private Integer publicExhibitionFloor;                                  //公区摆展楼层
     private Integer publicExhibitionPlace;
+    private List<Integer> publicAdType = Lists.newArrayList();             //公区广告类型
+    private List<Integer> brandSponsorType = Lists.newArrayList();         //品牌赞助类型
 
     public Long getSurveyId() {
         return surveyId;
@@ -59,4 +64,24 @@ public class ExhibitionSurveyPublicShow extends IdEntity{
     public void setPublicExhibitionPlace(Integer publicExhibitionPlace) {
         this.publicExhibitionPlace = publicExhibitionPlace;
     }
+
+
+    @Transient
+    public List<Integer> getPublicAdType() {
+        return publicAdType;
+    }
+
+    public void setPublicAdType(List<Integer> publicAdType) {
+        this.publicAdType = publicAdType;
+    }
+
+    @Transient
+    public List<Integer> getBrandSponsorType() {
+        return brandSponsorType;
+    }
+
+    public void setBrandSponsorType(List<Integer> brandSponsorType) {
+        this.brandSponsorType = brandSponsorType;
+    }
+
 }

@@ -9,14 +9,9 @@ import com.visionet.letsdesk.app.common.modules.validate.Validator;
 import com.visionet.letsdesk.app.common.utils.BeanConvertMap;
 import com.visionet.letsdesk.app.common.utils.PageInfo;
 import com.visionet.letsdesk.app.common.utils.SearchFilterUtil;
-import com.visionet.letsdesk.app.dictionary.entity.Sundry;
-import com.visionet.letsdesk.app.dictionary.repository.SundryDao;
-import com.visionet.letsdesk.app.exhibition.entity.Exhibition;
 import com.visionet.letsdesk.app.exhibition.entity.ExhibitionSurvey;
-import com.visionet.letsdesk.app.exhibition.entity.ExhibitionSurveyField;
 import com.visionet.letsdesk.app.exhibition.entity.ExhibitionSurveyMultiselect;
 import com.visionet.letsdesk.app.exhibition.repository.*;
-import com.visionet.letsdesk.app.exhibition.vo.ExhibitionSurveyFieldVo;
 import com.visionet.letsdesk.app.exhibition.vo.ExhibitionSurveyVo;
 import com.visionet.letsdesk.app.foundation.KeyWord;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,29 +64,8 @@ public class ExhibitionSurveyService extends BaseService{
             if(multiselect.getSurveyField().equals("peripheryFacility")){
                 vo.getPeripheryFacility().add(multiselect.getSundryId());
             }
-            if(multiselect.getSurveyField().equals("publicAdType")){
-                vo.getPublicAdType().add(multiselect.getSundryId());
-            }
-            if(multiselect.getSurveyField().equals("brandSponsorType")){
-                vo.getBrandSponsorType().add(multiselect.getSundryId());
-            }
             if(multiselect.getSurveyField().equals("hygiene")){
                 vo.getHygiene().add(multiselect.getSundryId());
-            }
-            if(multiselect.getSurveyField().equals("workbenchHygiene")){
-                vo.getWorkbenchHygiene().add(multiselect.getSundryId());
-            }
-            if(multiselect.getSurveyField().equals("discussionAreas")){
-                vo.getDiscussionAreas().add(multiselect.getSundryId());
-            }
-            if(multiselect.getSurveyField().equals("backgroundWallHygiene")){
-                vo.getBackgroundWallHygiene().add(multiselect.getSundryId());
-            }
-            if(multiselect.getSurveyField().equals("designAreaHygiene")){
-                vo.getDesignAreaHygiene().add(multiselect.getSundryId());
-            }
-            if(multiselect.getSurveyField().equals("brandImagePlace")){
-                vo.getBrandImagePlace().add(multiselect.getSundryId());
             }
             if(multiselect.getSurveyField().equals("salesPromotionMaterials")){
                 vo.getSalesPromotionMaterials().add(multiselect.getSundryId());
@@ -108,11 +82,18 @@ public class ExhibitionSurveyService extends BaseService{
             if(multiselect.getSurveyField().equals("guestDrink")){
                 vo.getGuestDrink().add(multiselect.getSundryId());
             }
-            if(multiselect.getSurveyField().equals("promotionType")){
-                vo.getPromotionType().add(multiselect.getSundryId());
+            if(multiselect.getSurveyField().equals("customerPicWall")){
+                vo.getCustomerPicWall().add(multiselect.getSundryId());
             }
-            if(multiselect.getSurveyField().equals("promotionStyle")){
-                vo.getPromotionStyle().add(multiselect.getSundryId());
+            if(Collections3.isNotEmpty(vo.getPublicShowList())){
+                vo.getPublicShowList().parallelStream().forEach(p->{
+                    if(multiselect.getSurveyField().equals("publicAdType")){
+                        p.getPublicAdType().add(multiselect.getSundryId());
+                    }
+                    if(multiselect.getSurveyField().equals("brandSponsorType")){
+                        p.getBrandSponsorType().add(multiselect.getSundryId());
+                    }
+                });
             }
         }
         vo.setPublicShowList(exhibitionSurveyPublicShowDao.findBySurveyId(vo.getId()));
@@ -131,11 +112,10 @@ public class ExhibitionSurveyService extends BaseService{
             if(Validator.isNull(survey.getExhibitionId())){
                 throwException(BusinessStatus.REQUIRE,"exhibitionId is null!");
             }
-            Exhibition store = exhibitionDao.findOne(survey.getExhibitionId());
-            if(store==null){
-                throwException(BusinessStatus.NOTFIND,"exhibitionId not exist!");
-            }
-            survey.setBrand(store.getBrandId());
+//            Exhibition store = exhibitionDao.findOne(survey.getExhibitionId());
+//            if(store==null){
+//                throwException(BusinessStatus.NOTFIND,"exhibitionId not exist!");
+//            }
             survey.setCreateDate(DateUtil.getCurrentDate());
             exhibitionSurveyDao.save(survey);
 

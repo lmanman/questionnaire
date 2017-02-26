@@ -558,6 +558,11 @@ public class ExhibitionSurveyController extends BaseController{
         if(exhibitionSurvey.getExhibitionId()==null){
             throwException(BusinessStatus.REQUIRE,"exhibitionId is null!");
         }
+        //TODO 品牌选择
+        if(exhibitionSurvey.getBrand()==null){
+            exhibitionSurvey.setBrand(1);
+        }
+        System.out.println(mapper.toJson(exhibitionSurvey));
         exhibitionSurvey.setCreateBy(getCurrentUserId());
         exhibitionSurveyService.save(exhibitionSurvey);
         return new ResponseEntity<Map<String,String>>(GetSuccMap() , HttpStatus.OK);

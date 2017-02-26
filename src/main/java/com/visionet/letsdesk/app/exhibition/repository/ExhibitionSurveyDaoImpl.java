@@ -94,7 +94,7 @@ public class ExhibitionSurveyDaoImpl {
                         query += " and t."+propertyName+" = :"+propertyName;
                         map.put(propertyName, result);
                     }else if(result instanceof List){
-                        if(checkboxNameList.contains(propertyName)){
+                        if(checkboxNameList.contains(propertyName) && !((List) result).isEmpty()){
                             query += " and  EXISTS (select 1 from ExhibitionSurveyMultiselect m where m.surveyId=t.id and m.surveyField='"+propertyName+"' and m.sundryId in(:"+propertyName+"))";
                             map.put(propertyName, (List<Integer>)result);
                         }

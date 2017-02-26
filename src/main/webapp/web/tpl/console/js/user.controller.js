@@ -12,7 +12,7 @@ function ctrlFn($scope,$stateParams,$http,$state,$log){
             pageNumber: 1,
             pageSize: 10
         }
-    }
+    };
     $scope.list = [];
     $scope.totalPages = 1;
     $scope.total = 0;
@@ -144,5 +144,8 @@ function ctrlFn($scope,$stateParams,$http,$state,$log){
 
         }
     };
+
+    $scope.chkVal = {"3": "Gj", "2": "Xt","7":"test1","8":"test2"};
+
 
 }
