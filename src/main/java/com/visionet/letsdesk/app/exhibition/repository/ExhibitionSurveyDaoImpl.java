@@ -59,6 +59,13 @@ public class ExhibitionSurveyDaoImpl {
             query += " and t.createDate <= :queryEndDate";
             map.put("queryEndDate", endDate);
         }
+        if(Validator.isNotNull(exhibitionSurveyVo.getQueryName())){
+            //展厅名/品牌/品类
+            query += " and (exists (select 1 from Exhibition h where h.name like :queryName and h.id=t.exhibitionId) " +
+                    " or exists (select 1 from Brand b where b.name like :queryName and b.id = t.brand)  " +
+                    " or exists (select 1 from Category c where c.name like :queryName and c.id = t.categoryMain))";
+            map.put("queryName", "%"+exhibitionSurveyVo.getQueryName()+"%");
+        }
 
         List<ExhibitionSurveyPublicShow> publicShowList = exhibitionSurveyVo.getPublicShowList();
         if(Collections3.isNotEmpty(publicShowList)){

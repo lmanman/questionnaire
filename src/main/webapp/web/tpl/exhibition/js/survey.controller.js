@@ -51,39 +51,7 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
 
     };
 
-
-    $scope.formData = {
-        pageInfo: {
-            pageNumber: 1,
-            pageSize: 10
-        }
-    };
-    $scope.list = [];
-    $scope.totalPages = 1;
-    $scope.total = 0;
-    $scope.number = 0;
-    $scope.size = 0;
-    $scope.numberOfElements = 0;
-    $scope.query  = function(){
-        var formData = {};
-        formData.pageInfo = $scope.formData.pageInfo;
-        formData.queryName = $scope.queryName;
-
-        $http.post($scope.app.projectName + '/mobile/exhibition/survey/search',formData).success(function(result){
-
-            $scope.list = result.content;
-            $scope.lastPage = result.lastPage;
-            $scope.firstPage = result.firstPage;
-            $scope.total = result.totalElements;
-            $scope.number = result.number;
-            $scope.totalPages = result.totalPages;
-            $scope.size = result.size;
-            $scope.numberOfElements = result.numberOfElements;
-        }).error(function(){
-            alert('查询失败');
-        });
-
-    };
+;
 
     $scope.maxNo = [0,0];
 

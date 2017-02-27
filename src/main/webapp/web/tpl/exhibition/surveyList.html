@@ -1,8 +1,8 @@
 <div class="bg-light lter b-b wrapper-md">
     <h1 class="m-n font-thin h3">展厅问卷查询</h1>
 </div>
-<div class="wrapper-md" ng-controller="SurveyQueryCtrl" ng-submit="query()" ng-init="query()">
-
+<div class="wrapper-md" ng-controller="SurveyQueryCtrl">
+    <form name="form" class="form-validation" ng-submit="query()" ng-init="query()">
     <div class="panel panel-default">
         <div class="panel-heading">
             问卷列表
@@ -10,9 +10,9 @@
         <div class="row wrapper">
             <div class="col-sm-4">
                 <div class="input-group">
-                    <input type="text" class="input-sm form-control" placeholder="展厅名/品牌/经销商">
+                    <input type="text" ng-model="queryName" class="input-sm form-control" placeholder="展厅名/品牌/品类">
                     <span class="input-group-btn">
-                      <button class="btn btn-sm btn-default btn-info" type="button"><i class="fa fa-fw fa-search"></i></button>
+                      <button class="btn btn-sm btn-default btn-info" type="submit"><i class="fa fa-fw fa-search"></i></button>
                   </span>
                 </div>
             </div>
@@ -23,6 +23,7 @@
                 <tr>
                     <th>展厅名</th>
                     <th>品牌</th>
+                    <th>品类</th>
                     <th>经销商</th>
                     <th>城市</th>
                     <!--<th>状态</th>-->
@@ -37,6 +38,7 @@
                         <span >{{item.exhibitionName}}</span>
                     </a></td>
                     <td>{{item.brandName}}</td>
+                    <td>{{item.categoryName}}</td>
                     <td>
                         <span >{{item.dealerName}}</span><br>
                         <span>{{item.address}}</span>
@@ -49,7 +51,7 @@
                     <td>{{item.userName}}</td>
                     <td>{{item.updateDate}}</td>
                 </tr>
-                <tr ng-show="dealerList.length <= 0">
+                <tr ng-show="exhibitionSurveyList.length <= 0">
                     <td colspan="5" class="text-center">
                         <h4>暂无数据</h4>
                     </td>
@@ -70,7 +72,7 @@
                 <div class="col-sm-4 text-center">
                     <small class="text-muted inline m-t-sm m-b-sm">20-30 共 50</small>
                 </div>
-                <div class="col-sm-4 text-right text-center-xs" ng-if="dealerList.length > 0">
+                <div class="col-sm-4 text-right text-center-xs" ng-if="exhibitionSurveyList.length > 0">
                     <ul class="pagination pagination-sm m-t-none m-b-none">
                         <li class="footable-page-arrow disabled"><a data-page="first" href>«</a></li>
                         <li class="footable-page-arrow disabled"><a data-page="prev" href>‹</a></li>
@@ -86,4 +88,5 @@
             </div>
         </footer>
     </div>
+    </form>
 </div>

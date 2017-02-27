@@ -28,13 +28,13 @@ public class ExhibitionSurvey extends IdEntity{
     private Integer brand;                             //品牌
     private Integer brand2;                            //子品牌
     private Integer brand3;                            //品牌系列
-    private Integer businessNature;                           //展厅经营性质
+    private Integer businessNature;                            //展厅经营性质(0:直营；其他：经销商 dealerId)
     private Integer standAloneStore;	                       //是否独立店面
 
     private Integer exhibitionProvince;                        //商场所在省／直辖市
     private Integer exhibitionCity;	                           //商场所在市／区
     private String exhibitionAddress;	                       //详细地址
-    private String exhibitionBusinessHours;                   //营业时间
+    private String exhibitionBusinessHours;                    //营业时间
     private Integer exhibitionEntrance;                        //展厅入口数量
     private Integer exhibitionStatus;                          //展厅状态
     private Integer outerWall;                                 //展厅外墙展示

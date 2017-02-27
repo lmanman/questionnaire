@@ -11,4 +11,7 @@ public interface BrandDao extends PagingAndSortingRepository<Brand, Long>, JpaSp
 
     @Query("select b from Brand b order by b.parentId,b.id")
     List<Brand> findOrderByParentId();
+
+    @Query("select b.name from Brand b where b.id=?1")
+    String findNameById(Long id);
 }

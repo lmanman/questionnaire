@@ -9,9 +9,12 @@ import com.visionet.letsdesk.app.common.modules.validate.Validator;
 import com.visionet.letsdesk.app.common.utils.BeanConvertMap;
 import com.visionet.letsdesk.app.common.utils.PageInfo;
 import com.visionet.letsdesk.app.common.utils.SearchFilterUtil;
+import com.visionet.letsdesk.app.dictionary.repository.BrandDao;
+import com.visionet.letsdesk.app.dictionary.repository.CategoryDao;
 import com.visionet.letsdesk.app.exhibition.entity.ExhibitionSurvey;
 import com.visionet.letsdesk.app.exhibition.entity.ExhibitionSurveyMultiselect;
 import com.visionet.letsdesk.app.exhibition.repository.*;
+import com.visionet.letsdesk.app.exhibition.vo.ExhibitionSurveyListVo;
 import com.visionet.letsdesk.app.exhibition.vo.ExhibitionSurveyVo;
 import com.visionet.letsdesk.app.foundation.KeyWord;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,13 +38,19 @@ public class ExhibitionSurveyService extends BaseService{
     @Autowired
     private ExhibitionSurveyFieldDao exhibitionSurveyFieldDao;
     @Autowired
-    private ExhibitionDao exhibitionDao;
-    @Autowired
     private ExhibitionSurveyMultiselectDao exhibitionSurveyMultiselectDao;
     @Autowired
     private ExhibitionSurveyPublicShowDao exhibitionSurveyPublicShowDao;
     @Autowired
     private ExhibitionSurveyDaoImpl exhibitionSurveyDaoImpl;
+    @Autowired
+    private ExhibitionDao exhibitionDao;
+    @Autowired
+    private BrandDao brandDao;
+    @Autowired
+    private DealerDao dealerDao;
+    @Autowired
+    private CategoryDao categoryDao;
 
     /**
      * 展厅问卷明细
@@ -188,6 +197,41 @@ public class ExhibitionSurveyService extends BaseService{
                 page.getSize(), page.getSort()), page.getTotalElements());
     }
 
+
+
+    public Page<ExhibitionSurveyListVo> list(ExhibitionSurveyVo query) throws Exception{
+        PageInfo pageInfo = query.getPageInfo();
+        if(pageInfo == null){
+            pageInfo = new PageInfo();
+        }
+
+        List<String> checkboxNameList = exhibitionSurveyFieldDao.findFieldNameByFieldFormat
+                (KeyWord.FIELD_FORMAT_CHECKBOX);
+        Page<ExhibitionSurvey> page = exhibitionSurveyDaoImpl.searchByCondition(query, checkboxNameList, pageInfo);
+
+        List<ExhibitionSurveyListVo> voList = Lists.newArrayList();
+        for(ExhibitionSurvey survey:page.getContent()){
+            ExhibitionSurveyListVo vo = new ExhibitionSurveyListVo();
+            vo.setBrandName(brandDao.findNameById(Validator.isNull(survey.getBrand2()) ? survey.getBrand().longValue() : survey.getBrand2().longValue()));
+            vo.setAddress(survey.getExhibitionAddress());
+            vo.setExhibitionName(exhibitionDao.findNameById(survey.getExhibitionId()));
+            if(Validator.isNotNull(survey.getBusinessNature())) {
+                vo.setDealerName(dealerDao.findNameById(survey.getBusinessNature().longValue()));
+            }
+            vo.setCategoryName(categoryDao.findNameById(survey.getCategoryMain().longValue()));
+            vo.setSchedule(new int[]{GetAnswerNum(survey),64});
+            vo.setUpdateDate(survey.getUpdateDate());
+            vo.setCreateBy(survey.getCreateBy());
+
+            voList.add(vo);
+        }
+        return new PageImpl<ExhibitionSurveyListVo>(voList, new PageRequest(page.getNumber(),
+                page.getSize(), page.getSort()), page.getTotalElements());
+    }
+
+    public static int GetAnswerNum(ExhibitionSurvey survey){
+        return 64;
+    }
 
 
 
