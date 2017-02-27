@@ -78,7 +78,7 @@ public class ExhibitionSurveyVo extends BaseVo{
     private Integer promotionStyle;                 //展厅的主要促销形式
     private Integer specialOffer;                   //特价款
 
-    private List<ExhibitionSurveyPublicShow> publicShowList = Lists.newArrayList();    //公区摆展
+    private ExhibitionSurveyPublicShow publicShow;     //公区摆展
 
     private Long exhibitionId;              //展厅ID
     private Long createBy;                  //创建人
@@ -596,12 +596,12 @@ public class ExhibitionSurveyVo extends BaseVo{
     }
 
 
-    public List<ExhibitionSurveyPublicShow> getPublicShowList() {
-        return publicShowList;
+    public ExhibitionSurveyPublicShow getPublicShow() {
+        return publicShow;
     }
 
-    public void setPublicShowList(List<ExhibitionSurveyPublicShow> publicShowList) {
-        this.publicShowList = publicShowList;
+    public void setPublicShow(ExhibitionSurveyPublicShow publicShow) {
+        this.publicShow = publicShow;
     }
 
     public Long getExhibitionId() {

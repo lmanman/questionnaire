@@ -1,8 +1,6 @@
 package com.visionet.letsdesk.app.user.service;
 
 import com.visionet.letsdesk.app.base.controller.BaseController;
-import com.visionet.letsdesk.app.base.rest.RestException;
-import com.visionet.letsdesk.app.base.service.ServiceException;
 import com.visionet.letsdesk.app.common.cache.EhcacheUtil;
 import com.visionet.letsdesk.app.common.constant.BusinessStatus;
 import com.visionet.letsdesk.app.common.constant.SysConstants;
@@ -88,23 +86,32 @@ public class UserService extends BaseController{
     }
 
 
-    private void checkUserInfo(User user){
-        if(userDao.checkByLoginName(user.getLoginName(), user.getId()) != null){
-            throw new RestException(MessageSourceHelper.GetMessages("register.loginName.exist"));
+    private void checkUserInfo(User user) {
+        if (user.getId() != null && user.getId().longValue() != BaseController.getCurrentUserId().longValue() && AccountService.isSupervisor(user.getId())) {
+            logger.warn("Operator{} want to modify admin!", BaseController.getLoginUserName());
+            throwException(BusinessStatus.ERROR, MessageSourceHelper.GetMessages("app.service.account.AccountService.modify.admin"));
         }
-//        if(userDao.checkByAliasName(user.getAliasName(), user.getOrgId(),user.getId()) > 0){
-//            throw new RestException(MessageSourceHelper.GetMessages("register.aliasName.exist"));
-//        }
-        if (AccountService.isSupervisor(user.getId())) {
-            logger.warn("Operator{}want to modify admin!", BaseController.getCurrentUserName());
-            throw new ServiceException(MessageSourceHelper.GetMessages("app.service.account.AccountService.modify.admin"));
+        if (user.getId() != null) {
+            if (userDao.checkByLoginName(user.getLoginName(), user.getId()) != null) {
+                throwException(BusinessStatus.NAMEREPEAT, MessageSourceHelper.GetMessages("register.loginName.exist"));
+            }
+            if (userDao.checkByAliasName(user.getAliasName(), user.getOrgId(), user.getId()) != null) {
+                throwException(BusinessStatus.NAMEREPEAT, MessageSourceHelper.GetMessages("register.aliasName.exist"));
+            }
+        } else {
+            if (userDao.findByLoginName(user.getLoginName()) != null) {
+                throwException(BusinessStatus.NAMEREPEAT, MessageSourceHelper.GetMessages("register.loginName.exist"));
+            }
+            if (userDao.findByAliasNameAndOrgId(user.getAliasName(), user.getOrgId()) != null) {
+                throwException(BusinessStatus.NAMEREPEAT, MessageSourceHelper.GetMessages("register.aliasName.exist"));
+            }
         }
+
     }
 
 
 
-
-    @Transactional(readOnly = false)
+        @Transactional(readOnly = false)
     public void updateUserRole(Long userId,Set<Role> roleSet) {
         User po = userDao.findOne(userId);
         po.setRoleSet(roleSet);
@@ -207,22 +214,22 @@ public class UserService extends BaseController{
         }
     }
 
-    public void checkOrgValid(Long userId){
-        if(AccountService.isSupervisor(userId)){
-            return;
-        }
-        User user = userDao.findOne(userId);
-        if(user==null){
-            throwException(BusinessStatus.NOTFIND,"userId not exist!");
-        }
-        Organization organization = organizationDao.findOne(user.getOrgId());
-        if(organization==null){
-            throwException(BusinessStatus.NOTFIND,"organization not exist!");
-        }
-        if(organization.getIsLock().intValue() == SysConstants.USER_ACTIVITY_DISABLED){
-            throwException(BusinessStatus.ILLEGAL,MessageSourceHelper.GetMessages("app.user.service.UserService.org.disabled"));
-        }
-    }
+//    public void checkOrgValid(Long userId){
+//        if(AccountService.isSupervisor(userId)){
+//            return;
+//        }
+//        User user = userDao.findOne(userId);
+//        if(user==null){
+//            throwException(BusinessStatus.NOTFIND,"userId not exist!");
+//        }
+//        Organization organization = organizationDao.findOne(user.getOrgId());
+//        if(organization==null){
+//            throwException(BusinessStatus.NOTFIND,"organization not exist!");
+//        }
+//        if(organization.getIsLock().intValue() == SysConstants.USER_ACTIVITY_DISABLED){
+//            throwException(BusinessStatus.ILLEGAL,MessageSourceHelper.GetMessages("app.user.service.UserService.org.disabled"));
+//        }
+//    }
 
     @Transactional(readOnly = false)
     public void registerUser(User user) {

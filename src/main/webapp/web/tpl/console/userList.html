@@ -24,6 +24,7 @@
                     <!--<th></th>-->
                     <th>账号</th>
                     <th>用户名</th>
+                    <th>角色</th>
                     <th>邮箱</th>
                     <th>电话</th>
                     <th style="width:10%;">备注</th>
@@ -31,7 +32,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="item in list">
+                <tr ng-repeat="item in list.content">
                     <!--<td><label class="i-checks m-b-none"><input type="checkbox" ng-model="chkVal[item.id]"  ng-true-value="{{item.id}}" ng-false-value="false"><i></i></label></td>-->
                     <!--<td><p>xx: {{chkVal}}</p></td>-->
                     <td ><a class="text-info-dker block" ui-sref="app.console.userInfo({uid:item.id})" >
@@ -39,6 +40,7 @@
                         <span class="label bg-success" title="{{item.roleDesc}}">{{item.roleDesc}}</span>
                     </a></td>
                     <td>{{item.aliasName}}</td>
+                    <td>{{item.roleDescs}}</td>
                     <td>{{item.email}}</td>
                     <td>{{item.phoneNumber}}</td>
                     <td>{{item.remark}}</td>
@@ -46,7 +48,7 @@
                         <a href ng-click="delete($index,item.id)"><i class="fa fa-times text-danger text"></i></a>
                     </td>
                 </tr>
-                <tr ng-show="list.length <= 0">
+                <tr ng-show="list.content.length <= 0">
                     <td colspan="5" class="text-center">
                         <h4>暂无数据</h4>
                     </td>
@@ -60,28 +62,11 @@
                     <button class="btn btn-sm btn-default"ui-sref="app.console.userInfo({uid:0})" >注册新用户</button>
                 </div>
                 <div class="col-sm-4 text-center">
-                    <small class="text-muted inline m-t-sm m-b-sm">{{number * totalPages + 1}}-{{number * totalPages + numberOfElements}} 共 {{total}}</small>
+                    <small class="text-muted inline m-t-sm m-b-sm">{{list.number * list.totalPages + 1}}-{{list.number * list.totalPages + list.numberOfElements}} 共 {{list.totalElements}}</small>
                 </div>
-                <div class="col-sm-4 text-right text-center-xs" ng-if="list.length > 0">
-                    <ul class="pagination pagination-sm m-t-none m-b-none">
-                        <li class="footable-page-arrow disabled"><a data-page="first" href="#first">«</a></li>
-                        <li class="footable-page-arrow disabled"><a data-page="prev" href="#prev">‹</a></li>
-                        <li><a href>1</a></li>
-                        <li class="footable-page-arrow"><a data-page="next" href="#next">›</a></li>
-                        <li class="footable-page-arrow"><a data-page="last" href="#last">»</a></li>
-                    </ul>
+                <div class="col-sm-4 text-right text-center-xs" ng-if="list.content.length > 0">
+                    <pagination boundary-links="true" total-items="list.totalElements" ng-model="formData.pageInfo.pageNumber" class="pagination-sm m-t-none m-b" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
                 </div>
-                <!--
-                <div class="col-sm-4 text-right text-center-xs" ng-if="list.length > 0">
-                    <pagination total-items="vm.totalItems" ng-model="vm.currentPage" ng-change="vm.pageChanged()"
-                                previous-text="‹" next-text="›" max-size="5"></pagination>
-                </div>
-                <div class="col-sm-4 text-right text-center-xs" ng-if="list.length > 0">
-                    <ul uib-pagination boundary-links="true" total-items="total"
-                        ng-model="formData.pageInfo.pageNumber" items-per-page="formData.pageInfo.pageSize"
-                        ng-change="queryUser()"></ul>
-                </div>
-                -->
             </div>
 
         </footer>

@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface ExhibitionSurveyPublicShowDao extends CrudRepository<ExhibitionSurveyPublicShow, Long> {
 
-    List<ExhibitionSurveyPublicShow> findBySurveyId(Long surveyId);
+    ExhibitionSurveyPublicShow findBySurveyId(Long surveyId);
 }

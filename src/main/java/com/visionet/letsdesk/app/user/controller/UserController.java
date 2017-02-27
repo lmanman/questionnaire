@@ -5,13 +5,10 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.visionet.letsdesk.app.base.controller.BaseController;
 import com.visionet.letsdesk.app.base.rest.RestException;
-import com.visionet.letsdesk.app.common.cache.UserCache;
 import com.visionet.letsdesk.app.common.constant.BusinessStatus;
 import com.visionet.letsdesk.app.common.constant.MobileKey;
 import com.visionet.letsdesk.app.common.constant.SysConstants;
-import com.visionet.letsdesk.app.common.modules.MessageSourceHelper;
 import com.visionet.letsdesk.app.common.modules.mapper.BeanMapper;
-import com.visionet.letsdesk.app.common.modules.string.StringPool;
 import com.visionet.letsdesk.app.common.modules.utils.Collections3;
 import com.visionet.letsdesk.app.common.modules.validate.Validator;
 import com.visionet.letsdesk.app.common.utils.BeanConvertMap;
@@ -281,7 +278,12 @@ public class UserController extends BaseController {
         vo.setOrgId(getCurrentOrgId());
         vo.setIsLock(KeyWord.UN_DEL_STATUS);
         Page<User> page = userService.searchUser(vo);
-        List<UserVo> listVo = BeanConvertMap.mapList(page.getContent(), UserVo.class);
+        List<UserVo> listVo = Lists.newArrayList();
+        page.getContent().stream().forEach(po->{
+            UserVo userVo = BeanConvertMap.map(po, UserVo.class);
+            userVo.setRoleDescs(Collections3.extractToString(po.getRoleSet(), "roleDesc", ", "));
+            listVo.add(userVo);
+        });
 
         return new ResponseEntity<Page<UserVo>>(GetPageByList(page, listVo, UserVo.class), HttpStatus.OK);
     }
@@ -323,7 +325,8 @@ public class UserController extends BaseController {
 	@ResponseBody
 	public ResponseEntity<?> updateUser(@RequestBody User vo) throws Exception{
         vo.setPlainPassword(null);
-		User po = userService.getUser(getCurrentUserId());
+                System.out.println(mapper.toJson(vo));
+		User po = userService.getUser(vo.getId());
 
         SearchFilterUtil.copyBeans(po, vo);
         userService.saveUser(po);

@@ -29,11 +29,6 @@ function ctrlFn($scope,$location,$log,$stateParams,$http){
         }
     };
     $scope.exhibitionSurveyList = [];
-    $scope.totalPages = 1;
-    $scope.total = 0;
-    $scope.number = 0;
-    $scope.size = 0;
-    $scope.numberOfElements = 0;
     $scope.query  = function(){
         var formData = {};
         formData.pageInfo = $scope.formData.pageInfo;
@@ -41,14 +36,7 @@ function ctrlFn($scope,$location,$log,$stateParams,$http){
 
         $http.post($scope.app.projectName + '/mobile/exhibition/survey/search',formData).success(function(result){
 
-            $scope.exhibitionSurveyList = result.content;
-            $scope.lastPage = result.lastPage;
-            $scope.firstPage = result.firstPage;
-            $scope.total = result.totalElements;
-            $scope.number = result.number;
-            $scope.totalPages = result.totalPages;
-            $scope.size = result.size;
-            $scope.numberOfElements = result.numberOfElements;
+            $scope.exhibitionSurveyList = result;
         }).error(function(){
             alert('查询失败');
         });
@@ -74,13 +62,9 @@ function ctrlFn($scope,$location,$log,$stateParams,$http){
     //    {"id":4,"cityName":"深圳"},
     //];
 
-
     $scope.newSurvey = function() {
         $location.path('/app/exhibition/surveyInput/0');
     };
 
-    function submit(){
-
-    }
 
 }

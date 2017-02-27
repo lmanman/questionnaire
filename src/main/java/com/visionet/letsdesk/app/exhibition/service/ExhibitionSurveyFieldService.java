@@ -87,19 +87,26 @@ public class ExhibitionSurveyFieldService extends BaseService{
             } else if("d_manufacturer".equals(relationData)){   //厂商
                 return ((List<Manufacturer>)manufacturerDao.findAll()).parallelStream().map(m -> new SundryVo(m.getId(),m.getName())).collect(Collectors.toList());
             } else if("s_dealer".equals(relationData)){ //经销商
-                List<SundryVo> sundryVoList = BeanConvertMap.mapList(sundryDao.findByType(type), SundryVo.class);
-                for(SundryVo svo : sundryVoList){
-                    if(svo.getCode().equals("N")){
-                        List<Dealer> dlist = ((List<Dealer>)dealerDao.findAll());
-                        svo.setChildDataList(dlist.stream().map(d -> {
-                            SundryVo.ChildData sc = new SundryVo.ChildData();
-                            sc.setId(d.getId());
-                            sc.setName(d.getName());
-                            return sc;
-                        }).collect(Collectors.toList()));
-                    }
-                }
-                return sundryVoList;
+//                List<SundryVo> sundryVoList = BeanConvertMap.mapList(sundryDao.findByType(type), SundryVo.class);
+//                for(SundryVo svo : sundryVoList){
+//                    if(svo.getCode().equals("N")){
+//                        List<Dealer> dlist = ((List<Dealer>)dealerDao.findAll());
+//                        svo.setChildDataList(dlist.stream().map(d -> {
+//                            SundryVo.ChildData sc = new SundryVo.ChildData();
+//                            sc.setId(d.getId());
+//                            sc.setName(d.getName());
+//                            return sc;
+//                        }).collect(Collectors.toList()));
+//                    }
+//                }
+                return ((List<Dealer>)dealerDao.findAll()).stream().map(d -> {
+                    SundryVo s = new SundryVo();
+                    s.setId(d.getId());
+                    s.setCode(d.getId().toString());
+                    s.setName(d.getName());
+                    s.setType(type);
+                    return s;
+                }).collect(Collectors.toList());
             }
         }
         return BeanConvertMap.mapList(sundryDao.findByType(type), SundryVo.class);

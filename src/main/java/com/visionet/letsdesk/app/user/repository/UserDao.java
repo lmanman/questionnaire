@@ -15,8 +15,12 @@ public interface UserDao extends PagingAndSortingRepository<User, Long>, JpaSpec
     @QueryHints({ @QueryHint(name = "org.hibernate.cacheable", value ="true") })
     public User findByLoginName(String loginName);
 
+    public User findByAliasNameAndOrgId(String aliasName,Long orgId);
+
     @Query("select u.id from User u where u.loginName=?1 and u.id <> ?2 ")
 	Long checkByLoginName(String loginName, Long userId);
+    @Query("select u.id from User u where u.aliasName=?1 and u.orgId=?2 and u.id <> ?3 ")
+    Long checkByAliasName(String aliasName, Long orgId,Long userId);
 
 	@Query("select count(u) from User u where u.isLock=0 ")
 	Long findUserCount();

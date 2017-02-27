@@ -14,11 +14,6 @@ function ctrlFn($scope,$stateParams,$http,$state,$log){
         }
     };
     $scope.list = [];
-    $scope.totalPages = 1;
-    $scope.total = 0;
-    $scope.number = 0;
-    $scope.size = 0;
-    $scope.numberOfElements = 0;
 
     $scope.password="";
     $scope.password2="";
@@ -32,16 +27,25 @@ function ctrlFn($scope,$stateParams,$http,$state,$log){
             $scope.password2="1";
             $scope.confirm_password2="1";
             $http.get($scope.app.projectName + '/mobile/user/'+$scope.uid).success(function(result){
-                $log.info(result);
+                //$log.info(result);
 
                 $scope.userInfo = result;
+
+                angular.forEach($scope.userInfo.roleList, function(role){
+                    if(role.hasRole){
+                        $scope.chkVal[role.id]=true;
+                    }else{
+                        $scope.chkVal[role.id]=false;
+                    }
+                });
             }).error(function(){
                 alert('请求失败');
             });
 
+
         }else if($scope.uid==0){
             $http.get($scope.app.projectName + '/console/role/list').success(function(result){
-                $log.info(result);
+                //$log.info(result);
 
                 $scope.userInfo.roleList = result;
             }).error(function(){
@@ -56,22 +60,14 @@ function ctrlFn($scope,$stateParams,$http,$state,$log){
         formData.queryName = $scope.queryName;
 
         $http.post($scope.app.projectName + '/mobile/user/search',formData).success(function(result){
-
-            $scope.list = result.content;
-            $scope.lastPage = result.lastPage;
-            $scope.firstPage = result.firstPage;
-            $scope.total = result.totalElements;
-            $scope.number = result.number;
-            $scope.totalPages = result.totalPages;
-            $scope.size = result.size;
-            $scope.numberOfElements = result.numberOfElements;
+            $scope.list = result;
         }).error(function(){
             alert('查询失败');
         });
 
     };
 
-    $scope.roles = [];
+    $scope.chkVal = {};
     $scope.saveInfo = function(){
         var formData = {};
         formData.loginName = $scope.userInfo.loginName;
@@ -86,17 +82,17 @@ function ctrlFn($scope,$stateParams,$http,$state,$log){
             url = $scope.app.projectName + '/mobile/user/update';
         }else if($scope.uid==0){
             url = $scope.app.projectName + '/mobile/user/register';
-
             formData.plainPassword = $scope.password2;
-            formData.roleSet = [];
-            angular.forEach($scope.roles, function(item){
-                if(item != false && item !='false'){
-                    formData.roleSet.push({"id":item})
-                }
-            });
-
-            //$log.info(formData.roleSet);
         }
+        formData.roleSet = [];
+        angular.forEach($scope.userInfo.roleList, function(role){
+            if($scope.chkVal[role.id]){
+                formData.roleSet.push({"id":role.id})
+            }
+        });
+
+        $log.info(formData.roleSet);
+
         $http.post(url, formData).success(function (result) {
             if (result.code == '10000') {
                 alert("保存成功");
@@ -134,7 +130,7 @@ function ctrlFn($scope,$stateParams,$http,$state,$log){
             $http.get($scope.app.projectName+'/mobile/user/disable/'+uid+'/1').success(function (result) {
                 if(result.code=='10000'){
                     alert("删除成功");
-                    $scope.list.splice(index, 1);
+                    $scope.query();
                 }else{
                     alert(result.msg);
                 }
@@ -145,7 +141,6 @@ function ctrlFn($scope,$stateParams,$http,$state,$log){
         }
     };
 
-    $scope.chkVal = {"3": "Gj", "2": "Xt","7":"test1","8":"test2"};
 
 
 }

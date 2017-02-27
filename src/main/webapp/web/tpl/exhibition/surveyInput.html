@@ -19,7 +19,7 @@
                                 <label ng-init="maxNo[0]=$index+1">{{$index+1}}. {{field1.fieldDesc}}</label>
                                 <div ng-show="field1.fieldFormat=='input'">
                                     <span ng-show="field1.fieldName!='exhibitionCity'">
-                                        <input type="text" ng-model="field1.fieldVal" class="input-sm form-control" placeholder="{{field1.fieldDesc}}">
+                                        <input type="text" ng-model="field1.fieldVal" class="input-sm form-control" placeholder="{{field1.fieldDesc}}" >
                                     </span>
                                     <span ng-show="field1.fieldName=='exhibitionCity'">
                                         <input type="text" ng-model="province" class="col-sm-3 input-sm form-control w-xs" placeholder="省">
@@ -29,7 +29,7 @@
                                 </div>
                                 <div ng-show="field1.fieldFormat=='number'">
                                     <div class="form-group col-sm-3">
-                                        <input type="number" ng-model="field1.fieldVal" class="input-sm form-control" placeholder="{{field1.fieldDesc}}">
+                                        <input type="number" ng-model="field1.fieldVal" class="input-sm form-control" placeholder="{{field1.fieldDesc}}" >
                                     </div>
                                 </div>
                                 <div ng-show="field1.fieldFormat=='select'">
@@ -59,24 +59,19 @@
                                 <div class="radio list-group-item wrapper bg-light clearfix" ng-show="field1.fieldFormat=='radio'">
                                     <div ng-class="{true: 'form-group col-sm-5', false: 'form-group col-sm-3'}[field1.optionList.length<=2]" ng-repeat="item in field1.optionList">
                                         <label class="i-checks" ng-show="item.code!='Z'">
-                                            <input type="radio" ng-model="field1.fieldVal" ng-value="item.id" ng-click="showSelect(item.code)">
+                                            <input type="radio" ng-model="field1.fieldVal" ng-value="item.id" >
                                             <i></i>
                                             {{item.name}}
                                         </label>
                                         <div ng-show="item.code=='Z'">
                                             <input placeholder="{{item.name}}" ng-model="other" >
                                         </div>
-                                        <span ng-show="item.childDataList!=null" >
-                                            <select ui-jq="chosen"  data-placeholder="{{item.name}}" class="form-control input-sm w-sm" ng-disabled="{{disabledSelect=='Y'}}">
-                                                <option ng-repeat="child in item.childDataList" value="{{child.id}}">{{child.name}}</option>
-                                            </select>
-                                        </span>
                                     </div>
                                 </div>
                                 <div class="checkbox list-group-item wrapper bg-light clearfix" ng-show="field1.fieldFormat=='checkbox'">
                                     <div ng-class="{true: 'form-group', false: 'form-group col-sm-3'}[field1.optionList.length<=2]" ng-repeat="item in field1.optionList">
                                         <label class="i-checks" ng-show="item.code!='Z'">
-                                            <input type="checkbox" ng-model="field1.fieldArr[item.id]"  >
+                                            <input type="checkbox" ng-model="field1.fieldArr[item.id]" >
                                             <i></i>
                                             {{item.name}}
                                         </label>
@@ -101,11 +96,11 @@
                             <div class="form-group">
                                 <label ng-init="maxNo[1]=$index+1+maxNo[0]">{{$index+1+maxNo[0]}}. {{field1.fieldDesc}}</label>
                                 <div ng-show="field1.fieldFormat=='input'">
-                                    <input type="text" ng-model="field1.fieldVal" class="input-sm form-control" placeholder="{{field1.fieldDesc}}">
+                                    <input type="text" ng-model="field1.fieldVal" class="input-sm form-control" placeholder="{{field1.fieldDesc}}" >
                                 </div>
                                 <div ng-show="field1.fieldFormat=='number'">
                                     <div class="form-group col-sm-3">
-                                        <input type="number" ng-model="field1.fieldVal" class="input-sm form-control" placeholder="{{field1.fieldDesc}}">
+                                        <input type="number" ng-model="field1.fieldVal" class="input-sm form-control" placeholder="{{field1.fieldDesc}}" >
                                     </div>
                                 </div>
                                 <div ng-show="field1.fieldFormat=='select'">
@@ -119,7 +114,7 @@
                                 <div class="radio list-group-item wrapper bg-light clearfix" ng-show="field1.fieldFormat=='radio'">
                                     <div ng-class="{true: 'form-group col-sm-4', false: 'form-group col-sm-3'}[field1.optionList.length<=2]" ng-repeat="item in field1.optionList">
                                         <label class="i-checks" ng-show="item.code!='Z'">
-                                            <input type="radio" ng-model="field1.fieldVal" ng-value="item.id" ng-click="showSelect(item.code)">
+                                            <input type="radio" ng-model="field1.fieldVal" ng-value="item.id">
                                             <i></i>
                                             {{item.name}}
                                         </label>
@@ -131,7 +126,7 @@
                                 <div class="checkbox list-group-item wrapper bg-light clearfix" ng-show="field1.fieldFormat=='checkbox'">
                                     <div ng-class="{true: 'form-group', false: 'form-group col-sm-3'}[field1.optionList.length<=2]" ng-repeat="item in field1.optionList">
                                         <label class="i-checks"  ng-show="item.code!='Z'">
-                                            <input type="checkbox" ng-model="field1.fieldArr[item.id]"  >
+                                            <input type="checkbox" ng-model="field1.fieldArr[item.id]" >
                                             <i></i>
                                             {{item.name}}
                                         </label>
@@ -156,11 +151,11 @@
                             <div class="form-group">
                                 <label>{{$index+1+maxNo[1]}}. {{field1.fieldDesc}}</label>
                                 <div ng-show="field1.fieldFormat=='input'">
-                                    <input type="text" ng-model="field1.fieldVal" class="input-sm form-control" placeholder="{{field1.fieldDesc}}">
+                                    <input type="text" ng-model="field1.fieldVal" class="input-sm form-control" placeholder="{{field1.fieldDesc}}" >
                                 </div>
                                 <div ng-show="field1.fieldFormat=='number'">
                                     <div class="form-group col-sm-3">
-                                        <input type="number" ng-model="field1.fieldVal" class="input-sm form-control" placeholder="{{field1.fieldDesc}}">
+                                        <input type="number" ng-model="field1.fieldVal" class="input-sm form-control" placeholder="{{field1.fieldDesc}}" >
                                     </div>
                                 </div>
                                 <div ng-show="field1.fieldFormat=='select'">
@@ -173,24 +168,19 @@
                                 <div class="radio list-group-item wrapper bg-light clearfix" ng-show="field1.fieldFormat=='radio'">
                                     <div ng-class="{true: 'form-group col-sm-4', false: 'form-group col-sm-3'}[field1.optionList.length<=2]" ng-repeat="item in field1.optionList">
                                         <label class="i-checks"  ng-show="item.code!='Z'" >
-                                            <input type="radio" ng-model="field1.fieldVal" ng-value="item.id" ng-click="showSelect(item.code)">
+                                            <input type="radio" ng-model="field1.fieldVal" ng-value="item.id" >
                                             <i></i>
                                             {{item.name}}
                                         </label>
                                         <div ng-show="item.code=='Z'">
                                             <input placeholder="{{item.name}}" ng-model="other" >
                                         </div>
-                                        <span ng-show="item.childDataList!=null" >
-                                            <select ui-jq="chosen"  data-placeholder="{{item.name}}" class="form-control input-sm w-sm" ng-disabled="{{disabledSelect=='Y'}}">
-                                                <option ng-repeat="child in item.childDataList" value="{{child.id}}">{{child.name}}</option>
-                                            </select>
-                                        </span>
                                     </div>
                                 </div>
                                 <div class="checkbox list-group-item wrapper bg-light clearfix" ng-show="field1.fieldFormat=='checkbox'">
                                     <div ng-class="{true: 'form-group', false: 'form-group col-sm-3'}[field1.optionList.length<=2]" ng-repeat="item in field1.optionList">
                                         <label class="i-checks" ng-show="item.code!='Z'">
-                                            <input type="checkbox" ng-model="field1.fieldArr[item.id]"  >
+                                            <input type="checkbox" ng-model="field1.fieldArr[item.id]" >
                                             <i></i>
                                             {{item.name}}
                                         </label>
@@ -204,7 +194,7 @@
                         </div>
                         <footer class="panel-footer text-left bg-light lter">
                             <button type="submit" class="btn btn-success" >提交</button>
-                            <button type="button" class="btn btn-danger" ui-sref="app.exhibition.surveyList" ng-if="id!=0">删除</button>
+                            <button type="button" class="btn btn-danger" ng-if="id!=0" ng-click="delete()">删除</button>
                         </footer>
                     </div>
 

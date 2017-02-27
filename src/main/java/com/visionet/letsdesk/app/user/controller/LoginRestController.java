@@ -107,7 +107,7 @@ public class LoginRestController extends BaseController {
 			
 			BaseController.setLocale(locale);
 
-            userService.checkOrgValid(getCurrentUserId());
+//            userService.checkOrgValid(getCurrentUserId());
 
 			//登录聊天系统并把sid保存下来
 //			Map<String, String> chatLoginMap = new HashMap<String,String>();

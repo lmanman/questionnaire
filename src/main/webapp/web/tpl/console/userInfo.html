@@ -54,7 +54,7 @@
                             <div class="row">
                                 <div class="col-md-4" ng-repeat="role in userInfo.roleList">
                                     <label class="i-checks" >
-                                        <input type="checkbox" value="{{role.id}}" ng-checked="role.hasRole" ng-model="roles[$index]" ng-true-value="{{role.id}}" ng-false-value="false">
+                                        <input type="checkbox" value="{{role.id}}" ng-checked="role.hasRole" ng-model="chkVal[role.id]">
                                         <i></i> {{role.roleDesc}}
                                     </label>
                                 </div>

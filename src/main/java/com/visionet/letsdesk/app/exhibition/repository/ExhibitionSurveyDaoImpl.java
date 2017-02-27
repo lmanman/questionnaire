@@ -13,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.orm.jpa.EntityManagerFactoryUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -31,7 +30,7 @@ import java.util.Map;
 public class ExhibitionSurveyDaoImpl {
 
     @PersistenceContext
-    private EntityManager em;
+    private EntityManager entityManager;
 
     public Page<ExhibitionSurvey> searchByCondition(final ExhibitionSurveyVo exhibitionSurveyVo,final List<String> checkboxNameList,final PageInfo pageinfo) throws Exception{
 
@@ -39,6 +38,10 @@ public class ExhibitionSurveyDaoImpl {
 
         Map<String,Object> map = Maps.newHashMap();
 
+        if(Validator.isNotNull(exhibitionSurveyVo.getCreateBy())){
+            query += " and t.createBy = :createBy";
+            map.put("createBy", exhibitionSurveyVo.getCreateBy());
+        }
         if(Validator.isNotNull(exhibitionSurveyVo.getQueryBeginDate())){
             Date beginDate;
             if(exhibitionSurveyVo.getQueryEndDate().trim().length()==19 && exhibitionSurveyVo.getQueryEndDate().contains(StringPool.COLON)){
@@ -67,10 +70,9 @@ public class ExhibitionSurveyDaoImpl {
             map.put("queryName", "%"+exhibitionSurveyVo.getQueryName()+"%");
         }
 
-        List<ExhibitionSurveyPublicShow> publicShowList = exhibitionSurveyVo.getPublicShowList();
-        if(Collections3.isNotEmpty(publicShowList)){
+        ExhibitionSurveyPublicShow publicShow= exhibitionSurveyVo.getPublicShow();
+        if(publicShow!=null){
             //只接收第一行元素查询
-            ExhibitionSurveyPublicShow publicShow = publicShowList.get(0);
             query += " and  EXISTS (select 1 from ExhibitionSurveyPublicShow s where s.surveyId=t.id ";
             if(publicShow.getPublicExhibitionArea()!=null){
                 query += " and s.publicExhibitionPriceTag="+publicShow.getPublicExhibitionPriceTag();
@@ -87,23 +89,25 @@ public class ExhibitionSurveyDaoImpl {
             query += ") ";
         }
 
-        BeanInfo beanInfo = Introspector.getBeanInfo(exhibitionSurveyVo.getClass());
-        PropertyDescriptor[] propertyDescriptors =  beanInfo.getPropertyDescriptors();
-        for (int i = 0; i< propertyDescriptors.length; i++) {
-            PropertyDescriptor descriptor = propertyDescriptors[i];
-            String propertyName = descriptor.getName();
+        if(Collections3.isNotEmpty(checkboxNameList)) {
+            BeanInfo beanInfo = Introspector.getBeanInfo(exhibitionSurveyVo.getClass());
+            PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+            for (int i = 0; i < propertyDescriptors.length; i++) {
+                PropertyDescriptor descriptor = propertyDescriptors[i];
+                String propertyName = descriptor.getName();
 
-            Method readMethod = descriptor.getReadMethod();
-            if(readMethod!=null) {
-                Object result = readMethod.invoke(exhibitionSurveyVo, new Object[0]);
-                if (result != null) {
-                    if (result instanceof Integer || result instanceof Long) {
-                        query += " and t."+propertyName+" = :"+propertyName;
-                        map.put(propertyName, result);
-                    }else if(result instanceof List){
-                        if(checkboxNameList.contains(propertyName) && !((List) result).isEmpty()){
-                            query += " and  EXISTS (select 1 from ExhibitionSurveyMultiselect m where m.surveyId=t.id and m.surveyField='"+propertyName+"' and m.sundryId in(:"+propertyName+"))";
-                            map.put(propertyName, (List<Integer>)result);
+                Method readMethod = descriptor.getReadMethod();
+                if (readMethod != null) {
+                    Object result = readMethod.invoke(exhibitionSurveyVo, new Object[0]);
+                    if (result != null) {
+                        if (result instanceof Integer || result instanceof Long) {
+                            query += " and t." + propertyName + " = :" + propertyName;
+                            map.put(propertyName, result);
+                        } else if (result instanceof List) {
+                            if (checkboxNameList.contains(propertyName) && !((List) result).isEmpty()) {
+                                query += " and  EXISTS (select 1 from ExhibitionSurveyMultiselect m where m.surveyId=t.id and m.surveyField='" + propertyName + "' and m.sundryId in(:" + propertyName + "))";
+                                map.put(propertyName, (List<Integer>) result);
+                            }
                         }
                     }
                 }
@@ -115,9 +119,9 @@ public class ExhibitionSurveyDaoImpl {
 
         Long count = 0L;
         List<ExhibitionSurvey> list = null;
-        EntityManager entityManager = null;
+//        EntityManager entityManager = null;
         try {
-            entityManager = em.getEntityManagerFactory().createEntityManager();
+//            entityManager = em.getEntityManagerFactory().createEntityManager();
             Query queryString = entityManager.createQuery(listSql);
             Query queryCount = entityManager.createQuery(countSql);
 
@@ -131,15 +135,14 @@ public class ExhibitionSurveyDaoImpl {
 
             count = (Long) queryCount.getSingleResult();
             list = queryString.getResultList();
-
         }catch (RuntimeException e){
             throw e instanceof IllegalArgumentException ? e : new IllegalArgumentException(e);
-        }finally {
-            if(entityManager!=null) {
-                EntityManagerFactoryUtils.closeEntityManager(entityManager);
-            }
+//        }finally {
+//            if(entityManager!=null) {
+//                EntityManagerFactoryUtils.closeEntityManager(entityManager);
+//            }
         }
-        return new PageImpl<ExhibitionSurvey>(list, new PageRequest(pageinfo.getPageNumber(),
+        return new PageImpl<ExhibitionSurvey>(list, new PageRequest(pageinfo.getPageNumber()-1,
                 pageinfo.getPageSize(), new Sort(pageinfo.getSortType(), pageinfo.getSortColumn())), count);
     }
 

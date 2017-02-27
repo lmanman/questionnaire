@@ -2,6 +2,7 @@ package com.visionet.letsdesk.app.exhibition.controller;
 
 import com.visionet.letsdesk.app.base.controller.BaseController;
 import com.visionet.letsdesk.app.common.constant.BusinessStatus;
+import com.visionet.letsdesk.app.common.constant.SysConstants;
 import com.visionet.letsdesk.app.exhibition.entity.ExhibitionSurvey;
 import com.visionet.letsdesk.app.exhibition.service.ExhibitionSurveyService;
 import com.visionet.letsdesk.app.exhibition.vo.ExhibitionSurveyListVo;
@@ -33,6 +34,7 @@ public class ExhibitionSurveyController extends BaseController{
      * @apiPermission user
      *
      * @apiParam {Long} id PK
+     * @apiParam {String} queryName 展厅名/品牌/品类（模糊查询）
      *
      * @apiParamExample {json} 输入:
      *   {
@@ -40,18 +42,77 @@ public class ExhibitionSurveyController extends BaseController{
      *       "pageNumber":1,
      *       "pageSize":10
      *    },
-     *    "exhibitionId":1,
-     *     "brandSponsorType": [43,45]
+     *    "queryName":"慕斯"
      *   }
      *
      * @apiSuccess {Long} id PK
      * @apiSuccessExample {json} Page<Manufacturer>
-     *
+     *   {
+     *     "content": [
+     *       {
+     *         "id": null,
+     *         "pageInfo": null,
+     *         "surveyId": null,
+     *         "exhibitionName": "顾家沙发古北店",
+     *         "address": "0",
+     *         "dealerName": null,
+     *         "categoryName": "家居饰品",
+     *         "brandName": "顾家沙发",
+     *         "cityName": null,
+     *         "schedule": [
+     *           64,
+     *           64
+     *         ],
+     *         "createBy": 3,
+     *         "updateDate": null,
+     *         "userName": "郭嘉"
+     *       },
+     *       {
+     *         "id": null,
+     *         "pageInfo": null,
+     *         "surveyId": null,
+     *         "exhibitionName": "慕斯古北店",
+     *         "address": "地址11",
+     *         "dealerName": null,
+     *         "categoryName": "家具",
+     *         "brandName": "圣象",
+     *         "cityName": null,
+     *         "schedule": [
+     *           64,
+     *           64
+     *         ],
+     *         "createBy": 2,
+     *         "updateDate": null,
+     *         "userName": "XT"
+     *       }
+     *     ],
+     *     "totalElements": 3,
+     *     "last": true,
+     *     "totalPages": 1,
+     *     "firstPage": false,
+     *     "lastPage": true,
+     *     "size": 10,
+     *     "number": 1,
+     *     "sort": [
+     *       {
+     *         "direction": "DESC",
+     *         "property": "id",
+     *         "ignoreCase": false,
+     *         "nullHandling": "NATIVE",
+     *         "ascending": false
+     *       }
+     *     ],
+     *     "numberOfElements": 3,
+     *     "first": false
+     *   }
      */
     @RequestMapping(value ="/search", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> search(@RequestBody ExhibitionSurveyVo vo) throws Exception {
 //        Page<ExhibitionSurveyVo> page = exhibitionSurveyService.search(vo);
+        if(!hasRole(SysConstants.SUBADMIN)){
+            vo.setCreateBy(getCurrentUserId());
+        }
         Page<ExhibitionSurveyListVo> page = exhibitionSurveyService.list(vo);
 
         return new ResponseEntity<Page<ExhibitionSurveyListVo>>(page, HttpStatus.OK);
@@ -240,7 +301,7 @@ public class ExhibitionSurveyController extends BaseController{
 
 
     /**
-     * @apiDescription 展厅问卷新增
+     * @apiDescription 展厅问卷新增/修改
      * @api {post} /mobile/exhibition/survey/save /mobile/exhibition/survey/save
      * @apiVersion 2.0.0
      * @apiName save
@@ -358,7 +419,7 @@ public class ExhibitionSurveyController extends BaseController{
         if(exhibitionSurvey.getBrand()==null){
             exhibitionSurvey.setBrand(1);
         }
-        System.out.println(mapper.toJson(exhibitionSurvey));
+//        System.out.println(mapper.toJson(exhibitionSurvey));
         exhibitionSurvey.setCreateBy(getCurrentUserId());
         exhibitionSurveyService.save(exhibitionSurvey);
         return new ResponseEntity<Map<String,String>>(GetSuccMap() , HttpStatus.OK);

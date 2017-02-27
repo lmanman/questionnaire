@@ -1,6 +1,7 @@
 package com.visionet.letsdesk.app.exhibition.repository;
 
 import com.visionet.letsdesk.app.exhibition.entity.ExhibitionSurveyMultiselect;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -12,4 +13,9 @@ public interface ExhibitionSurveyMultiselectDao extends CrudRepository<Exhibitio
     List<Integer> findSundryIdBySurveyIdAndSurveyField(Long surveyId,String fieldName);
 
     List<ExhibitionSurveyMultiselect> findBySurveyId(Long surveyId);
+
+
+    @Modifying
+    @Query("delete from ExhibitionSurveyMultiselect m where surveyId=?1")
+    void deleteBySurveyId(Long surveyId);
 }

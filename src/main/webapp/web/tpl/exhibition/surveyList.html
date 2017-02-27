@@ -33,7 +33,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="item in exhibitionSurveyList">
+                <tr ng-repeat="item in exhibitionSurveyList.content">
                     <td ><a class="text-info-dker block" ui-sref="app.exhibition.surveyInput({id:item.id})" >
                         <span >{{item.exhibitionName}}</span>
                     </a></td>
@@ -45,13 +45,12 @@
                     </td>
                     <td>{{item.cityName}}</td>
                     <td>
-                        <!--{{item.schedule}}-->
                         <progressbar max="item.schedule[1]" value="item.schedule[0]" ng-init="type1=dynamicType(item.schedule[0],item.schedule[1])" type="{{type1}}" class="progress-sm m-t-sm"><span style="white-space:nowrap;">{{item.schedule[0]}} / {{item.schedule[1]}}</span></progressbar>
                     </td>
                     <td>{{item.userName}}</td>
-                    <td>{{item.updateDate}}</td>
+                    <td>{{item.updateDate | date:'yyyy-MM-dd HH:mm'}}</td>
                 </tr>
-                <tr ng-show="exhibitionSurveyList.length <= 0">
+                <tr ng-show="exhibitionSurveyList.content.length <= 0">
                     <td colspan="5" class="text-center">
                         <h4>暂无数据</h4>
                     </td>
@@ -70,20 +69,10 @@
                     <i class="fa fa-spin fa-spinner hide" id="spin"></i>
                 </div>
                 <div class="col-sm-4 text-center">
-                    <small class="text-muted inline m-t-sm m-b-sm">20-30 共 50</small>
+                    <small class="text-muted inline m-t-sm m-b-sm">{{exhibitionSurveyList.number * exhibitionSurveyList.totalPages + 1}}-{{exhibitionSurveyList.number * exhibitionSurveyList.totalPages + exhibitionSurveyList.numberOfElements}} 共 {{exhibitionSurveyList.totalElements}}</small>
                 </div>
-                <div class="col-sm-4 text-right text-center-xs" ng-if="exhibitionSurveyList.length > 0">
-                    <ul class="pagination pagination-sm m-t-none m-b-none">
-                        <li class="footable-page-arrow disabled"><a data-page="first" href>«</a></li>
-                        <li class="footable-page-arrow disabled"><a data-page="prev" href>‹</a></li>
-                        <li><a href>1</a></li>
-                        <li><a href>2</a></li>
-                        <li><a href>3</a></li>
-                        <li><a href>4</a></li>
-                        <li><a href>5</a></li>
-                        <li class="footable-page-arrow"><a data-page="next" href>›</a></li>
-                        <li class="footable-page-arrow"><a data-page="last" href>»</a></li>
-                    </ul>
+                <div class="col-sm-4 text-right text-center-xs" ng-if="exhibitionSurveyList.content.length > 0">
+                    <pagination boundary-links="true" total-items="exhibitionSurveyList.totalElements" ng-model="formData.pageInfo.pageNumber" class="pagination-sm m-t-none m-b" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
                 </div>
             </div>
         </footer>

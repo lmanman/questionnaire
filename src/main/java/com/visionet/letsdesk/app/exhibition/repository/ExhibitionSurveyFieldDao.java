@@ -11,7 +11,7 @@ public interface ExhibitionSurveyFieldDao extends CrudRepository<ExhibitionSurve
     @Query("select f from ExhibitionSurveyField f where f.formId = ?1 and f.delFlag = 0 order by f.orderId")
     List<ExhibitionSurveyField> findByFormId(Long formId);
 
-    @Query("select f.fieldName from ExhibitionSurveyField f where f.fieldFormat = ?1 ")
+    @Query("select f.fieldName from ExhibitionSurveyField f where f.fieldFormat = ?1 and f.delFlag = 0 ")
     List<String> findFieldNameByFieldFormat(String fieldFormat);
 
 }
