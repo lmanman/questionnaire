@@ -4,14 +4,8 @@ import com.google.common.collect.Lists;
 import com.visionet.letsdesk.app.base.service.BaseService;
 import com.visionet.letsdesk.app.common.modules.validate.Validator;
 import com.visionet.letsdesk.app.common.utils.BeanConvertMap;
-import com.visionet.letsdesk.app.dictionary.entity.Brand;
-import com.visionet.letsdesk.app.dictionary.entity.Category;
-import com.visionet.letsdesk.app.dictionary.entity.Manufacturer;
-import com.visionet.letsdesk.app.dictionary.entity.Sundry;
-import com.visionet.letsdesk.app.dictionary.repository.BrandDao;
-import com.visionet.letsdesk.app.dictionary.repository.CategoryDao;
-import com.visionet.letsdesk.app.dictionary.repository.ManufacturerDao;
-import com.visionet.letsdesk.app.dictionary.repository.SundryDao;
+import com.visionet.letsdesk.app.dictionary.entity.*;
+import com.visionet.letsdesk.app.dictionary.repository.*;
 import com.visionet.letsdesk.app.dictionary.vo.SundryVo;
 import com.visionet.letsdesk.app.exhibition.entity.Dealer;
 import com.visionet.letsdesk.app.exhibition.entity.ExhibitionSurveyField;
@@ -40,6 +34,10 @@ public class ExhibitionSurveyFieldService extends BaseService{
     private ManufacturerDao manufacturerDao;
     @Autowired
     private DealerDao dealerDao;
+    @Autowired
+    private ProvinceDao provinceDao;
+    @Autowired
+    private CityDao cityDao;
 
     /**
      * 展厅问卷字段项
@@ -83,22 +81,28 @@ public class ExhibitionSurveyFieldService extends BaseService{
                 }).collect(Collectors.toList());
             } else if("d_brand".equals(relationData)){  //品牌
                 return this.findBrandTree();
-
+            } else if("d_city".equals(relationData)){  //省市区
+                List<Province> provinceList = (List<Province>)provinceDao.findAll();
+                List<City> cityList = (List<City>)cityDao.findAll();
+                return provinceList.stream().map(p -> {
+                    SundryVo s = new SundryVo();
+                    s.setId(p.getId());
+                    s.setCode(p.getId().toString());
+                    s.setName(p.getProvinceName());
+                    s.setChildDataList(cityList.parallelStream()
+                            .filter(c -> c.getProvinceId().intValue() == p.getId().intValue())
+                            .map(c -> {
+                                SundryVo.ChildData childData = new SundryVo.ChildData();
+                                childData.setId(c.getId());
+                                childData.setName(c.getCityName());
+                                return childData;
+                            }).collect(Collectors.toList()));
+                    s.setType(type);
+                    return s;
+                }).collect(Collectors.toList());
             } else if("d_manufacturer".equals(relationData)){   //厂商
                 return ((List<Manufacturer>)manufacturerDao.findAll()).parallelStream().map(m -> new SundryVo(m.getId(),m.getName())).collect(Collectors.toList());
             } else if("s_dealer".equals(relationData)){ //经销商
-//                List<SundryVo> sundryVoList = BeanConvertMap.mapList(sundryDao.findByType(type), SundryVo.class);
-//                for(SundryVo svo : sundryVoList){
-//                    if(svo.getCode().equals("N")){
-//                        List<Dealer> dlist = ((List<Dealer>)dealerDao.findAll());
-//                        svo.setChildDataList(dlist.stream().map(d -> {
-//                            SundryVo.ChildData sc = new SundryVo.ChildData();
-//                            sc.setId(d.getId());
-//                            sc.setName(d.getName());
-//                            return sc;
-//                        }).collect(Collectors.toList()));
-//                    }
-//                }
                 return ((List<Dealer>)dealerDao.findAll()).stream().map(d -> {
                     SundryVo s = new SundryVo();
                     s.setId(d.getId());

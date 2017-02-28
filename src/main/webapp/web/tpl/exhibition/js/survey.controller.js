@@ -8,7 +8,6 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
     $scope.surveyFieldList1 = [];
     $scope.surveyFieldList2 = [];
     $scope.surveyFieldList3 = [];
-    $scope.tempList = [];
 
     $scope.id = 0;
     $scope.init = function(){
@@ -28,18 +27,24 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
                 $scope.surveyFieldList3 = result[2];
             }
 
-            angular.forEach($scope.surveyFieldList1, function(field){
-                if(field.fieldName=='brand'){
-                    angular.forEach(field.optionList, function(option){
-                        angular.forEach(option.childDataList, function(child){
-                            $scope.tempList.push({"id":child.id,"name":child.name});
+            var newOptionList = [];
+            for(var i=0;i<$scope.surveyFieldList1.length;i++) {
+                var field = $scope.surveyFieldList1[i];
+                if (field.fieldName == 'brand') {
+                    angular.forEach(field.optionList, function (option) {
+                        var newOption = {"id":option.id,"name":option.name,"type":option.type,"childDataList":[]};
+                        angular.forEach(option.childDataList, function (child) {
+                            newOption.childDataList.push({"id":child.id,"name":child.name});
+                            angular.forEach(child.grandchildDataList, function (grand) {
+                                newOption.childDataList.push({"id":grand.id,"name":"• "+grand.name});
+                            });
                         });
+                        newOptionList.push(newOption);
                     });
+                    field.optionList = newOptionList;
+                    break;
                 }
-            });
-            $scope.tempList.push({"id":0,"name":""});
-            //$log.info($scope.tempList);
-
+            }
 
             if($scope.id>0){
                 $http.get($scope.app.projectName + '/mobile/exhibition/survey/'+$scope.id).success(function(result){
@@ -60,7 +65,6 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
     };
 
     $scope.mergedata = function (list,data){
-        console.log("length1="+list.length);
         angular.forEach(list, function(field){
             if(field.indicator!='publicResource') {
                 if (field.fieldFormat == 'checkbox') {
@@ -74,7 +78,6 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
         });
     };
     $scope.mergedata3 = function (list,data){
-        console.log("data3="+data);
         if(data!=null) {
             angular.forEach(list, function (field) {
                 if (field.indicator == 'publicResource') {
@@ -101,6 +104,7 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
     $scope.firstChange=true;
     $scope.grandchildDataList = [];
 
+    /*
     $scope.childChange = function(idx,childId) {
         //$log.info(idx+"---"+childId);
         var optionList = $scope.surveyFieldList1[idx].optionList;   //[圣象,慕斯]
@@ -125,23 +129,17 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
         }
         //$log.info("--grandchildDataList="+$scope.grandchildDataList);
     };
+    */
 
-
-    $scope.brand2='';
-    $scope.brand3='';
     $scope.fieldVal={"exhibitionId":1};
     $scope.fieldVal.publicShow={};
     $scope.surveySubmit = function(){
-        $log.info("brand2="+$scope.brand2);
-        $log.info("brand3="+$scope.brand3);
 
         submitDate($scope.surveyFieldList1);
         submitDate($scope.surveyFieldList2);
         submitDate3($scope.surveyFieldList3);
         $scope.fieldVal['id']=$scope.id;
 
-        $scope.fieldVal['brand2'] = $scope.brand2;
-        $scope.fieldVal['brand3'] = $scope.brand3;
 
         //$log.info($scope.fieldVal);
 

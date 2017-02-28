@@ -52,7 +52,7 @@ function ctrlFn($scope,$stateParams,$http,$state,$log){
                 alert('权限数据更新失败！');
             });
         }
-    }
+    };
 
     $scope.query  = function(){
         var formData = {};
@@ -64,7 +64,7 @@ function ctrlFn($scope,$stateParams,$http,$state,$log){
         }).error(function(){
             alert('查询失败');
         });
-
+        //console.log("=="+String.fromCharCode(11)+"--");
     };
 
     $scope.chkVal = {};

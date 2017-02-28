@@ -1,7 +1,7 @@
 <div class="bg-light lter b-b wrapper-md">
     <h1 class="m-n font-thin h3">门店/展厅详情</h1>
 </div>
-<div class="wrapper-md" ng-controller="CustomerCtrl">
+<div class="wrapper-md" ng-controller="ExhibitionCtrl">
     <div class="col-sm-12">
         <form name="form" class="form-validation" ng-submit="submit()" ng-init="init()">
             <div class="panel panel-default">
@@ -58,7 +58,7 @@
                     <div class="form-group  pull-in ">
                         <div class="col-sm-8">
                             <label>备注</label>
-                            <textarea ng-model="exhibitionList[id-1].remark" class="form-control" rows="2" placeholder="个人备注"></textarea>
+                            <textarea ng-model="exhibitionList[id-1].remark" class="form-control" rows="2" placeholder="门店备注"></textarea>
                         </div>
                     </div>
                 </div>

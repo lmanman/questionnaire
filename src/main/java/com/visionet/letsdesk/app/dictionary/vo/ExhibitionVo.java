@@ -16,6 +16,9 @@ public class ExhibitionVo extends BaseVo{
     private Market market;      //商场
     private City city;          //城市
     private Date createDate;
+    private Integer delFlag;
+
+    private String queryName;
 
     public String getName() {
         return name;
@@ -71,5 +74,21 @@ public class ExhibitionVo extends BaseVo{
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public Integer getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(Integer delFlag) {
+        this.delFlag = delFlag;
+    }
+
+    public String getQueryName() {
+        return queryName;
+    }
+
+    public void setQueryName(String queryName) {
+        this.queryName = queryName;
     }
 }

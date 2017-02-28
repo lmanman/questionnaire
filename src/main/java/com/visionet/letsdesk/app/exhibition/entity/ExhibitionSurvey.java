@@ -26,8 +26,6 @@ public class ExhibitionSurvey extends IdEntity{
     private Integer categoryImport;                           //品类进口
     private Integer manufacturer;                             //品牌厂商
     private Integer brand;                             //品牌
-    private Integer brand2;                            //子品牌
-    private Integer brand3;                            //品牌系列
     private Integer businessNature;                            //展厅经营性质(0:直营；其他：经销商 dealerId)
     private Integer standAloneStore;	                       //是否独立店面
 
@@ -430,22 +428,6 @@ public class ExhibitionSurvey extends IdEntity{
 
     public void setManufacturer(Integer manufacturer) {
         this.manufacturer = manufacturer;
-    }
-
-    public Integer getBrand2() {
-        return brand2;
-    }
-
-    public void setBrand2(Integer brand2) {
-        this.brand2 = brand2;
-    }
-
-    public Integer getBrand3() {
-        return brand3;
-    }
-
-    public void setBrand3(Integer brand3) {
-        this.brand3 = brand3;
     }
 
     public Integer getBusinessNature() {

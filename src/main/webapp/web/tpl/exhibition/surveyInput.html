@@ -33,26 +33,26 @@
                                     </div>
                                 </div>
                                 <div ng-show="field1.fieldFormat=='select'">
-                                    <div class="form-group col-sm-3" ng-show="field1.relationData!='d_brand'">
+                                    <div class="form-group col-sm-3" ng-show="field1.fieldName!='brand' && field1.fieldName!='exhibitionCity'">
                                         <select ui-jq="chosen" data-placeholder="{{field1.fieldDesc}}" ng-model="field1.fieldVal" class="form-control m-b">
                                             <option ng-repeat="item in field1.optionList" value="{{item.id}}">{{item.name}}</option>
                                         </select>
                                     </div>
-                                    <div class="form-group col-sm-6" ng-show="field1.relationData=='d_brand'">
+                                    <div class="form-group col-sm-6" ng-show="field1.fieldName=='brand' || field1.fieldName=='exhibitionCity'">
                                         <div class="col-sm-4">
-                                            <select ui-jq="chosen" class="w-md" ng-model="brand2" data-placeholder="{{field1.fieldDesc}}" ng-change="childChange($index,brand2)">
+                                            <select ui-jq="chosen" class="w-md" ng-model="field1.fieldVal" data-placeholder="{{field1.fieldDesc}}" >
                                                 <optgroup ng-repeat="item in field1.optionList" label="{{item.name}}">
                                                     <option ng-repeat="child in item.childDataList" value="{{child.id}}">{{child.name}}</option>
                                                 </optgroup>
                                                 <option value="0"></option>
                                             </select>
                                         </div>
-                                        <div class="col-sm-4 pull-right" ng-show="grandchildDataList.length>0">
-                                            <select  ng-model="brand3" data-placeholder="品牌系列" class="form-control input-sm w-sm">
-                                                <option value=""></option>
-                                                <option ng-repeat="item in grandchildDataList" value="{{item.id}}">{{item.name}}</option>
-                                            </select>
-                                        </div>
+                                        <!--<div class="col-sm-4 pull-right" ng-show="grandchildDataList.length>0">-->
+                                            <!--<select  ng-model="brand3" data-placeholder="品牌系列" class="form-control input-sm w-sm">-->
+                                                <!--<option value=""></option>-->
+                                                <!--<option ng-repeat="item in grandchildDataList" value="{{item.id}}">{{item.name}}</option>-->
+                                            <!--</select>-->
+                                        <!--</div>-->
                                     </div>
 
                                 </div>

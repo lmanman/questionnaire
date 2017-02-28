@@ -1,9 +1,11 @@
 package com.visionet.letsdesk.app.exhibition.controller;
 
 import com.visionet.letsdesk.app.base.controller.BaseController;
+import com.visionet.letsdesk.app.common.modules.validate.Validator;
 import com.visionet.letsdesk.app.dictionary.vo.ExhibitionVo;
 import com.visionet.letsdesk.app.exhibition.entity.Exhibition;
 import com.visionet.letsdesk.app.exhibition.service.ExhibitionInfoService;
+import com.visionet.letsdesk.app.foundation.KeyWord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -151,8 +153,13 @@ public class ExhibitionInfoController extends BaseController{
     @RequestMapping(value ="/search", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> search(@RequestBody ExhibitionVo vo) throws Exception {
-
-        Page<ExhibitionVo> page = exhibitionInfoService.search(vo);
+        Page<ExhibitionVo> page ;
+        if(Validator.isNull(vo.getQueryName())){
+            vo.setDelFlag(KeyWord.UN_DEL_STATUS);
+            page = exhibitionInfoService.search(vo);
+        }else {
+            page = exhibitionInfoService.search(vo.getQueryName(),vo.getPageInfo());
+        }
 
         return new ResponseEntity<Page<ExhibitionVo>>(page, HttpStatus.OK);
     }
@@ -296,6 +303,12 @@ public class ExhibitionInfoController extends BaseController{
         return new ResponseEntity<Map<String,String>>(GetSuccMap() , HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+        exhibitionInfoService.delete(id);
+        return new ResponseEntity<Map<String,String>>(GetSuccMap() , HttpStatus.OK);
+    }
 
 
 }

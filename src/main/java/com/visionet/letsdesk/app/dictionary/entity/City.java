@@ -16,7 +16,7 @@ public class City extends IdEntity{
 
     private String cityName;
     private String telephoneAreaCode;
-    private String provinceId;
+    private Long provinceId;
     private String provinceName;
 
     public String getCityName() {
@@ -35,11 +35,11 @@ public class City extends IdEntity{
         this.telephoneAreaCode = telephoneAreaCode;
     }
 
-    public String getProvinceId() {
+    public Long getProvinceId() {
         return provinceId;
     }
 
-    public void setProvinceId(String provinceId) {
+    public void setProvinceId(Long provinceId) {
         this.provinceId = provinceId;
     }
 

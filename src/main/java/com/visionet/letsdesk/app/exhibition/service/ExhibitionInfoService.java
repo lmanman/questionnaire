@@ -18,6 +18,7 @@ import com.visionet.letsdesk.app.exhibition.entity.Exhibition;
 import com.visionet.letsdesk.app.exhibition.repository.DealerDao;
 import com.visionet.letsdesk.app.exhibition.repository.ExhibitionDao;
 import com.visionet.letsdesk.app.exhibition.vo.DealerVo;
+import com.visionet.letsdesk.app.foundation.KeyWord;
 import com.visionet.letsdesk.app.market.repository.MarketDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -106,6 +107,21 @@ public class ExhibitionInfoService extends BaseService{
                 page.getSize(), page.getSort()), page.getTotalElements());
     }
 
+    public Page<ExhibitionVo> search(String queryName,PageInfo pageInfo) throws Exception{
+        if(pageInfo == null){
+            pageInfo = new PageInfo();
+        }
+        Page<Exhibition> page = exhibitionDao.search(queryName, pageInfo.getPageRequestInfo());
+        List<ExhibitionVo> voList = Lists.newArrayList();
+        for(Exhibition exhibition:page.getContent()){
+            ExhibitionVo vo = BeanConvertMap.map(exhibition,ExhibitionVo.class);
+            this.transferExhibitionVo(exhibition, vo);
+            voList.add(vo);
+        }
+        return new PageImpl<ExhibitionVo>(voList, new PageRequest(page.getNumber(),
+                page.getSize(), page.getSort()), page.getTotalElements());
+    }
+
     /**
      * 展厅保存
      * @param exhibition
@@ -130,6 +146,16 @@ public class ExhibitionInfoService extends BaseService{
         }
     }
 
+
+    @Transactional(readOnly = false)
+    public void delete(Long id) {
+        Exhibition exhibition = exhibitionDao.findOne(id);
+        if(exhibition!=null){
+            exhibition.setDelFlag(KeyWord.DEL_STATUS);
+            exhibition.setUpdateDate(DateUtil.getCurrentDate());
+            exhibitionDao.save(exhibition);
+        }
+    }
 
 
     /**

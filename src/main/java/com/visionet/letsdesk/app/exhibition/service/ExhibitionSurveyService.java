@@ -9,8 +9,10 @@ import com.visionet.letsdesk.app.common.modules.validate.Validator;
 import com.visionet.letsdesk.app.common.utils.BeanConvertMap;
 import com.visionet.letsdesk.app.common.utils.PageInfo;
 import com.visionet.letsdesk.app.common.utils.SearchFilterUtil;
+import com.visionet.letsdesk.app.dictionary.entity.City;
 import com.visionet.letsdesk.app.dictionary.repository.BrandDao;
 import com.visionet.letsdesk.app.dictionary.repository.CategoryDao;
+import com.visionet.letsdesk.app.dictionary.repository.CityDao;
 import com.visionet.letsdesk.app.exhibition.entity.ExhibitionSurvey;
 import com.visionet.letsdesk.app.exhibition.entity.ExhibitionSurveyMultiselect;
 import com.visionet.letsdesk.app.exhibition.entity.ExhibitionSurveyPublicShow;
@@ -52,6 +54,8 @@ public class ExhibitionSurveyService extends BaseService{
     private DealerDao dealerDao;
     @Autowired
     private CategoryDao categoryDao;
+    @Autowired
+    private CityDao cityDao;
 
     /**
      * 展厅问卷明细
@@ -127,6 +131,7 @@ public class ExhibitionSurveyService extends BaseService{
 //            if(store==null){
 //                throwException(BusinessStatus.NOTFIND,"exhibitionId not exist!");
 //            }
+            survey.setExhibitionProvince(this.getProvinceId(survey.getExhibitionCity()));
             survey.setCreateDate(DateUtil.getCurrentDate());
             survey.setUpdateDate(DateUtil.getCurrentDate());
             exhibitionSurveyDao.save(survey);
@@ -140,6 +145,11 @@ public class ExhibitionSurveyService extends BaseService{
             this.multiselectSave(survey);
         }else{
             ExhibitionSurvey po = exhibitionSurveyDao.findOne(survey.getId());
+            if(po.getExhibitionCity()==null ||
+                    (Validator.isNotNull(survey.getExhibitionCity())
+                            && survey.getExhibitionCity().intValue()!=po.getExhibitionCity().intValue())){
+                po.setExhibitionProvince(this.getProvinceId(survey.getExhibitionCity()));
+            }
             SearchFilterUtil.copyBeans(po, survey);
             po.setUpdateDate(DateUtil.getCurrentDate());
             exhibitionSurveyDao.save(po);
@@ -167,6 +177,16 @@ public class ExhibitionSurveyService extends BaseService{
         }
     }
 
+    private Integer getProvinceId(Integer exhibitionCity){
+        if(Validator.isNotNull(exhibitionCity)){
+            City city = cityDao.findOne(exhibitionCity.longValue());
+            if(city!=null) {
+                return city.getProvinceId().intValue();
+            }
+        }
+        return null;
+    }
+
     private void multiselectSave(ExhibitionSurvey survey) throws Exception{
 
         List<String> checkboxNameList = exhibitionSurveyFieldDao.findFieldNameByFieldFormat
@@ -186,7 +206,6 @@ public class ExhibitionSurveyService extends BaseService{
                     if (result instanceof List) {
                         List<Integer> list = (List<Integer>)result;
                         if(Collections3.isNotEmpty(list)){
-                            System.out.println(propertyName+"----"+list.stream().map(id->id.toString()).reduce((a,b)->a+","+b).get());
                             this.multiselectSave(survey.getId(),propertyName,list);
                         }
                     }
@@ -209,7 +228,6 @@ public class ExhibitionSurveyService extends BaseService{
                         if (result instanceof List) {
                             List<Integer> list = (List<Integer>) result;
                             if (Collections3.isNotEmpty(list)) {
-                                System.out.println(propertyName + "----" + list.stream().map(id -> id.toString()).reduce((a, b) -> a + "," + b).get());
                                 this.multiselectSave(survey.getId(), propertyName, list);
                             }
                         }
@@ -281,7 +299,7 @@ public class ExhibitionSurveyService extends BaseService{
     private ExhibitionSurveyListVo generateListVo(ExhibitionSurvey survey){
         ExhibitionSurveyListVo vo = new ExhibitionSurveyListVo();
         vo.setId(survey.getId());
-        vo.setBrandName(brandDao.findNameById(Validator.isNull(survey.getBrand2()) ? survey.getBrand().longValue() : survey.getBrand2().longValue()));
+        vo.setBrandName(brandDao.findNameById(survey.getBrand().longValue()));
         vo.setAddress(survey.getExhibitionAddress());
         vo.setExhibitionName(exhibitionDao.findNameById(survey.getExhibitionId()));
         if(survey.getBusinessNature()!=null) {

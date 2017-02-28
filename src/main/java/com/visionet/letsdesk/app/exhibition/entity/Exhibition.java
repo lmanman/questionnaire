@@ -24,6 +24,7 @@ public class Exhibition extends IdEntity {
     private Long cityId;        //城市
     private Date createDate;
     private Date updateDate;
+    private Integer delFlag;
 
     public String getName() {
         return name;
@@ -87,6 +88,14 @@ public class Exhibition extends IdEntity {
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    public Integer getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(Integer delFlag) {
+        this.delFlag = delFlag;
     }
 }
 
