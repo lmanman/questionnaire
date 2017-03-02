@@ -36,7 +36,7 @@
                     </a></td>
                     <td>{{item.address}}</td>
                     <td>{{item.dealer.name}}</td>
-                    <td>{{item.marketName}}</td>
+                    <td>{{item.market.name}}</td>
                     <td>{{item.city.cityName}}</td>
                     <td>
                         <a href ng-click="deleteEhb(item.id)"><i class="fa fa-times text-danger text"></i></a>
@@ -52,7 +52,7 @@
         </div>
         <footer class="panel-footer">
             <div class="row">
-                <div class="col-sm-4 hidden-xs">
+                <div class="col-sm-4">
                     <!--<button class="btn btn-sm btn-default" ui-sref="app.console.exhibitionDetail({id:0})">添加</button>-->
                     <button class="btn btn-sm btn-default" ng-click="ui_detail(0)">添加</button>
                 </div>

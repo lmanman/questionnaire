@@ -20,6 +20,7 @@ import com.visionet.letsdesk.app.dictionary.vo.BrandVo;
 import com.visionet.letsdesk.app.dictionary.vo.ManufacturerVo;
 import com.visionet.letsdesk.app.dictionary.vo.SundryVo;
 import com.visionet.letsdesk.app.exhibition.service.ExhibitionSurveyFieldService;
+import com.visionet.letsdesk.app.market.repository.MarketDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -234,6 +235,9 @@ public class DictionaryService extends BaseService{
         }
         if(type.contains("s_dealer")){ //经销商
             map.put("s_dealer",exhibitionSurveyFieldService.findSundry(null,"s_dealer").stream().filter(d->d.getId().intValue()!=0).collect(Collectors.toList()));
+        }
+        if(type.contains("s_market")){ //商场
+            map.put("s_market", exhibitionSurveyFieldService.findSundry(null, "s_market"));
         }
 
         return map;

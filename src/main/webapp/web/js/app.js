@@ -25,6 +25,7 @@ var app = angular.module('app', [
     'app.console.foundation.controllers',
     'app.console.customer.controllers',
     'app.console.exhibition.controllers',
+    'app.console.mall.controllers',
     'app.console.surveyType.controllers'
   ])
 .run(

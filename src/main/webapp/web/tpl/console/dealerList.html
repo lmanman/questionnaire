@@ -2,7 +2,7 @@
     <h1 class="m-n font-thin h3">经销商信息</h1>
 </div>
 <div class="wrapper-md" ng-controller="CustomerCtrl">
-
+    <form name="form" class="form-validation" ng-submit="query()" ng-init="query()">
     <div class="panel panel-default">
         <div class="panel-heading">
             经销商列表
@@ -10,9 +10,9 @@
         <div class="row wrapper">
             <div class="col-sm-4">
                 <div class="input-group">
-                    <input type="text" class="input-sm form-control" placeholder="名称/品牌/城市">
+                    <input type="text" class="input-sm form-control" placeholder="名称" ng-model="name">
                     <span class="input-group-btn">
-                      <button class="btn btn-sm btn-default btn-info" type="button"><i class="fa fa-fw fa-search"></i></button>
+                      <button class="btn btn-sm btn-default btn-info" type="submit"><i class="fa fa-fw fa-search"></i></button>
                   </span>
                 </div>
             </div>
@@ -29,7 +29,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="item in dealerList">
+                <tr ng-repeat="item in dealerList.content">
                     <td ><a class="text-info-dker block" ui-sref="app.console.dealerDetail({id:item.id})" >
                         <span >{{item.name}}</span> <br>
                     </a></td>
@@ -37,10 +37,10 @@
                     <td>{{item.telephone}}</td>
                     <td>{{item.email}}</td>
                     <td>
-                        <a href ng-click="deleteEhb($index)"><i class="fa fa-times text-danger text"></i></a>
+                        <a href ng-click="deleteEhb(item.id)"><i class="fa fa-times text-danger text"></i></a>
                     </td>
                 </tr>
-                <tr ng-show="dealerList.length <= 0">
+                <tr ng-show="dealerList.content.length <= 0">
                     <td colspan="5" class="text-center">
                         <h4>暂无数据</h4>
                     </td>
@@ -50,26 +50,17 @@
         </div>
         <footer class="panel-footer">
             <div class="row">
-                <div class="col-sm-4 hidden-xs">
+                <div class="col-sm-4">
                     <button class="btn btn-sm btn-default" ui-sref="app.console.dealerDetail({id:0})">添加</button>
                 </div>
                 <div class="col-sm-4 text-center">
-                    <small class="text-muted inline m-t-sm m-b-sm">20-30 共 50</small>
+                    <small class="text-muted inline m-t-sm m-b-sm">{{dealerList.number * dealerList.totalPages + 1}}-{{dealerList.number * dealerList.totalPages + dealerList.numberOfElements}} 共 {{dealerList.totalElements}}</small>
                 </div>
-                <div class="col-sm-4 text-right text-center-xs" ng-if="dealerList.length > 0">
-                    <ul class="pagination pagination-sm m-t-none m-b-none">
-                        <li class="footable-page-arrow disabled"><a data-page="first" href>«</a></li>
-                        <li class="footable-page-arrow disabled"><a data-page="prev" href>‹</a></li>
-                        <li><a href>1</a></li>
-                        <li><a href>2</a></li>
-                        <li><a href>3</a></li>
-                        <li><a href>4</a></li>
-                        <li><a href>5</a></li>
-                        <li class="footable-page-arrow"><a data-page="next" href>›</a></li>
-                        <li class="footable-page-arrow"><a data-page="last" href>»</a></li>
-                    </ul>
+                <div class="col-sm-4 text-right text-center-xs" ng-if="dealerList.content.length > 0">
+                    <pagination boundary-links="true" total-items="dealerList.totalElements" ng-model="formData.pageInfo.pageNumber" class="pagination-sm m-t-none m-b" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
                 </div>
             </div>
         </footer>
     </div>
+    </form>
 </div>

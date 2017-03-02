@@ -6,6 +6,7 @@ import com.visionet.letsdesk.app.common.constant.BusinessStatus;
 import com.visionet.letsdesk.app.common.modules.persistence.DynamicSpecifications;
 import com.visionet.letsdesk.app.common.modules.persistence.SearchFilter;
 import com.visionet.letsdesk.app.common.modules.time.DateUtil;
+import com.visionet.letsdesk.app.common.modules.utils.Collections3;
 import com.visionet.letsdesk.app.common.modules.validate.Validator;
 import com.visionet.letsdesk.app.common.utils.BeanConvertMap;
 import com.visionet.letsdesk.app.common.utils.PageInfo;
@@ -63,9 +64,9 @@ public class ExhibitionInfoService extends BaseService{
         if(Validator.isNotNull(exhibition.getDealerId())) {
             vo.setDealer(dealerDao.findOne(exhibition.getDealerId()));
         }
-//        if(Validator.isNotNull(exhibition.getMarketId())) {
-//            vo.setMarket(marketDao.findOne(exhibition.getMarketId()));
-//        }
+        if(Validator.isNotNull(exhibition.getMarketId())) {
+            vo.setMarket(marketDao.findOne(exhibition.getMarketId()));
+        }
         if(Validator.isNotNull(exhibition.getCityId())) {
             vo.setCity(cityDao.findOne(exhibition.getCityId()));
         }
@@ -174,6 +175,7 @@ public class ExhibitionInfoService extends BaseService{
 
         Map<String, SearchFilter> filters = SearchFilterUtil.parse(searchParams);
 
+        filters.put("id", new SearchFilter("id", SearchFilter.Operator.GT, 0L));
         if(filters.get("name")!=null){
             filters.put("name", new SearchFilter("name", SearchFilter.Operator.LIKE, filters.get("name").value));
         }
@@ -182,6 +184,21 @@ public class ExhibitionInfoService extends BaseService{
         return dealerDao.findAll(DynamicSpecifications.bySearchFilter(filters.values(), Dealer.class), pageRequest);
     }
 
+    public Dealer findDealerById(Long id){
+        return dealerDao.findOne(id);
+    }
+
+    @Transactional(readOnly = false)
+    public void deleteDealer(Long id){
+        dealerDao.delete(id);
+        List<Exhibition> exhibitions = exhibitionDao.findByDealerId(id);
+        if(Collections3.isNotEmpty(exhibitions)){
+            exhibitions.stream().forEach(e->{
+                e.setDealerId(null);
+                exhibitionDao.save(e);
+            });
+        }
+    }
     /**
      * 经销商保存
      * @param dealer

@@ -3,45 +3,42 @@
 </div>
 <div class="wrapper-md" ng-controller="CustomerCtrl">
     <div class="col-sm-12">
-        <form name="form" class="form-validation" ng-submit="submit()" ng-init="init()">
-            <div class="panel panel-default">
+        <form name="infoForm" class="form-validation" ng-submit="save()" ng-init="detail()">
+            <div class="panel panel-success">
                 <div class="panel-heading">
-                    <span class="h4">&nbsp;</span>
+                    <span ng-show="id==0">经销商新建</span>
+                    <span ng-show="id!=0">经销商修改</span>
                 </div>
-                <div class="panel-body">
-                    <!--<p class="text-muted">Please fill the information to continue</p>-->
-                    <div class="form-group  pull-in ">
-                        <div class="col-sm-4">
-                            <label>名称 </label>
-                            <input type="text" class="form-control" ng-model="dealerList[id-1].name" required >
+                <div class="list-group bg-white">
+                    <li class="list-group-item">
+                        <span class="pull-left thumb-sm"><i class="fa fa-fw fa-star"></i></span>
+                        <div class="media-body">
+                            <input type="text" ng-model="dealerInfo.name" class="input-sm form-control" placeholder="名称" required>
                         </div>
-                        <div class="col-sm-4">
-                            <label>联系人</label>
-                            <input type="text" class="form-control" ng-model="dealerList[id-1].linkman" required >
+                    </li>
+                    <li class="list-group-item">
+                        <span class="pull-left thumb-sm"><i class="fa fa-map-signs fa-user"></i></span>
+                        <div class="media-body">
+                            <input type="text" ng-model="dealerInfo.linkman" class="input-sm form-control" placeholder="联系人" >
                         </div>
-                    </div>
-                    <div class="line line-dashed b-b line-lg pull-in"></div>
-                    <div class="form-group  pull-in ">
-                        <div class="col-sm-4">
-                            <label>电话 </label>
-                            <input type="text" class="form-control" ng-model="dealerList[id-1].telephone"  ng-pattern="/^1[34578]\d{9}$/" required >
+                    </li>
+                    <li class="list-group-item">
+                        <span class="pull-left thumb-sm"><i class="fa fa-fw fa-phone"></i></span>
+                        <div class="media-body">
+                            <input type="text" ng-model="dealerInfo.telephone" class="input-sm form-control" placeholder="电话" >
                         </div>
-                        <div class="col-sm-4">
-                            <label>邮箱</label>
-                            <input type="email" class="form-control" ng-model="dealerList[id-1].email" required >
+                    </li>
+                    <li class="list-group-item">
+                        <span class="pull-left thumb-sm"><i class="fa fa-fw fa-envelope"></i></span>
+                        <div class="media-body">
+                            <input type="email" ng-model="dealerInfo.email" class="input-sm form-control" placeholder="邮箱" >
                         </div>
-                    </div>
-                    <div class="line line-dashed b-b line-lg pull-in"></div>
-                    <div class="form-group  pull-in ">
-                        <div class="col-sm-8">
-                            <label>备注</label>
-                            <textarea ng-model="dealerList[id-1].remark" class="form-control" rows="2" placeholder="个人备注"></textarea>
-                        </div>
-                    </div>
+                    </li>
+
                 </div>
                 <footer class="panel-footer text-left bg-light lter">
-                    <button type="submit" class="btn btn-success" ng-disabled="form.$invalid" onClick="history.back()">保存</button>
-                    <button ui-sref="app.console.dealerList" type="button" class="btn btn-success" >返回</button>
+                    <button type="submit" class="btn btn-sm btn-primary" ng-disabled="infoForm.$invalid">保存</button>
+                    <button type="button" class="btn btn-sm btn-success" ui-sref="app.console.exhibitionList">返回</button>
                 </footer>
             </div>
         </form>

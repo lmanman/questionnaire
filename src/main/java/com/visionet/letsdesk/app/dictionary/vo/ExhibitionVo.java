@@ -3,6 +3,7 @@ package com.visionet.letsdesk.app.dictionary.vo;
 import com.visionet.letsdesk.app.base.vo.BaseVo;
 import com.visionet.letsdesk.app.dictionary.entity.City;
 import com.visionet.letsdesk.app.exhibition.entity.Dealer;
+import com.visionet.letsdesk.app.market.entity.Market;
 
 import java.util.Date;
 
@@ -11,9 +12,8 @@ public class ExhibitionVo extends BaseVo{
     private String name;
     private String address;
     private Dealer dealer;      //经销商
-    private BrandVo brandVo;        //品牌
-//    private Market market;      //商场
-    private String marketName;      //商场
+    private BrandVo brandVo;    //品牌
+    private Market market;      //商场
     private City city;          //城市
     private Date createDate;
     private Integer delFlag;
@@ -52,12 +52,12 @@ public class ExhibitionVo extends BaseVo{
         this.brandVo = brandVo;
     }
 
-    public String getMarketName() {
-        return marketName;
+    public Market getMarket() {
+        return market;
     }
 
-    public void setMarketName(String marketName) {
-        this.marketName = marketName;
+    public void setMarket(Market market) {
+        this.market = market;
     }
 
     public City getCity() {

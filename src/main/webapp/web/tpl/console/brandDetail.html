@@ -5,7 +5,19 @@
     <h4 class="m-t-none m-b">品牌结构</h4>
     <div class="panel-body">
     <div class="row">
-        <div class="col-sm-4">
+        <footer class="panel-footer text-left bg-light lter">
+            <button type="submit" class="btn btn-sm btn-primary" ng-disabled="infoForm.$invalid">保存</button>
+        </footer>
+        <div class="col-sm-5">
+
+            <div class="list-group ">
+                <li class="list-group-item">
+                    <div class="media-body">
+                        <input ng-model="manufacture" placeholder="厂商名称" class="input-sm form-control" >
+                    </div>
+                </li>
+            </div>
+
             <div ui-jq="nestable" class="dd">
                 <ol class="dd-list">
                     <li class="dd-item dd3-item" data-id="brandTree[id-1].id" >

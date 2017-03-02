@@ -15,8 +15,10 @@ import javax.persistence.Table;
 public class Market extends IdEntity{
 
     private String name;
-    private String address;
+    private Long provinceId;
     private Long cityId;
+    private String address;
+    private String businessHours;
 
     public String getName() {
         return name;
@@ -40,5 +42,21 @@ public class Market extends IdEntity{
 
     public void setCityId(Long cityId) {
         this.cityId = cityId;
+    }
+
+    public Long getProvinceId() {
+        return provinceId;
+    }
+
+    public void setProvinceId(Long provinceId) {
+        this.provinceId = provinceId;
+    }
+
+    public String getBusinessHours() {
+        return businessHours;
+    }
+
+    public void setBusinessHours(String businessHours) {
+        this.businessHours = businessHours;
     }
 }

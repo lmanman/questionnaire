@@ -1,49 +1,87 @@
 
 angular.module('app.console.customer.controllers', [])
-    .controller('CustomerCtrl', ['$scope','$stateParams','$http',ctrlFn]);
+    .controller('CustomerCtrl', ['$scope','$stateParams','$http','$state','$log',ctrlFn]);
 ;
 
 
-function ctrlFn($scope,$stateParams,$http){
+function ctrlFn($scope,$stateParams,$http,$state,$log){
     $scope.id = 0;
-    $scope.init = function(){
+    $scope.dealerInfo = {};
+
+    $scope.detail = function(){
         $scope.id = $stateParams.id;
-    }
+        $log.info("$scope.id="+$scope.id);
 
-    $scope.exhibitionList = [
-        {"id":"1","name":"顾家沙发汶水店","address":"上海市宝山区汶水路1555号","dealerId":"1","brandId":"3","marketId":"1","cityId":"2","dealerName":"经销商A","brandName":"顾家","marketName":"红星美凯龙汶水店","cityName":"上海","createDate":"2016-11-22","remark":""},
-        {"id":"2","name":"慕斯真北店","address":"上海市普陀区真北路1108号","dealerId":"2","brandId":"2","marketId":"2","cityId":"2","dealerName":"经销商B","brandName":"慕斯","marketName":"红星美凯龙真北店","cityName":"上海","createDate":"2016-12-16","remark":""},
-    ];
-    $scope.dealerList = [
-        {"id":"1","name":"经销商A","linkman":"张三","telephone":"18711111111","email":"zs@visionet.com.cn"},
-        {"id":"2","name":"经销商B","linkman":"李四","telephone":"18722222222","email":"ls@visionet.com.cn"},
-    ];
-    $scope.brandList = [
-        {"id":"1","name":"圣象","mainId":2,"mainName":"建材"},
-        {"id":"2","name":"慕斯","mainId":3,"mainName":"家居饰品"},
-        {"id":"3","name":"顾家","mainId":1,"mainName":"家具"},
-        {"id":"4","name":"科勒","mainId":2,"mainName":"建材"},
-        {"id":"5","name":"海尔","mainId":4,"mainName":"电器"},
-    ];
-    $scope.marketList = [
-        {"id":"1","name":"红星美凯龙汶水店","address":"上海市宝山区汶水路1555号","linkman":"xxx","cityName":"上海","createDate":"2016-11-22","remark":""},
-        {"id":"2","name":"红星美凯龙真北店","address":"上海市普陀区真北路1108号","linkman":"xxx","cityName":"上海","createDate":"2016-11-22","remark":""},
-        {"id":"3","name":"月星家居澳门店","address":"上海市普陀区澳门路168号","linkman":"xxx","cityName":"上海","createDate":"2016-10-13","remark":""},
-    ];
-    $scope.cityList = [
-        {"id":1,"cityName":"北京"},
-        {"id":2,"cityName":"上海"},
-        {"id":3,"cityName":"广州"},
-        {"id":4,"cityName":"深圳"},
-    ];
+        if($scope.id!=0 && $scope.id!=''){
+            $http.get($scope.app.projectName + '/mobile/dealer/'+$scope.id).success(function(detail){
+                $scope.dealerInfo = detail;
+                $log.info("name="+$scope.dealerInfo.name);
+            }).error(function(){
+                alert('请求失败');
+            });
+        }
+
+    };
 
 
-    $scope.deleteEhb = function(index){
-        $scope.exhibitionList.splice(index,1);
-    }
+    $scope.formData = {
+        pageInfo: {
+            pageNumber: 1,
+            pageSize: 10
+        }
+    };
+    $scope.dealerList = [];
+    $scope.query  = function(){
+        var formData = {};
+        formData.pageInfo = $scope.formData.pageInfo;
+        formData.name = $scope.name;
 
-    function submit(){
+        $http.post($scope.app.projectName + '/mobile/dealer/search',formData).success(function(result){
+            $scope.dealerList = result;
+        }).error(function(){
+            alert('查询失败');
+        });
+    };
 
-    }
+
+    $scope.save = function(){
+        var formData = {};
+        if($scope.id!=0) {
+            formData.id = $scope.dealerInfo.id;
+        }
+        formData.name = $scope.dealerInfo.name;
+        formData.linkman = $scope.dealerInfo.linkman;
+        formData.email = $scope.dealerInfo.email;
+        formData.telephone = $scope.dealerInfo.telephone;
+
+        $http.post($scope.app.projectName + '/mobile/dealer/save', formData).success(function (result) {
+            if (result.code == '10000') {
+                alert("保存成功");
+                $state.go('app.console.dealerList');
+            } else {
+                alert(result.msg);
+                $state.go('app.console.dealerList');
+            }
+        }).error(function () {
+            alert('提交失败');
+        });
+    };
+
+
+    $scope.deleteEhb = function(id){
+        if(confirm("是否确认删除！")) {
+            $http.get($scope.app.projectName+'/mobile/dealer/delete/'+id).success(function (result) {
+                if(result.code=='10000'){
+                    alert("删除成功");
+                    $scope.query();
+                }else{
+                    alert(result.msg);
+                }
+            }).error(function () {
+                alert('删除失败');
+            });
+
+        }
+    };
 
 }

@@ -1,10 +1,66 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">商场信息</h1>
+</div>
+<div class="wrapper-md" ng-controller="MallCtrl">
+    <form name="form" class="form-validation" ng-submit="query()" ng-init="query()">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                商场列表
+            </div>
+            <div class="row wrapper">
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <input type="text" class="input-sm form-control" placeholder="名称" ng-model="name">
+                    <span class="input-group-btn">
+                      <button class="btn btn-sm btn-default btn-info" type="submit"><i class="fa fa-fw fa-search"></i></button>
+                  </span>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped b-t b-light table-hover" >
+                    <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>省市区</th>
+                        <th>地址</th>
+                        <th>营业时间</th>
+                        <th style="width:30px;"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="item in mallList.content">
+                        <td ><a class="text-info-dker block" ui-sref="app.console.mallDetail({id:item.id})" >
+                            <span >{{item.name}}</span> <br>
+                        </a></td>
+                        <td>{{item.provinceName}}/{{item.cityName}}</td>
+                        <td>{{item.address}}</td>
+                        <td>{{item.businessHours}}</td>
+                        <td>
+                            <a href ng-click="deleteEhb(item.id)"><i class="fa fa-times text-danger text"></i></a>
+                        </td>
+                    </tr>
+                    <tr ng-show="mallList.content.length <= 0">
+                        <td colspan="5" class="text-center">
+                            <h4>暂无数据</h4>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <footer class="panel-footer">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button class="btn btn-sm btn-default" ui-sref="app.console.mallDetail({id:0})">添加</button>
+                    </div>
+                    <div class="col-sm-4 text-center">
+                        <small class="text-muted inline m-t-sm m-b-sm">{{mallList.number * mallList.totalPages + 1}}-{{mallList.number * mallList.totalPages + mallList.numberOfElements}} 共 {{mallList.totalElements}}</small>
+                    </div>
+                    <div class="col-sm-4 text-right text-center-xs" ng-if="mallList.content.length > 0">
+                        <pagination boundary-links="true" total-items="mallList.totalElements" ng-model="formData.pageInfo.pageNumber" class="pagination-sm m-t-none m-b" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </form>
+</div>

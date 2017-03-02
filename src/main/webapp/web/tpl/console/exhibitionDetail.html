@@ -4,7 +4,7 @@
 <div class="wrapper-md" ng-controller="ExhibitionCtrl" >
     <div class="row">
         <div class="col-sm-6" >
-            <form name="form" class="form-validation" ng-submit="saveStore()" ng-init="detail()">
+            <form name="infoForm" class="form-validation" ng-submit="saveStore()" ng-init="detail()">
                 <div class="panel panel-success">
                     <div class="panel-heading">
                         基本信息
@@ -22,10 +22,13 @@
                                 <input type="text" ng-model="storeInfo.address" class="input-sm form-control" placeholder="地址" required>
                             </div>
                         </li>
-                        <li class="list-group-item">
+                        <li class="list-group-item" >
                             <span class="pull-left thumb-sm"><i class="fa fa-fw fa-building"></i></span>
-                            <div class="media-body">
-                                <input type="text" ng-model="storeInfo.marketName" class="input-sm form-control" placeholder="商场" >
+                            <div ui-module="select2">
+                                <select ui-select2="{allowClear: true}" ng-model="storeInfo.market.id" data-placeholder="商场" class="form-control input-sm w-md">
+                                    <option value=""></option>
+                                    <option ng-repeat="market in dictionaryMap.s_market" value="{{market.id}}">{{market.name}}</option>
+                                </select>
                             </div>
                         </li>
                         <li class="list-group-item" >

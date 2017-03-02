@@ -88,6 +88,7 @@ public class ExhibitionSurvey extends IdEntity{
     private ExhibitionSurveyPublicShow publicShow;      //公区摆展
     private Map<String,String> otherOptionVo;           //其它填写
 
+    private Long marketId;                  //商场ID
     private Long exhibitionId;              //展厅ID
     private Long createBy;                  //创建人
     private Long updateBy;                  //修改人
@@ -610,6 +611,13 @@ public class ExhibitionSurvey extends IdEntity{
         this.memberArea = memberArea;
     }
 
+    public Long getMarketId() {
+        return marketId;
+    }
+
+    public void setMarketId(Long marketId) {
+        this.marketId = marketId;
+    }
 
     public Long getExhibitionId() {
         return exhibitionId;
@@ -619,6 +627,7 @@ public class ExhibitionSurvey extends IdEntity{
         this.exhibitionId = exhibitionId;
     }
 
+    @Column(updatable=false)
     public Long getCreateBy() {
         return createBy;
     }
@@ -636,6 +645,7 @@ public class ExhibitionSurvey extends IdEntity{
     }
 
     @JsonSerialize(using = JsonDateSerializer.class)
+    @Column(updatable=false)
     public Date getCreateDate() {
         return createDate;
     }

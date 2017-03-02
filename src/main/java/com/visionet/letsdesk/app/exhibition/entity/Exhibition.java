@@ -20,8 +20,7 @@ public class Exhibition extends IdEntity {
     private String address;
     private Long dealerId;      //经销商
     private Long brandId;       //品牌
-//    private Long marketId;      //商场ID
-    private String marketName;      //商场
+    private Long marketId;      //商场ID
     private Long cityId;        //城市
     private Date createDate;
     private Date updateDate;
@@ -59,12 +58,12 @@ public class Exhibition extends IdEntity {
         this.brandId = brandId;
     }
 
-    public String getMarketName() {
-        return marketName;
+    public Long getMarketId() {
+        return marketId;
     }
 
-    public void setMarketName(String marketName) {
-        this.marketName = marketName;
+    public void setMarketId(Long marketId) {
+        this.marketId = marketId;
     }
 
     public Long getCityId() {

@@ -21,4 +21,7 @@ public interface ExhibitionDao extends PagingAndSortingRepository<Exhibition, Lo
             "or (exists (select 1 from Brand d where d.id=b.brandId and d.name like %?1%)) " +
             "or (exists (select 1 from City c where c.id=b.cityId and c.cityName like %?1%)))")
     Page<Exhibition> search(String queryName,Pageable pageable);
+
+    List<Exhibition> findByDealerId(Long dealerId);
+    List<Exhibition> findByMarketId(Long marketId);
 }

@@ -14,6 +14,8 @@ import com.visionet.letsdesk.app.exhibition.entity.ExhibitionSurveyField;
 import com.visionet.letsdesk.app.exhibition.repository.DealerDao;
 import com.visionet.letsdesk.app.exhibition.repository.ExhibitionSurveyFieldDao;
 import com.visionet.letsdesk.app.exhibition.vo.ExhibitionSurveyFieldVo;
+import com.visionet.letsdesk.app.market.entity.Market;
+import com.visionet.letsdesk.app.market.repository.MarketDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +43,8 @@ public class ExhibitionSurveyFieldService extends BaseService{
     private ProvinceDao provinceDao;
     @Autowired
     private CityDao cityDao;
+    @Autowired
+    private MarketDao marketDao;
 
     /**
      * 展厅问卷字段项
@@ -115,6 +119,15 @@ public class ExhibitionSurveyFieldService extends BaseService{
                     s.setType(type);
                     return s;
                 }).collect(Collectors.toList());
+            } else if("s_market".equals(relationData)){ //商场
+                return ((List<Market>)marketDao.findAll()).stream().map(d -> {
+                    SundryVo s = new SundryVo();
+                    s.setId(d.getId());
+                    s.setCode(d.getId().toString());
+                    s.setName(d.getName());
+                    s.setType(type);
+                    return s;
+                }).collect(Collectors.toList());
             }
         }else if(Validator.isNotNull(type)) {
             return BeanConvertMap.mapList(sundryDao.findByType(type), SundryVo.class);
@@ -126,7 +139,7 @@ public class ExhibitionSurveyFieldService extends BaseService{
         Map<String,String> otherMap = Maps.newHashMap();
         List<String> otherList = exhibitionSurveyFieldDao.findFieldNameWithOther();
         if(Collections3.isNotEmpty(otherList)){
-            otherList.parallelStream().forEach(obj-> otherMap.put(obj,""));
+            otherList.parallelStream().forEach(obj -> otherMap.put(obj, ""));
         }
 
         return otherMap;

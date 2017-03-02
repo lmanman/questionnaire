@@ -14,10 +14,10 @@ function ctrlFn($scope,$stateParams,$http,$state,$log){
         $scope.id = $stateParams.id;
         $log.info("$scope.id="+$scope.id);
 
-        var types = ['d_city','s_dealer'];
+        var types = ['d_city','s_dealer','s_market'];
         $http.post($scope.app.projectName + '/mobile/dictionary/collect/map',types).success(function(map){
             $scope.dictionaryMap = map;
-            $log.info("dealer.length="+$scope.dictionaryMap.s_dealer.length);
+            $log.info("s_market.length="+$scope.dictionaryMap.s_market.length);
 
             if($scope.id!=0 && $scope.id!=''){
                 $http.get($scope.app.projectName + '/mobile/exhibition/store/'+$scope.id).success(function(detail){
@@ -33,16 +33,6 @@ function ctrlFn($scope,$stateParams,$http,$state,$log){
         });
 
     };
-
-    function getDictMap(){
-        var types = ['d_city','s_dealer'];
-        $http.post($scope.app.projectName + '/mobile/dictionary/collect/map',types).success(function(map){
-            $scope.dictionaryMap = map;
-            $log.info("dealer.length="+$scope.dictionaryMap.s_dealer.length);
-        }).error(function(){
-            alert('权限数据更新失败！');
-        });
-    }
 
 
     $scope.formData = {
@@ -75,6 +65,7 @@ function ctrlFn($scope,$stateParams,$http,$state,$log){
         formData.address = $scope.storeInfo.address;
         formData.dealerId = $scope.storeInfo.dealer.id;
         formData.cityId = $scope.storeInfo.city.id;
+        formData.marketId = $scope.storeInfo.market.id;
 
         $http.post($scope.app.projectName + '/mobile/exhibition/store/save', formData).success(function (result) {
             if (result.code == '10000') {

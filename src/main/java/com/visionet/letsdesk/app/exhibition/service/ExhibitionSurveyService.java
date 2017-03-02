@@ -131,17 +131,20 @@ public class ExhibitionSurveyService extends BaseService{
      */
     @Transactional(readOnly = false)
     public void save(ExhibitionSurvey survey) throws Exception{
+        if(Validator.isNull(survey.getExhibitionId())){
+            throwException(BusinessStatus.REQUIRE,"exhibitionId is null!");
+        }
+
         if(Validator.isNull(survey.getId())){
             if(survey.getId()!=null && survey.getId().longValue()==0){
                 survey.setId(null);
             }
-            if(Validator.isNull(survey.getExhibitionId())){
-                throwException(BusinessStatus.REQUIRE,"exhibitionId is null!");
-            }
+
 //            Exhibition store = exhibitionDao.findOne(survey.getExhibitionId());
 //            if(store==null){
 //                throwException(BusinessStatus.NOTFIND,"exhibitionId not exist!");
 //            }
+
             survey.setExhibitionProvince(this.getProvinceId(survey.getExhibitionCity()));
             survey.setCreateDate(DateUtil.getCurrentDate());
             survey.setUpdateDate(DateUtil.getCurrentDate());
@@ -158,13 +161,15 @@ public class ExhibitionSurveyService extends BaseService{
             //其它填写项保存
             this.otherOptionSave(survey.getId(),survey.getOtherOptionVo());
         }else{
-            ExhibitionSurvey po = exhibitionSurveyDao.findOne(survey.getId());
-            if(po.getExhibitionCity()==null ||
-                    (Validator.isNotNull(survey.getExhibitionCity())
-                            && survey.getExhibitionCity().intValue()!=po.getExhibitionCity().intValue())){
-                po.setExhibitionProvince(this.getProvinceId(survey.getExhibitionCity()));
-            }
-            survey.setId(po.getId());
+//            ExhibitionSurvey po = exhibitionSurveyDao.findOne(survey.getId());
+//            if(po.getExhibitionCity()==null ||
+//                    (Validator.isNotNull(survey.getExhibitionCity())
+//                            && survey.getExhibitionCity().intValue()!=po.getExhibitionCity().intValue())){
+//                po.setExhibitionProvince(this.getProvinceId(survey.getExhibitionCity()));
+//            }
+//            SearchFilterUtil.copyBeans(po,survey);
+
+            survey.setExhibitionProvince(this.getProvinceId(survey.getExhibitionCity()));
             survey.setUpdateDate(DateUtil.getCurrentDate());
             exhibitionSurveyDao.save(survey);
 
@@ -182,8 +187,6 @@ public class ExhibitionSurveyService extends BaseService{
                 exhibitionSurveyPublicShowDao.save(survey.getPublicShow());
             }
 
-
-
             //多选项保存
             exhibitionSurveyMultiselectDao.deleteBySurveyId(survey.getId());
             this.multiselectSave(survey);
@@ -195,7 +198,7 @@ public class ExhibitionSurveyService extends BaseService{
         }
     }
 
-    private Integer getProvinceId(Integer exhibitionCity){
+    public Integer getProvinceId(Integer exhibitionCity){
         if(Validator.isNotNull(exhibitionCity)){
             City city = cityDao.findOne(exhibitionCity.longValue());
             if(city!=null) {
@@ -344,6 +347,12 @@ public class ExhibitionSurveyService extends BaseService{
         }
         if(Validator.isNotNull(survey.getCategoryMain())) {
             vo.setCategoryName(categoryDao.findNameById(survey.getCategoryMain().longValue()));
+        }
+        if(Validator.isNotNull(survey.getExhibitionCity())){
+            City city = cityDao.findOne(survey.getExhibitionCity().longValue());
+            if(city!=null){
+                vo.setCityName((city.getProvinceName()==null?"":city.getProvinceName())+"/"+city.getCityName());
+            }
         }
         vo.setSchedule(new int[]{GetAnswerNum(survey),64});
         vo.setUpdateDate(survey.getUpdateDate());

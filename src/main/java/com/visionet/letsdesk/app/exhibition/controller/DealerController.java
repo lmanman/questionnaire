@@ -10,10 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -99,6 +96,12 @@ public class DealerController extends BaseController{
         return new ResponseEntity<Page<Dealer>>(page, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/{id}", method= RequestMethod.GET)
+    public ResponseEntity<?> detail(@PathVariable Long id){
+
+        return new ResponseEntity<Dealer>(exhibitionInfoService.findDealerById(id), HttpStatus.OK);
+    }
+
 
     /**
      * @apiDescription 经销商新增修改
@@ -136,5 +139,12 @@ public class DealerController extends BaseController{
         return new ResponseEntity<Map<String,String>>(GetSuccMap() , HttpStatus.OK);
     }
 
+
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+        exhibitionInfoService.deleteDealer(id);
+        return new ResponseEntity<Map<String,String>>(GetSuccMap() , HttpStatus.OK);
+    }
 
 }

@@ -17,6 +17,7 @@ public class Category extends IdEntity{
     private Integer level;
     private String name;
     private String type;                  //功能,材质,风格,是否进口
+    private String manufacture;           //厂商
 
     public Integer getLevel() {
         return level;
@@ -40,5 +41,13 @@ public class Category extends IdEntity{
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getManufacture() {
+        return manufacture;
+    }
+
+    public void setManufacture(String manufacture) {
+        this.manufacture = manufacture;
     }
 }

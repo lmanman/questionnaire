@@ -1,10 +1,48 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">商场详情</h1>
+</div>
+<div class="wrapper-md" ng-controller="MallCtrl">
+    <div class="col-sm-12">
+        <form name="infoForm" class="form-validation" ng-submit="save()" ng-init="detail()">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <span ng-show="id==0">商场新建</span>
+                    <span ng-show="id!=0">商场修改</span>
+                </div>
+                <div class="list-group bg-white">
+                    <li class="list-group-item">
+                        <span class="pull-left thumb-sm"><i class="fa fa-fw fa-star"></i></span>
+                        <div class="media-body">
+                            <input type="text" ng-model="mallInfo.name" class="input-sm form-control" placeholder="名称" required>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="pull-left thumb-sm"><i class="fa fa-map-signs fa-user"></i></span>
+                        <div class="media-body">
+                            <input type="text" ng-model="mallInfo.address" class="input-sm form-control" placeholder="地址" >
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="pull-left thumb-sm"><i class="fa fa-map-marker"></i></span>
+                        <select  ng-model="mallInfo.cityId" data-placeholder="城市" class="w-md">
+                            <optgroup ng-repeat="province in dictionaryMap.d_city" label="{{province.name}}">
+                                <option ng-repeat="city in province.childDataList" value="{{city.id}}">{{city.name}}</option>
+                            </optgroup>
+                        </select>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="pull-left thumb-sm"><i class="fa fa-fw fa-clock-o"></i></span>
+                        <div class="media-body">
+                            <input type="text" ng-model="mallInfo.businessHours" class="input-sm form-control" placeholder="营业时间" >
+                        </div>
+                    </li>
 
-</body>
-</html>
+                </div>
+                <footer class="panel-footer text-left bg-light lter">
+                    <button type="submit" class="btn btn-sm btn-primary" ng-disabled="infoForm.$invalid">保存</button>
+                    <button type="button" class="btn btn-sm btn-success" ui-sref="app.console.exhibitionList">返回</button>
+                </footer>
+            </div>
+        </form>
+    </div>
+</div>
