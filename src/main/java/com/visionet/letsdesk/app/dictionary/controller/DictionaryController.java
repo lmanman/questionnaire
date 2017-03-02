@@ -7,6 +7,7 @@ import com.visionet.letsdesk.app.dictionary.entity.Manufacturer;
 import com.visionet.letsdesk.app.dictionary.service.DictionaryService;
 import com.visionet.letsdesk.app.dictionary.vo.BrandVo;
 import com.visionet.letsdesk.app.dictionary.vo.ManufacturerVo;
+import com.visionet.letsdesk.app.dictionary.vo.SundryVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -486,6 +487,13 @@ public class DictionaryController extends BaseController{
     public ResponseEntity<?> manufacturerSave(@RequestBody Manufacturer manufacturer) throws Exception{
         dictionaryService.saveManufacturer(manufacturer);
         return new ResponseEntity<Map<String,String>>(GetSuccMap() , HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/collect/map", method= RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<?> typeMap(@RequestBody List<String> typeList){
+
+        return new ResponseEntity<Map<String,List<SundryVo>>>(dictionaryService.findDictionaryMap(typeList), HttpStatus.OK);
     }
 
 

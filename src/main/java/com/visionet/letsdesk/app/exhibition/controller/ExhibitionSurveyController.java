@@ -109,10 +109,10 @@ public class ExhibitionSurveyController extends BaseController{
     @RequestMapping(value ="/search", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> search(@RequestBody ExhibitionSurveyVo vo) throws Exception {
-//        Page<ExhibitionSurveyVo> page = exhibitionSurveyService.search(vo);
         if(!hasRole(SysConstants.SUBADMIN)){
             vo.setCreateBy(getCurrentUserId());
         }
+//        Page<ExhibitionSurveyVo> page = exhibitionSurveyService.search(vo);
         Page<ExhibitionSurveyListVo> page = exhibitionSurveyService.list(vo);
 
         return new ResponseEntity<Page<ExhibitionSurveyListVo>>(page, HttpStatus.OK);

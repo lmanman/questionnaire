@@ -398,6 +398,8 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
       updateModel(data.value);
     });
 
+      $scope.select2Val="Two";
+      $scope.select3Val="CA";
     $scope.select2Number = [
       {text:'First',  value:'One'},
       {text:'Second', value:'Two'},

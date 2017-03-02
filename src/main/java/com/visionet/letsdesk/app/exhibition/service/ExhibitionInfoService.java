@@ -11,7 +11,6 @@ import com.visionet.letsdesk.app.common.utils.BeanConvertMap;
 import com.visionet.letsdesk.app.common.utils.PageInfo;
 import com.visionet.letsdesk.app.common.utils.SearchFilterUtil;
 import com.visionet.letsdesk.app.dictionary.repository.CityDao;
-import com.visionet.letsdesk.app.dictionary.service.DictionaryService;
 import com.visionet.letsdesk.app.dictionary.vo.ExhibitionVo;
 import com.visionet.letsdesk.app.exhibition.entity.Dealer;
 import com.visionet.letsdesk.app.exhibition.entity.Exhibition;
@@ -41,8 +40,6 @@ public class ExhibitionInfoService extends BaseService{
     private DealerDao dealerDao;
     @Autowired
     private CityDao cityDao;
-    @Autowired
-    private DictionaryService dictionaryService;
 
 
     /**
@@ -60,20 +57,23 @@ public class ExhibitionInfoService extends BaseService{
         return vo;
     }
     private void transferExhibitionVo(Exhibition exhibition,ExhibitionVo vo ){
-        if(Validator.isNotNull(exhibition.getBrandId())) {
-            vo.setBrandVo(dictionaryService.findBrandVoById(exhibition.getBrandId()));
-        }
+//        if(Validator.isNotNull(exhibition.getBrandId())) {
+//            vo.setBrandVo(dictionaryService.findBrandVoById(exhibition.getBrandId()));
+//        }
         if(Validator.isNotNull(exhibition.getDealerId())) {
             vo.setDealer(dealerDao.findOne(exhibition.getDealerId()));
         }
-        if(Validator.isNotNull(exhibition.getMarketId())) {
-            vo.setMarket(marketDao.findOne(exhibition.getMarketId()));
-        }
+//        if(Validator.isNotNull(exhibition.getMarketId())) {
+//            vo.setMarket(marketDao.findOne(exhibition.getMarketId()));
+//        }
         if(Validator.isNotNull(exhibition.getCityId())) {
             vo.setCity(cityDao.findOne(exhibition.getCityId()));
         }
     }
 
+    public List<Exhibition> all(){
+        return exhibitionDao.findAllExhibition();
+    }
 
     /**
      * 展厅查询
@@ -130,13 +130,14 @@ public class ExhibitionInfoService extends BaseService{
     @Transactional(readOnly = false)
     public void save(Exhibition exhibition) throws Exception{
         if(exhibition.getId()==null){
-            if(Validator.isNull(exhibition.getBrandId())){
-                throwException(BusinessStatus.REQUIRE,"brandId is null!");
-            }
-            if(Validator.isNull(exhibition.getMarketId())){
-                throwException(BusinessStatus.REQUIRE,"marketId is null!");
+//            if(Validator.isNull(exhibition.getBrandId())){
+//                throwException(BusinessStatus.REQUIRE,"brandId is null!");
+//            }
+            if(Validator.isNull(exhibition.getName())){
+                throwException(BusinessStatus.REQUIRE,"name is null!");
             }
             exhibition.setCreateDate(DateUtil.getCurrentDate());
+            exhibition.setDelFlag(KeyWord.UN_DEL_STATUS);
             exhibitionDao.save(exhibition);
         }else{
             Exhibition po = exhibitionDao.findOne(exhibition.getId());

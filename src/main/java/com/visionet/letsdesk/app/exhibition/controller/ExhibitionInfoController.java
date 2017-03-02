@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -164,7 +165,10 @@ public class ExhibitionInfoController extends BaseController{
         return new ResponseEntity<Page<ExhibitionVo>>(page, HttpStatus.OK);
     }
 
-
+    @RequestMapping(value = "/list", method= RequestMethod.GET)
+    public ResponseEntity<?> list(){
+        return new ResponseEntity<List<Exhibition>>(exhibitionInfoService.all(), HttpStatus.OK);
+    }
 
     /**
      * @apiDescription 展厅详情
@@ -196,56 +200,7 @@ public class ExhibitionInfoController extends BaseController{
      *       "telephone": "18761556212",
      *       "email": "zhousheng@visionet.com.cn"
      *     },
-     *     "brandVo": {
-     *       "id": 17,
-     *       "pageInfo": null,
-     *       "name": "顾家沙发",
-     *       "manufacturer": {
-     *         "id": 2,
-     *         "name": "家具商B",
-     *         "address": "上海市普陀区真北路1108号",
-     *         "telephone": "51099516",
-     *         "linkman": "李四"
-     *       },
-     *       "type": 2,
-     *       "parentId": 16,
-     *       "categoryMain": {
-     *         "id": 1,
-     *         "level": 1,
-     *         "name": "家具",
-     *         "parentId": 0
-     *       },
-     *       "categoryFunction": {
-     *         "id": 5,
-     *         "level": 2,
-     *         "name": "沙发",
-     *         "parentId": 1
-     *       },
-     *       "categoryMaterial": {
-     *         "id": 15,
-     *         "level": 3,
-     *         "name": "皮质",
-     *         "parentId": 1
-     *       },
-     *       "categoryStyle": {
-     *         "id": 23,
-     *         "level": 4,
-     *         "name": "现代",
-     *         "parentId": 1
-     *       },
-     *       "categoryImport": {
-     *         "id": 31,
-     *         "level": 5,
-     *         "name": "非进口",
-     *         "parentId": 4
-     *       }
-     *     },
-     *     "market": {
-     *       "id": 1,
-     *       "name": "红星美凯龙汶水店",
-     *       "address": "汶水路1555号（沪太路1801号）",
-     *       "cityId": 36
-     *     },
+     *     "marketName": "红星美凯龙汶水店",
      *     "city": {
      *       "id": 36,
      *       "cityName": "上海",

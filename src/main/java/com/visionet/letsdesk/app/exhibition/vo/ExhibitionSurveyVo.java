@@ -2,12 +2,14 @@ package com.visionet.letsdesk.app.exhibition.vo;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.visionet.letsdesk.app.base.entity.JsonDateSerializer;
 import com.visionet.letsdesk.app.base.vo.BaseVo;
 import com.visionet.letsdesk.app.exhibition.entity.ExhibitionSurveyPublicShow;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class ExhibitionSurveyVo extends BaseVo{
 
@@ -76,7 +78,8 @@ public class ExhibitionSurveyVo extends BaseVo{
     private Integer promotionStyle;                 //展厅的主要促销形式
     private Integer specialOffer;                   //特价款
 
-    private ExhibitionSurveyPublicShow publicShow;     //公区摆展
+    private ExhibitionSurveyPublicShow publicShow = new ExhibitionSurveyPublicShow();       //公区摆展
+    private Map<String,String> otherOptionVo = Maps.newHashMap();                           //其它填写
 
     private Long exhibitionId;              //展厅ID
     private Long createBy;                  //创建人
@@ -584,6 +587,14 @@ public class ExhibitionSurveyVo extends BaseVo{
 
     public void setPublicShow(ExhibitionSurveyPublicShow publicShow) {
         this.publicShow = publicShow;
+    }
+
+    public Map<String, String> getOtherOptionVo() {
+        return otherOptionVo;
+    }
+
+    public void setOtherOptionVo(Map<String, String> otherOptionVo) {
+        this.otherOptionVo = otherOptionVo;
     }
 
     public Long getExhibitionId() {

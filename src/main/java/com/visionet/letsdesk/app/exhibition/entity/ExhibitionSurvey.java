@@ -9,6 +9,7 @@ import com.visionet.letsdesk.app.common.cache.UserCache;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 展厅
@@ -84,7 +85,8 @@ public class ExhibitionSurvey extends IdEntity{
     private Integer promotionStyle;                 //展厅的主要促销形式
     private Integer specialOffer;                   //特价款
 
-    private ExhibitionSurveyPublicShow publicShow;    //公区摆展
+    private ExhibitionSurveyPublicShow publicShow;      //公区摆展
+    private Map<String,String> otherOptionVo;           //其它填写
 
     private Long exhibitionId;              //展厅ID
     private Long createBy;                  //创建人
@@ -141,6 +143,15 @@ public class ExhibitionSurvey extends IdEntity{
 
     public void setPublicShow(ExhibitionSurveyPublicShow publicShow) {
         this.publicShow = publicShow;
+    }
+
+    @Transient
+    public Map<String, String> getOtherOptionVo() {
+        return otherOptionVo;
+    }
+
+    public void setOtherOptionVo(Map<String, String> otherOptionVo) {
+        this.otherOptionVo = otherOptionVo;
     }
 
     @Transient

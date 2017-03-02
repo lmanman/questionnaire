@@ -1,6 +1,5 @@
 package com.visionet.letsdesk.app.exhibition.vo;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.visionet.letsdesk.app.dictionary.vo.SundryVo;
 
@@ -24,6 +23,8 @@ public class ExhibitionSurveyFieldVo {
     private List<SundryVo> optionList;
     private String fieldVal;
     private Map<Long,Boolean> fieldArr = Maps.newHashMap();
+    private Map<String,String> otherOptionVo = Maps.newHashMap();                           //其它填写
+
 
 //    private static class Option {
 //        Long id;
@@ -114,5 +115,13 @@ public class ExhibitionSurveyFieldVo {
 
     public void setFieldArr(Map<Long, Boolean> fieldArr) {
         this.fieldArr = fieldArr;
+    }
+
+    public Map<String, String> getOtherOptionVo() {
+        return otherOptionVo;
+    }
+
+    public void setOtherOptionVo(Map<String, String> otherOptionVo) {
+        this.otherOptionVo = otherOptionVo;
     }
 }

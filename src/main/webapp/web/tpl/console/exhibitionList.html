@@ -24,7 +24,6 @@
                     <th>名称</th>
                     <th>地址</th>
                     <th>经销商</th>
-                    <th>品牌</th>
                     <th>商场</th>
                     <th>城市</th>
                     <th style="width:30px;"></th>
@@ -32,16 +31,15 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="item in exhibitionList.content">
-                    <td ><a class="text-info-dker block" ui-sref="app.console.exhibitionDetail({id:item.id})" >
+                    <td ><a class="text-info-dker block" ng-click="ui_detail(item.id)" >
                         <span >{{item.name}}</span> <br>
                     </a></td>
                     <td>{{item.address}}</td>
                     <td>{{item.dealer.name}}</td>
-                    <td>{{item.brandVo.name}}</td>
-                    <td>{{item.market.name}}</td>
+                    <td>{{item.marketName}}</td>
                     <td>{{item.city.cityName}}</td>
                     <td>
-                        <a href ng-click="deleteEhb($index)"><i class="fa fa-times text-danger text"></i></a>
+                        <a href ng-click="deleteEhb(item.id)"><i class="fa fa-times text-danger text"></i></a>
                     </td>
                 </tr>
                 <tr ng-show="exhibitionList.content.length <= 0">
@@ -55,7 +53,8 @@
         <footer class="panel-footer">
             <div class="row">
                 <div class="col-sm-4 hidden-xs">
-                    <button class="btn btn-sm btn-default" ui-sref="app.console.exhibitionDetail({id:0})">添加</button>
+                    <!--<button class="btn btn-sm btn-default" ui-sref="app.console.exhibitionDetail({id:0})">添加</button>-->
+                    <button class="btn btn-sm btn-default" ng-click="ui_detail(0)">添加</button>
                 </div>
                 <div class="col-sm-4 text-center">
                     <small class="text-muted inline m-t-sm m-b-sm">{{exhibitionList.number * exhibitionList.totalPages + 1}}-{{exhibitionList.number * exhibitionList.totalPages + exhibitionList.numberOfElements}} 共 {{exhibitionList.totalElements}}</small>

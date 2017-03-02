@@ -6,9 +6,43 @@ angular.module('app.console.exhibition.controllers', [])
 
 function ctrlFn($scope,$stateParams,$http,$state,$log){
     $scope.id = 0;
-    $scope.init = function(){
+    $scope.storeInfo = {};
+    $scope.dictionaryMap = {};
+
+
+    $scope.detail = function(){
         $scope.id = $stateParams.id;
+        $log.info("$scope.id="+$scope.id);
+
+        var types = ['d_city','s_dealer'];
+        $http.post($scope.app.projectName + '/mobile/dictionary/collect/map',types).success(function(map){
+            $scope.dictionaryMap = map;
+            $log.info("dealer.length="+$scope.dictionaryMap.s_dealer.length);
+
+            if($scope.id!=0 && $scope.id!=''){
+                $http.get($scope.app.projectName + '/mobile/exhibition/store/'+$scope.id).success(function(detail){
+                    $scope.storeInfo = detail;
+                    $log.info("name="+$scope.storeInfo.name);
+                }).error(function(){
+                    alert('请求失败');
+                });
+            }
+
+        }).error(function(){
+            alert('权限数据更新失败！');
+        });
+
     };
+
+    function getDictMap(){
+        var types = ['d_city','s_dealer'];
+        $http.post($scope.app.projectName + '/mobile/dictionary/collect/map',types).success(function(map){
+            $scope.dictionaryMap = map;
+            $log.info("dealer.length="+$scope.dictionaryMap.s_dealer.length);
+        }).error(function(){
+            alert('权限数据更新失败！');
+        });
+    }
 
 
     $scope.formData = {
@@ -31,10 +65,50 @@ function ctrlFn($scope,$stateParams,$http,$state,$log){
     };
 
 
+    $scope.saveStore = function(){
+        var formData = {};
+        if($scope.id!=0) {
+            formData.id = $scope.storeInfo.id;
+        }
+        formData.name = $scope.storeInfo.name;
+        formData.marketName = $scope.storeInfo.marketName;
+        formData.address = $scope.storeInfo.address;
+        formData.dealerId = $scope.storeInfo.dealer.id;
+        formData.cityId = $scope.storeInfo.city.id;
 
-    $scope.deleteEhb = function(index){
-        $scope.exhibitionList.splice(index,1);
+        $http.post($scope.app.projectName + '/mobile/exhibition/store/save', formData).success(function (result) {
+            if (result.code == '10000') {
+                alert("保存成功");
+                $state.go('app.console.exhibitionList');
+            } else {
+                alert(result.msg);
+                $state.go('app.console.exhibitionList');
+            }
+        }).error(function () {
+            alert('提交失败');
+        });
     };
 
+
+    $scope.deleteEhb = function(id){
+        if(confirm("是否确认删除！")) {
+            $http.get($scope.app.projectName+'/mobile/exhibition/store/delete/'+id).success(function (result) {
+                if(result.code=='10000'){
+                    alert("删除成功");
+                    $scope.query();
+                }else{
+                    alert(result.msg);
+                }
+            }).error(function () {
+                alert('删除失败');
+            });
+
+        }
+    };
+
+    $scope.ui_detail = function(sid){
+        $state.go("app.console.exhibitionDetail", {id:sid});
+        //$state.go("app.console.exhibitionDetail", {id:sid}, { reload: true });
+    }
 
 }

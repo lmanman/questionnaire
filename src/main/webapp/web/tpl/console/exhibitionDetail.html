@@ -1,72 +1,62 @@
 <div class="bg-light lter b-b wrapper-md">
     <h1 class="m-n font-thin h3">门店/展厅详情</h1>
 </div>
-<div class="wrapper-md" ng-controller="ExhibitionCtrl">
-    <div class="col-sm-12">
-        <form name="form" class="form-validation" ng-submit="submit()" ng-init="init()">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <span class="h4">&nbsp;</span>
+<div class="wrapper-md" ng-controller="ExhibitionCtrl" >
+    <div class="row">
+        <div class="col-sm-6" >
+            <form name="form" class="form-validation" ng-submit="saveStore()" ng-init="detail()">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        基本信息
+                    </div>
+                    <div class="list-group bg-white">
+                        <li class="list-group-item">
+                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-star"></i></span>
+                            <div class="media-body">
+                                <input type="text" ng-model="storeInfo.name" class="input-sm form-control" placeholder="名称" required>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <span class="pull-left thumb-sm"><i class="fa fa-map-signs fa-user"></i></span>
+                            <div class="media-body">
+                                <input type="text" ng-model="storeInfo.address" class="input-sm form-control" placeholder="地址" required>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-building"></i></span>
+                            <div class="media-body">
+                                <input type="text" ng-model="storeInfo.marketName" class="input-sm form-control" placeholder="商场" >
+                            </div>
+                        </li>
+                        <li class="list-group-item" >
+                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-user"></i></span>
+                            <div ui-module="select2">
+                                <select ui-select2="{allowClear: true}" ng-model="storeInfo.dealer.id" data-placeholder="经销商" class="form-control input-sm w-md">
+                                    <option value=""></option>
+                                    <option ng-repeat="dealer in dictionaryMap.s_dealer" value="{{dealer.id}}">{{dealer.name}}</option>
+                                </select>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <span class="pull-left thumb-sm"><i class="fa fa-map-marker"></i></span>
+                            <select  ng-model="storeInfo.city.id" data-placeholder="城市" class="w-md">
+                                <optgroup ng-repeat="province in dictionaryMap.d_city" label="{{province.name}}">
+                                    <option ng-repeat="city in province.childDataList" value="{{city.id}}">{{city.name}}</option>
+                                </optgroup>
+                            </select>
+                        </li>
+
+                    </div>
+                    <footer class="panel-footer text-left bg-light lter">
+                        <span class="pull-left thumb-sm">&nbsp;</span>
+                        <button type="submit" class="btn btn-sm btn-primary" ng-disabled="infoForm.$invalid">保存</button>
+                        <button type="button" class="btn btn-sm btn-success" ui-sref="app.console.exhibitionList">返回</button>
+                    </footer>
                 </div>
-                <div class="panel-body">
-                    <!--<p class="text-muted">Please fill the information to continue</p>-->
-                    <div class="form-group  pull-in ">
-                        <div class="col-sm-4">
-                            <label>名称 </label>
-                            <input type="text" class="form-control" ng-model="exhibitionList[id-1].name" required >
-                        </div>
-                        <div class="col-sm-4">
-                            <label>地址</label>
-                            <input type="text" class="form-control" ng-model="exhibitionList[id-1].address" required >
-                        </div>
-                    </div>
-                    <div class="line line-dashed b-b line-lg pull-in"></div>
-                    <div class="form-group pull-in clearfix">
-                        <div class="col-sm-4">
-                            <label>经销商</label>
-                            <select  ui-jq="chosen" ng-model="exhibitionList[id-1].dealerId" data-placeholder="经销商" class="form-control input-sm w-sm">
-                                <option value=""></option>
-                                <option ng-repeat="dealer in dealerList" value="{{dealer.id}}">{{dealer.name}}</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-4">
-                            <label>品牌</label>
-                            <select  ui-jq="chosen" ng-model="exhibitionList[id-1].brandId" data-placeholder="品牌" class="form-control input-sm w-sm">
-                                <option value=""></option>
-                                <option ng-repeat="brand in brandList" value="{{brand.id}}">{{brand.name}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="line line-dashed b-b line-lg pull-in"></div>
-                    <div class="form-group  pull-in ">
-                        <div class="col-sm-4">
-                            <label>商场</label>
-                            <select  ui-jq="chosen" ng-model="exhibitionList[id-1].marketId" data-placeholder="商场" class="form-control input-sm w-sm">
-                                <option value=""></option>
-                                <option ng-repeat="market in marketList" value="{{market.id}}">{{market.name}}</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-4">
-                            <label>城市</label>
-                            <select  ui-jq="chosen" ng-model="exhibitionList[id-1].cityId" data-placeholder="城市" class="form-control input-sm w-sm">
-                                <option value=""></option>
-                                <option ng-repeat="city in cityList" value="{{city.id}}">{{city.cityName}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="line line-dashed b-b line-lg pull-in"></div>
-                    <div class="form-group  pull-in ">
-                        <div class="col-sm-8">
-                            <label>备注</label>
-                            <textarea ng-model="exhibitionList[id-1].remark" class="form-control" rows="2" placeholder="门店备注"></textarea>
-                        </div>
-                    </div>
-                </div>
-                <footer class="panel-footer text-left bg-light lter">
-                    <button type="submit" class="btn btn-success" ng-disabled="form.$invalid" onClick="history.back()">保存</button>
-                    <button ui-sref="app.console.exhibitionList" type="button" class="btn btn-success" >返回</button>
-                </footer>
-            </div>
-        </form>
+            </form>
+        </div>
+
     </div>
+
 </div>

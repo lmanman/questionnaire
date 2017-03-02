@@ -1,4 +1,4 @@
-<div class="bg-light lter b-b wrapper-md" ng-controller="ExhibitionSurveyCtrl" ng-init="init()">
+<div class="bg-light lter b-b wrapper-md" >
     <h1 class="m-n font-thin h3">
         <span ng-show="id==0">展厅问卷录入</span>
         <span ng-show="id!=0">展厅问卷修改</span>
@@ -9,6 +9,21 @@
         <form name="myForm" class="form-validation" ng-submit="surveySubmit()">
             <div class="row ">
                 <div class="col-sm-10">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span class="h4">展厅／门店选择</span>
+                        </div>
+                        <div class="panel-body" >
+                            <div class="form-group">
+                                <div ui-module="select2">
+                                    <select ui-select2="{allowClear: true}" ng-model="fieldVal.exhibitionId" data-placeholder="展厅／门店" class="form-control input-sm w-md" required >
+                                        <option value=""></option>
+                                        <option ng-repeat="store in exhibitionList" value="{{store.id}}">{{store.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <span class="h4">展厅环境</span>
@@ -18,14 +33,7 @@
                             <div class="form-group">
                                 <label ng-init="maxNo[0]=$index+1">{{$index+1}}. {{field1.fieldDesc}}</label>
                                 <div ng-show="field1.fieldFormat=='input'">
-                                    <span ng-show="field1.fieldName!='exhibitionCity'">
-                                        <input type="text" ng-model="field1.fieldVal" class="input-sm form-control" placeholder="{{field1.fieldDesc}}" >
-                                    </span>
-                                    <span ng-show="field1.fieldName=='exhibitionCity'">
-                                        <input type="text" ng-model="province" class="col-sm-3 input-sm form-control w-xs" placeholder="省">
-                                        <input type="text" ng-model="city" class="col-sm-3 input-sm form-control w-xs" placeholder="市">
-                                        <input type="text" ng-model="area" class="col-sm-3 input-sm form-control w-xs" placeholder="区">
-                                    </span>
+                                    <input type="text" ng-model="field1.fieldVal" class="input-sm form-control" placeholder="{{field1.fieldDesc}}" >
                                 </div>
                                 <div ng-show="field1.fieldFormat=='number'">
                                     <div class="form-group col-sm-3">
@@ -58,26 +66,22 @@
                                 </div>
                                 <div class="radio list-group-item wrapper bg-light clearfix" ng-show="field1.fieldFormat=='radio'">
                                     <div ng-class="{true: 'form-group col-sm-5', false: 'form-group col-sm-3'}[field1.optionList.length<=2]" ng-repeat="item in field1.optionList">
-                                        <label class="i-checks" ng-show="item.code!='Z'">
+                                        <label class="i-checks"  >
                                             <input type="radio" ng-model="field1.fieldVal" ng-value="item.id" >
                                             <i></i>
-                                            {{item.name}}
+                                            <t ng-show="item.code!='Z'">{{item.name}}</t>
                                         </label>
-                                        <div ng-show="item.code=='Z'">
-                                            <input placeholder="{{item.name}}" ng-model="other" >
-                                        </div>
+                                        <input ng-show="item.code=='Z'" placeholder="{{item.name}}" ng-model="field1.otherOptionVo[field1.fieldName]" >
                                     </div>
                                 </div>
                                 <div class="checkbox list-group-item wrapper bg-light clearfix" ng-show="field1.fieldFormat=='checkbox'">
                                     <div ng-class="{true: 'form-group', false: 'form-group col-sm-3'}[field1.optionList.length<=2]" ng-repeat="item in field1.optionList">
-                                        <label class="i-checks" ng-show="item.code!='Z'">
+                                        <label class="i-checks" >
                                             <input type="checkbox" ng-model="field1.fieldArr[item.id]" >
                                             <i></i>
-                                            {{item.name}}
+                                            <t ng-show="item.code!='Z'">{{item.name}}</t>
                                         </label>
-                                        <div ng-show="item.code=='Z'">
-                                            <input placeholder="{{item.name}}" ng-model="other" >
-                                        </div>
+                                        <input ng-show="item.code=='Z'" placeholder="{{item.name}}" ng-model="field1.otherOptionVo[field1.fieldName]" >
                                     </div>
                                 </div>
                             </div>
@@ -113,26 +117,22 @@
                                 </div>
                                 <div class="radio list-group-item wrapper bg-light clearfix" ng-show="field1.fieldFormat=='radio'">
                                     <div ng-class="{true: 'form-group col-sm-4', false: 'form-group col-sm-3'}[field1.optionList.length<=2]" ng-repeat="item in field1.optionList">
-                                        <label class="i-checks" ng-show="item.code!='Z'">
-                                            <input type="radio" ng-model="field1.fieldVal" ng-value="item.id">
+                                        <label class="i-checks"  >
+                                            <input type="radio" ng-model="field1.fieldVal" ng-value="item.id" >
                                             <i></i>
-                                            {{item.name}}
+                                            <t ng-show="item.code!='Z'">{{item.name}}</t>
                                         </label>
-                                        <div ng-show="item.code=='Z'">
-                                            <input placeholder="{{item.name}}" ng-model="other" >
-                                        </div>
+                                        <input ng-show="item.code=='Z'" placeholder="{{item.name}}" ng-model="field1.otherOptionVo[field1.fieldName]" >
                                     </div>
                                 </div>
                                 <div class="checkbox list-group-item wrapper bg-light clearfix" ng-show="field1.fieldFormat=='checkbox'">
                                     <div ng-class="{true: 'form-group', false: 'form-group col-sm-3'}[field1.optionList.length<=2]" ng-repeat="item in field1.optionList">
-                                        <label class="i-checks"  ng-show="item.code!='Z'">
+                                        <label class="i-checks" >
                                             <input type="checkbox" ng-model="field1.fieldArr[item.id]" >
                                             <i></i>
-                                            {{item.name}}
+                                            <t ng-show="item.code!='Z'">{{item.name}}</t>
                                         </label>
-                                        <div ng-show="item.code=='Z'">
-                                            <input placeholder="{{item.name}}" ng-model="other" >
-                                        </div>
+                                        <input ng-show="item.code=='Z'" placeholder="{{item.name}}" ng-model="field1.otherOptionVo[field1.fieldName]" >
                                     </div>
                                 </div>
                             </div>
@@ -167,26 +167,22 @@
                                 </div>
                                 <div class="radio list-group-item wrapper bg-light clearfix" ng-show="field1.fieldFormat=='radio'">
                                     <div ng-class="{true: 'form-group col-sm-4', false: 'form-group col-sm-3'}[field1.optionList.length<=2]" ng-repeat="item in field1.optionList">
-                                        <label class="i-checks"  ng-show="item.code!='Z'" >
+                                        <label class="i-checks"  >
                                             <input type="radio" ng-model="field1.fieldVal" ng-value="item.id" >
                                             <i></i>
-                                            {{item.name}}
+                                            <t ng-show="item.code!='Z'">{{item.name}}</t>
                                         </label>
-                                        <div ng-show="item.code=='Z'">
-                                            <input placeholder="{{item.name}}" ng-model="other" >
-                                        </div>
+                                            <input ng-show="item.code=='Z'" placeholder="{{item.name}}" ng-model="field1.otherOptionVo[field1.fieldName]" >
                                     </div>
                                 </div>
                                 <div class="checkbox list-group-item wrapper bg-light clearfix" ng-show="field1.fieldFormat=='checkbox'">
                                     <div ng-class="{true: 'form-group', false: 'form-group col-sm-3'}[field1.optionList.length<=2]" ng-repeat="item in field1.optionList">
-                                        <label class="i-checks" ng-show="item.code!='Z'">
+                                        <label class="i-checks" >
                                             <input type="checkbox" ng-model="field1.fieldArr[item.id]" >
                                             <i></i>
-                                            {{item.name}}
+                                            <t ng-show="item.code!='Z'">{{item.name}}</t>
                                         </label>
-                                        <div ng-show="item.code=='Z'">
-                                            <input placeholder="{{item.name}}" ng-model="other" >
-                                        </div>
+                                            <input ng-show="item.code=='Z'" placeholder="{{item.name}}" ng-model="field1.otherOptionVo[field1.fieldName]" >
                                     </div>
                                 </div>
                             </div>

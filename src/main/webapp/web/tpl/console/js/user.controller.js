@@ -21,7 +21,7 @@ function ctrlFn($scope,$stateParams,$http,$state,$log){
 
 
     $scope.userInfo = {};
-    $scope.init = function(){
+    $scope.detail = function(){
         $scope.uid = $stateParams.uid;
         if($scope.uid!=0 && $scope.uid!=''){
             $scope.password2="1";

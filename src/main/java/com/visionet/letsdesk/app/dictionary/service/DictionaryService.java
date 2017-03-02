@@ -1,6 +1,7 @@
 package com.visionet.letsdesk.app.dictionary.service;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.visionet.letsdesk.app.base.service.BaseService;
 import com.visionet.letsdesk.app.common.constant.BusinessStatus;
 import com.visionet.letsdesk.app.common.modules.persistence.DynamicSpecifications;
@@ -15,9 +16,10 @@ import com.visionet.letsdesk.app.dictionary.entity.Manufacturer;
 import com.visionet.letsdesk.app.dictionary.repository.BrandDao;
 import com.visionet.letsdesk.app.dictionary.repository.CategoryDao;
 import com.visionet.letsdesk.app.dictionary.repository.ManufacturerDao;
-import com.visionet.letsdesk.app.dictionary.repository.SundryDao;
 import com.visionet.letsdesk.app.dictionary.vo.BrandVo;
 import com.visionet.letsdesk.app.dictionary.vo.ManufacturerVo;
+import com.visionet.letsdesk.app.dictionary.vo.SundryVo;
+import com.visionet.letsdesk.app.exhibition.service.ExhibitionSurveyFieldService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -27,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class DictionaryService extends BaseService{
@@ -38,7 +41,7 @@ public class DictionaryService extends BaseService{
     @Autowired
     private ManufacturerDao manufacturerDao;
     @Autowired
-    private SundryDao sundryDao;
+    private ExhibitionSurveyFieldService exhibitionSurveyFieldService;
 
 
     /**
@@ -220,6 +223,21 @@ public class DictionaryService extends BaseService{
         }
     }
 
+
+    public Map<String,List<SundryVo>> findDictionaryMap(List<String> type){
+        Map<String,List<SundryVo>> map = Maps.newHashMap();
+        if(type.contains("d_brand")) { //品牌
+            map.put("d_brand",exhibitionSurveyFieldService.findSundry(null,"d_brand"));
+        }
+        if(type.contains("d_city")){ //城市
+            map.put("d_city",exhibitionSurveyFieldService.findSundry(null,"d_city"));
+        }
+        if(type.contains("s_dealer")){ //经销商
+            map.put("s_dealer",exhibitionSurveyFieldService.findSundry(null,"s_dealer").stream().filter(d->d.getId().intValue()!=0).collect(Collectors.toList()));
+        }
+
+        return map;
+    }
 
 
 }

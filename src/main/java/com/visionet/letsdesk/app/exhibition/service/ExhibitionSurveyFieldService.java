@@ -1,7 +1,9 @@
 package com.visionet.letsdesk.app.exhibition.service;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.visionet.letsdesk.app.base.service.BaseService;
+import com.visionet.letsdesk.app.common.modules.utils.Collections3;
 import com.visionet.letsdesk.app.common.modules.validate.Validator;
 import com.visionet.letsdesk.app.common.utils.BeanConvertMap;
 import com.visionet.letsdesk.app.dictionary.entity.*;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -49,6 +52,7 @@ public class ExhibitionSurveyFieldService extends BaseService{
         for(ExhibitionSurveyField field:fieldList){
             ExhibitionSurveyFieldVo vo = BeanConvertMap.map(field, ExhibitionSurveyFieldVo.class);
             vo.setOptionList(this.findSundry(vo.getFieldName(),vo.getRelationData()));
+            vo.setOtherOptionVo(this.findOtherMap());
             voList.add(vo);
         }
         return voList;
@@ -112,8 +116,20 @@ public class ExhibitionSurveyFieldService extends BaseService{
                     return s;
                 }).collect(Collectors.toList());
             }
+        }else if(Validator.isNotNull(type)) {
+            return BeanConvertMap.mapList(sundryDao.findByType(type), SundryVo.class);
         }
-        return BeanConvertMap.mapList(sundryDao.findByType(type), SundryVo.class);
+        return null;
+    }
+
+    public Map<String,String> findOtherMap(){
+        Map<String,String> otherMap = Maps.newHashMap();
+        List<String> otherList = exhibitionSurveyFieldDao.findFieldNameWithOther();
+        if(Collections3.isNotEmpty(otherList)){
+            otherList.parallelStream().forEach(obj-> otherMap.put(obj,""));
+        }
+
+        return otherMap;
     }
 
     public List<SundryVo> findBrandTree(){

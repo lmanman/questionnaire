@@ -18,6 +18,11 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
         $scope.id = $stateParams.id;
         $log.info("id:"+$scope.id);
 
+        $scope.exhibitionList = [];
+        $http.get($scope.app.projectName + '/mobile/exhibition/store/list').success(function(result){
+            $scope.exhibitionList=result;
+        });
+
         $http.get($scope.app.projectName + '/mobile/exhibition/survey/field/1').success(function(result){
             //$log.info(result);
 
@@ -48,9 +53,9 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
 
             if($scope.id>0){
                 $http.get($scope.app.projectName + '/mobile/exhibition/survey/'+$scope.id).success(function(result){
-                    $scope.mergedata($scope.surveyFieldList1,result);
-                    $scope.mergedata($scope.surveyFieldList2,result);
-                    $scope.mergedata3($scope.surveyFieldList3,result['publicShow']);
+                    mergedata($scope.surveyFieldList1,result);
+                    mergedata($scope.surveyFieldList2,result);
+                    mergedata3($scope.surveyFieldList3,result.publicShow,result.otherOptionVo);
 
                 }).error(function(){
                     alert('问卷数据获取失败');
@@ -64,29 +69,39 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
 
     };
 
-    $scope.mergedata = function (list,data){
-        angular.forEach(list, function(field){
-            if(field.indicator!='publicResource') {
-                if (field.fieldFormat == 'checkbox') {
-                    data[field.fieldName].forEach(function (item) {
-                        field.fieldArr[item] = true;
-                    });
-                } else {
-                    field.fieldVal = data[field.fieldName];
-                }
-            }
-        });
-    };
-    $scope.mergedata3 = function (list,data){
+    function mergedata(list,data){
         if(data!=null) {
             angular.forEach(list, function (field) {
-                if (field.indicator == 'publicResource') {
+                if (field.indicator != 'publicResource') {
                     if (field.fieldFormat == 'checkbox') {
                         data[field.fieldName].forEach(function (item) {
                             field.fieldArr[item] = true;
                         });
                     } else {
                         field.fieldVal = data[field.fieldName];
+                    }
+                    if(data.otherOptionVo!=null) {
+                        field.otherOptionVo[field.fieldName] = data.otherOptionVo[field.fieldName];
+                    }
+                }
+            });
+            $scope.fieldVal.exhibitionId=data.exhibitionId;
+        }
+    };
+    function mergedata3(list,pbshow,otherOptionVo){
+        if(pbshow!=null) {
+            angular.forEach(list, function (field) {
+                $log.info(field.otherOptionVo);
+                if (field.indicator == 'publicResource') {
+                    if (field.fieldFormat == 'checkbox') {
+                        pbshow[field.fieldName].forEach(function (item) {
+                            field.fieldArr[item] = true;
+                        });
+                    } else {
+                        field.fieldVal = pbshow[field.fieldName];
+                    }
+                    if(otherOptionVo!=null) {
+                        field.otherOptionVo[field.fieldName] = otherOptionVo[field.fieldName];
                     }
                 }
             });
@@ -96,45 +111,18 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
 
     $scope.maxNo = [0,0];
 
-    //$scope.disabledSelect = 'N';
-    //$scope.showSelect = function(code){
-    //    $scope.disabledSelect = code;
-    //};
-
     $scope.firstChange=true;
     $scope.grandchildDataList = [];
 
-    /*
-    $scope.childChange = function(idx,childId) {
-        //$log.info(idx+"---"+childId);
-        var optionList = $scope.surveyFieldList1[idx].optionList;   //[圣象,慕斯]
 
-        if(!$scope.firstChange){
-            for(var i=0;i<$scope.tempList.length;i++){
-                if(childId==$scope.tempList[i].id){
-                    childId = $scope.tempList[i-1].id;
-                }
-            }
-        }
-        //$log.info("--childId2="+childId);
-        $scope.firstChange=false;
-        $scope.grandchildDataList = [];
-        for(var i=0;i<optionList.length;i++){
-            for(var j=0;j<optionList[i].childDataList.length;j++) {
-                if (optionList[i].childDataList[j].id == childId) {
-                    $scope.grandchildDataList =optionList[i].childDataList[j].grandchildDataList;
-                    return;
-                }
-            }
-        }
-        //$log.info("--grandchildDataList="+$scope.grandchildDataList);
-    };
-    */
-
-    $scope.fieldVal={"exhibitionId":1};
+    $scope.fieldVal={};
     $scope.fieldVal.publicShow={};
+    $scope.fieldVal.otherOptionVo={};
     $scope.surveySubmit = function(){
 
+        if($scope.fieldVal.exhibitionId==''){
+            alert("请先选择展厅／门店");
+        }
         submitDate($scope.surveyFieldList1);
         submitDate($scope.surveyFieldList2);
         submitDate3($scope.surveyFieldList3);
@@ -168,6 +156,10 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
             }else if(field.fieldVal!=null){
                 $scope.fieldVal[field.fieldName] = field.fieldVal;
             }
+            if(field.otherOptionVo[field.fieldName]!=undefined && field.otherOptionVo[field.fieldName]!=null) {
+                $scope.fieldVal.otherOptionVo[field.fieldName] = field.otherOptionVo[field.fieldName];
+                $log.info("otherOptionVo1["+field.fieldName+"]=" + $scope.fieldVal.otherOptionVo[field.fieldName]);
+            }
         });
     }
     function submitDate3(list){
@@ -183,6 +175,10 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
                 });
             }else if(field.fieldVal!=null){
                 publicShow[field.fieldName] = field.fieldVal;
+            }
+            if(field.otherOptionVo[field.fieldName]!=undefined && field.otherOptionVo[field.fieldName]!=null) {
+                $scope.fieldVal.otherOptionVo[field.fieldName] = field.otherOptionVo[field.fieldName];
+                $log.info("otherOptionVo3["+field.fieldName+"]=" + $scope.fieldVal.otherOptionVo[field.fieldName]);
             }
         });
         publicShow['surveyId']=$scope.id;
