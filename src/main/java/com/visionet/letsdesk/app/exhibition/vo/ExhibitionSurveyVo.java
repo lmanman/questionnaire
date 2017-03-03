@@ -59,6 +59,7 @@ public class ExhibitionSurveyVo extends BaseVo{
     private Integer backgroundWallHygiene;          //背景墙卫生
     private Integer designAreaHygiene;              //设计区卫生
     private Integer designAreaImage;                //设计区形象
+    private Integer priceTag;                       //是否有价签
     private List<Integer> salesPromotionMaterials = Lists.newArrayList();  //促销物料
     private Integer shopEmployeesNumber;            //营业员数量
     private Integer designer;                       //有无设计师
@@ -434,6 +435,14 @@ public class ExhibitionSurveyVo extends BaseVo{
 
     public void setDesignAreaImage(Integer designAreaImage) {
         this.designAreaImage = designAreaImage;
+    }
+
+    public Integer getPriceTag() {
+        return priceTag;
+    }
+
+    public void setPriceTag(Integer priceTag) {
+        this.priceTag = priceTag;
     }
 
     public List<Integer> getSalesPromotionMaterials() {

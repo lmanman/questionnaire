@@ -22,6 +22,7 @@ public class ExhibitionSurveyField extends IdEntity{
     private Integer delFlag;
     private Long formId;
     private Float orderId;
+    private Integer shortFlag;
 
     public String getFieldName() {
         return fieldName;
@@ -85,5 +86,13 @@ public class ExhibitionSurveyField extends IdEntity{
 
     public void setOrderId(Float orderId) {
         this.orderId = orderId;
+    }
+
+    public Integer getShortFlag() {
+        return shortFlag;
+    }
+
+    public void setShortFlag(Integer shortFlag) {
+        this.shortFlag = shortFlag;
     }
 }

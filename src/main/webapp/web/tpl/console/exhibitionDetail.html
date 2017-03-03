@@ -43,7 +43,7 @@
 
                         <li class="list-group-item">
                             <span class="pull-left thumb-sm"><i class="fa fa-map-marker"></i></span>
-                            <select  ng-model="storeInfo.city.id" data-placeholder="城市" class="w-md">
+                            <select  ng-model="storeInfo.city.id" data-placeholder="城市" class="w-md form-group">
                                 <optgroup ng-repeat="province in dictionaryMap.d_city" label="{{province.name}}">
                                     <option ng-repeat="city in province.childDataList" value="{{city.id}}">{{city.name}}</option>
                                 </optgroup>

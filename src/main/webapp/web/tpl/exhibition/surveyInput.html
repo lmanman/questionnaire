@@ -11,14 +11,25 @@
                 <div class="col-sm-10">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <span class="h4">展厅／门店选择</span>
+                            <span class="h4">商场／展厅选择</span>
                         </div>
                         <div class="panel-body" >
                             <div class="form-group">
+                                <label >1. 商场</label>
                                 <div ui-module="select2">
-                                    <select ui-select2="{allowClear: true}" ng-model="fieldVal.exhibitionId" data-placeholder="展厅／门店" class="form-control input-sm w-md" required >
+                                    <select ui-select2="{allowClear: true}" ng-model="fieldVal.marketId" data-placeholder="商场" class="form-control input-sm w-md" required ng-change="selectEhb(fieldVal.marketId)">
                                         <option value=""></option>
-                                        <option ng-repeat="store in exhibitionList" value="{{store.id}}">{{store.name}}</option>
+                                        <option ng-repeat="market in marketList" value="{{market.id}}">{{market.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg pull-in"></div>
+                            <div class="form-group">
+                                <label >2. 展厅</label>
+                                <div ui-module="select2">
+                                    <select ui-select2="{allowClear: true}" ng-model="fieldVal.exhibitionId" data-placeholder="展厅" class="form-control input-sm w-md"  >
+                                        <option value=""></option>
+                                        <option ng-repeat="store in exhibitionList | filter:{marketId: fieldVal.marketId}:ehbComparator" value="{{store.id}}">{{store.name}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -31,36 +42,32 @@
                         <div class="panel-body" ng-repeat="field1 in surveyFieldList1 ">
                             <!--<p class="text-muted">Need support? please fill the fields below.</p>-->
                             <div class="form-group">
-                                <label ng-init="maxNo[0]=$index+1">{{$index+1}}. {{field1.fieldDesc}}</label>
+                                <label>{{field1.orderId}}. {{field1.fieldDesc}}</label>
                                 <div ng-show="field1.fieldFormat=='input'">
                                     <input type="text" ng-model="field1.fieldVal" class="input-sm form-control" placeholder="{{field1.fieldDesc}}" >
                                 </div>
                                 <div ng-show="field1.fieldFormat=='number'">
                                     <div class="form-group col-sm-3">
-                                        <input type="number" ng-model="field1.fieldVal" class="input-sm form-control" placeholder="{{field1.fieldDesc}}" >
+                                        <input type="number" ng-model="field1.fieldVal" class="input-sm form-control" placeholder="{{field1.fieldDesc}}" ng-pattern="/^[0-9]*\d$/">
                                     </div>
                                 </div>
                                 <div ng-show="field1.fieldFormat=='select'">
-                                    <div class="form-group col-sm-3" ng-show="field1.fieldName!='brand' && field1.fieldName!='exhibitionCity'">
-                                        <select ui-jq="chosen" data-placeholder="{{field1.fieldDesc}}" ng-model="field1.fieldVal" class="form-control m-b">
-                                            <option ng-repeat="item in field1.optionList" value="{{item.id}}">{{item.name}}</option>
-                                        </select>
+                                    <div class="form-group col-sm-3" ng-show="field1.fieldName!='exhibitionCity'">
+                                        <div ui-module="select2">
+                                            <select ui-select2="{allowClear: true}" data-placeholder="{{field1.fieldDesc}}" ng-model="field1.fieldVal" class="form-control m-b">
+                                                <option ng-repeat="item in field1.optionList" value="{{item.id}}">{{item.name}}</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div class="form-group col-sm-6" ng-show="field1.fieldName=='brand' || field1.fieldName=='exhibitionCity'">
+                                    <div class="form-group col-sm-6" ng-show="field1.fieldName=='exhibitionCity'">
                                         <div class="col-sm-4">
-                                            <select ui-jq="chosen" class="w-md" ng-model="field1.fieldVal" data-placeholder="{{field1.fieldDesc}}" >
+                                            <select class="w-md" ng-model="field1.fieldVal" data-placeholder="{{field1.fieldDesc}}" >
                                                 <optgroup ng-repeat="item in field1.optionList" label="{{item.name}}">
                                                     <option ng-repeat="child in item.childDataList" value="{{child.id}}">{{child.name}}</option>
                                                 </optgroup>
                                                 <option value="0"></option>
                                             </select>
                                         </div>
-                                        <!--<div class="col-sm-4 pull-right" ng-show="grandchildDataList.length>0">-->
-                                            <!--<select  ng-model="brand3" data-placeholder="品牌系列" class="form-control input-sm w-sm">-->
-                                                <!--<option value=""></option>-->
-                                                <!--<option ng-repeat="item in grandchildDataList" value="{{item.id}}">{{item.name}}</option>-->
-                                            <!--</select>-->
-                                        <!--</div>-->
                                     </div>
 
                                 </div>
@@ -98,20 +105,22 @@
                         <div class="panel-body" ng-repeat="field1 in surveyFieldList2">
                             <!--<p class="text-muted">Need support? please fill the fields below.</p>-->
                             <div class="form-group">
-                                <label ng-init="maxNo[1]=$index+1+maxNo[0]">{{$index+1+maxNo[0]}}. {{field1.fieldDesc}}</label>
+                                <label >{{field1.orderId}}. {{field1.fieldDesc}}</label>
                                 <div ng-show="field1.fieldFormat=='input'">
                                     <input type="text" ng-model="field1.fieldVal" class="input-sm form-control" placeholder="{{field1.fieldDesc}}" >
                                 </div>
                                 <div ng-show="field1.fieldFormat=='number'">
                                     <div class="form-group col-sm-3">
-                                        <input type="number" ng-model="field1.fieldVal" class="input-sm form-control" placeholder="{{field1.fieldDesc}}" >
+                                        <input type="number" ng-model="field1.fieldVal" class="input-sm form-control" placeholder="{{field1.fieldDesc}}"  ng-pattern="/^[0-9]*\d$/">
                                     </div>
                                 </div>
                                 <div ng-show="field1.fieldFormat=='select'">
                                     <div class="form-group col-sm-3" >
-                                        <select ui-jq="chosen" data-placeholder="{{field1.fieldDesc}}" ng-model="field1.fieldVal" class="form-control m-b">
-                                            <option ng-repeat="item in field1.optionList" value="{{item.id}}">{{item.name}}</option>
-                                        </select>
+                                        <div ui-module="select2">
+                                            <select ui-select2="{allowClear: true}" data-placeholder="{{field1.fieldDesc}}" ng-model="field1.fieldVal" class="form-control m-b">
+                                                <option ng-repeat="item in field1.optionList" value="{{item.id}}">{{item.name}}</option>
+                                            </select>
+                                        </div>
                                     </div>
 
                                 </div>
@@ -149,20 +158,22 @@
                         <div class="panel-body" ng-repeat="field1 in surveyFieldList3 ">
                             <!--<p class="text-muted">Need support? please fill the fields below.</p>-->
                             <div class="form-group">
-                                <label>{{$index+1+maxNo[1]}}. {{field1.fieldDesc}}</label>
+                                <label>{{field1.orderId}}. {{field1.fieldDesc}}</label>
                                 <div ng-show="field1.fieldFormat=='input'">
                                     <input type="text" ng-model="field1.fieldVal" class="input-sm form-control" placeholder="{{field1.fieldDesc}}" >
                                 </div>
                                 <div ng-show="field1.fieldFormat=='number'">
                                     <div class="form-group col-sm-3">
-                                        <input type="number" ng-model="field1.fieldVal" class="input-sm form-control" placeholder="{{field1.fieldDesc}}" >
+                                        <input type="number" ng-model="field1.fieldVal" class="input-sm form-control" placeholder="{{field1.fieldDesc}}"  ng-pattern="/^[0-9]*\d$/">
                                     </div>
                                 </div>
                                 <div ng-show="field1.fieldFormat=='select'">
                                     <div class="form-group col-sm-3">
-                                        <select ui-jq="chosen" data-placeholder="{{field1.fieldDesc}}" ng-model="field1.fieldVal" class="form-control m-b">
-                                            <option ng-repeat="item in field1.optionList" value="{{item.id}}">{{item.name}}</option>
-                                        </select>
+                                        <div ui-module="select2">
+                                            <select ui-select2="{allowClear: true}" data-placeholder="{{field1.fieldDesc}}" ng-model="field1.fieldVal" class="form-control m-b">
+                                                <option ng-repeat="item in field1.optionList" value="{{item.id}}">{{item.name}}</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="radio list-group-item wrapper bg-light clearfix" ng-show="field1.fieldFormat=='radio'">

@@ -18,9 +18,11 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
         $scope.id = $stateParams.id;
         $log.info("id:"+$scope.id);
 
+        $scope.marketList = [];
         $scope.exhibitionList = [];
         $http.get($scope.app.projectName + '/mobile/exhibition/store/list').success(function(result){
-            $scope.exhibitionList=result;
+            $scope.marketList=result.marketList;
+            $scope.exhibitionList=result.exhibitionList;
         });
 
         $http.get($scope.app.projectName + '/mobile/exhibition/survey/field/1').success(function(result){
@@ -37,14 +39,14 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
                 var field = $scope.surveyFieldList1[i];
                 if (field.fieldName == 'brand') {
                     angular.forEach(field.optionList, function (option) {
-                        var newOption = {"id":option.id,"name":option.name,"type":option.type,"childDataList":[]};
+                        newOptionList.push({"id":option.id,"name":option.name,"type":option.type});
                         angular.forEach(option.childDataList, function (child) {
-                            newOption.childDataList.push({"id":child.id,"name":child.name});
-                            angular.forEach(child.grandchildDataList, function (grand) {
-                                newOption.childDataList.push({"id":grand.id,"name":"• "+grand.name});
-                            });
+                            newOptionList.push({"id":child.id,"name":"• "+child.name,"type":option.type});
+                            //angular.forEach(child.grandchildDataList, function (grand) {
+                            //    newOption.childDataList.push({"id":grand.id,"name":"•• "+grand.name});
+                            //});
                         });
-                        newOptionList.push(newOption);
+                        //newOptionList.push(newOption);
                     });
                     field.optionList = newOptionList;
                     break;
@@ -74,9 +76,11 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
             angular.forEach(list, function (field) {
                 if (field.indicator != 'publicResource') {
                     if (field.fieldFormat == 'checkbox') {
-                        data[field.fieldName].forEach(function (item) {
-                            field.fieldArr[item] = true;
-                        });
+                        if(data[field.fieldName]!=null) {
+                            data[field.fieldName].forEach(function (item) {
+                                field.fieldArr[item] = true;
+                            });
+                        }
                     } else {
                         field.fieldVal = data[field.fieldName];
                     }
@@ -91,12 +95,14 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
     function mergedata3(list,pbshow,otherOptionVo){
         if(pbshow!=null) {
             angular.forEach(list, function (field) {
-                $log.info(field.otherOptionVo);
+                //$log.info(field.otherOptionVo);
                 if (field.indicator == 'publicResource') {
                     if (field.fieldFormat == 'checkbox') {
-                        pbshow[field.fieldName].forEach(function (item) {
-                            field.fieldArr[item] = true;
-                        });
+                        if(pbshow[field.fieldName]!=null) {
+                            pbshow[field.fieldName].forEach(function (item) {
+                                field.fieldArr[item] = true;
+                            });
+                        }
                     } else {
                         field.fieldVal = pbshow[field.fieldName];
                     }
@@ -109,10 +115,32 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
     };
 
 
-    $scope.maxNo = [0,0];
+    $scope.selectEhb = function(marketId){
+        //$log.info("marketId:"+marketId);
+        $scope.fieldVal.exhibitionId='';
 
-    $scope.firstChange=true;
-    $scope.grandchildDataList = [];
+        if($scope.marketList!=null) {
+            $scope.marketList.forEach(function (m) {
+                if (marketId == m.id) {
+                    //$log.info("m.cityId:" + m.cityId);
+                    angular.forEach($scope.surveyFieldList1, function (field) {
+                        if (field.fieldName == 'exhibitionCity') {
+                            field.fieldVal = m.cityId;
+                        }
+                    });
+                }
+            })
+        }
+
+    };
+    $scope.ehbComparator = function(expected, actual){
+        //$log.info(expected+"----"+actual+"----"+(expected==actual));
+        return expected==actual;
+    };
+
+
+
+
 
 
     $scope.fieldVal={};
@@ -121,7 +149,7 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
     $scope.surveySubmit = function(){
 
         if($scope.fieldVal.exhibitionId==''){
-            alert("请先选择展厅／门店");
+            alert("请先选择展厅");
         }
         submitDate($scope.surveyFieldList1);
         submitDate($scope.surveyFieldList2);
@@ -158,7 +186,7 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
             }
             if(field.otherOptionVo[field.fieldName]!=undefined && field.otherOptionVo[field.fieldName]!=null) {
                 $scope.fieldVal.otherOptionVo[field.fieldName] = field.otherOptionVo[field.fieldName];
-                $log.info("otherOptionVo1["+field.fieldName+"]=" + $scope.fieldVal.otherOptionVo[field.fieldName]);
+                //$log.info("otherOptionVo1["+field.fieldName+"]=" + $scope.fieldVal.otherOptionVo[field.fieldName]);
             }
         });
     }
@@ -178,7 +206,7 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
             }
             if(field.otherOptionVo[field.fieldName]!=undefined && field.otherOptionVo[field.fieldName]!=null) {
                 $scope.fieldVal.otherOptionVo[field.fieldName] = field.otherOptionVo[field.fieldName];
-                $log.info("otherOptionVo3["+field.fieldName+"]=" + $scope.fieldVal.otherOptionVo[field.fieldName]);
+                //$log.info("otherOptionVo3["+field.fieldName+"]=" + $scope.fieldVal.otherOptionVo[field.fieldName]);
             }
         });
         publicShow['surveyId']=$scope.id;

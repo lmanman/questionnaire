@@ -9,6 +9,7 @@ import com.visionet.letsdesk.app.common.modules.utils.Collections3;
 import com.visionet.letsdesk.app.common.modules.validate.Validator;
 import com.visionet.letsdesk.app.common.utils.BeanConvertMap;
 import com.visionet.letsdesk.app.common.utils.PageInfo;
+import com.visionet.letsdesk.app.common.utils.SearchFilterUtil;
 import com.visionet.letsdesk.app.dictionary.entity.City;
 import com.visionet.letsdesk.app.dictionary.repository.BrandDao;
 import com.visionet.letsdesk.app.dictionary.repository.CategoryDao;
@@ -21,6 +22,7 @@ import com.visionet.letsdesk.app.exhibition.repository.*;
 import com.visionet.letsdesk.app.exhibition.vo.ExhibitionSurveyListVo;
 import com.visionet.letsdesk.app.exhibition.vo.ExhibitionSurveyVo;
 import com.visionet.letsdesk.app.foundation.KeyWord;
+import com.visionet.letsdesk.app.market.repository.MarketDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -53,6 +55,8 @@ public class ExhibitionSurveyService extends BaseService{
     @Autowired
     private ExhibitionDao exhibitionDao;
     @Autowired
+    private MarketDao marketDao;
+    @Autowired
     private BrandDao brandDao;
     @Autowired
     private DealerDao dealerDao;
@@ -73,6 +77,15 @@ public class ExhibitionSurveyService extends BaseService{
         }
         ExhibitionSurveyVo vo = BeanConvertMap.map(survey,ExhibitionSurveyVo.class);
         this.transferExhibitionSurveyVo(vo);
+        return vo;
+    }
+    public ExhibitionSurveyVo findShortById(Long id) throws Exception{
+        ExhibitionSurvey survey = exhibitionSurveyDao.findOne(id);
+        if(survey==null){
+            throwException(BusinessStatus.NOTFIND,"id not exist!");
+        }
+        ExhibitionSurveyVo vo = BeanConvertMap.map(survey,ExhibitionSurveyVo.class);
+        this.transferExhibitionSurveyShortVo(vo);
         return vo;
     }
 
@@ -122,6 +135,50 @@ public class ExhibitionSurveyService extends BaseService{
         vo.setOtherOptionVo(otherMap);
     }
 
+    private void transferExhibitionSurveyShortVo(ExhibitionSurveyVo vo) throws Exception{
+        List<ExhibitionSurveyMultiselect> list = exhibitionSurveyMultiselectDao.findByShortSurveyId(vo.getId());
+        for(ExhibitionSurveyMultiselect multiselect:list){
+            if(multiselect.getSurveyField().equals("peripheryFacility")){
+                vo.getPeripheryFacility().add(multiselect.getSundryId());
+            }
+            if(multiselect.getSurveyField().equals("hygiene")){
+                vo.getHygiene().add(multiselect.getSundryId());
+            }
+            if(multiselect.getSurveyField().equals("salesPromotionMaterials")){
+                vo.getSalesPromotionMaterials().add(multiselect.getSundryId());
+            }
+            if(multiselect.getSurveyField().equals("shopEmployeesImage")){
+                vo.getShopEmployeesImage().add(multiselect.getSundryId());
+            }
+            if(multiselect.getSurveyField().equals("violations")){
+                vo.getViolations().add(multiselect.getSundryId());
+            }
+            if(multiselect.getSurveyField().equals("guestSnack")){
+                vo.getGuestSnack().add(multiselect.getSundryId());
+            }
+            if(multiselect.getSurveyField().equals("guestDrink")){
+                vo.getGuestDrink().add(multiselect.getSundryId());
+            }
+            if(multiselect.getSurveyField().equals("customerPicWall")){
+                vo.getCustomerPicWall().add(multiselect.getSundryId());
+            }
+            if(vo.getPublicShow()!=null){
+                if(multiselect.getSurveyField().equals("publicAdType")){
+                    vo.getPublicShow().getPublicAdType().add(multiselect.getSundryId());
+                }
+                if(multiselect.getSurveyField().equals("brandSponsorType")){
+                    vo.getPublicShow().getBrandSponsorType().add(multiselect.getSundryId());
+                }
+            }
+        }
+
+        List<ExhibitionSurveyOtherOption> otherList = exhibitionSurveyOtherOptionDao.findByShortSurveyId(vo.getId());
+        Map<String,String> otherMap = Maps.newHashMap();
+        if(Collections3.isNotEmpty(otherList)){
+            otherList.parallelStream().forEach(o -> otherMap.put(o.getSurveyField(), o.getOtherOption()));
+        }
+        vo.setOtherOptionVo(otherMap);
+    }
 
 
     /**
@@ -152,22 +209,35 @@ public class ExhibitionSurveyService extends BaseService{
 
             //公区
             ExhibitionSurveyPublicShow publicShow = survey.getPublicShow();
-            publicShow.setSurveyId(survey.getId());
-            exhibitionSurveyPublicShowDao.save(publicShow);
-
+            if(publicShow!=null) {
+                publicShow.setSurveyId(survey.getId());
+                exhibitionSurveyPublicShowDao.save(publicShow);
+            }
             //多选项保存
             this.multiselectSave(survey);
 
             //其它填写项保存
             this.otherOptionSave(survey.getId(),survey.getOtherOptionVo());
+
+        }else if(survey.getShortFlag()!=null && survey.getShortFlag().intValue() == KeyWord.Y) {    //短问卷修改
+            ExhibitionSurvey po = exhibitionSurveyDao.findOne(survey.getId());
+            if(po.getExhibitionCity()==null ||
+                    (Validator.isNotNull(survey.getExhibitionCity())
+                            && survey.getExhibitionCity().intValue()!=po.getExhibitionCity().intValue())){
+                po.setExhibitionProvince(this.getProvinceId(survey.getExhibitionCity()));
+            }
+            SearchFilterUtil.copyBeans(po, survey);
+
+            survey.setExhibitionProvince(this.getProvinceId(survey.getExhibitionCity()));
+            survey.setUpdateDate(DateUtil.getCurrentDate());
+            exhibitionSurveyDao.save(survey);
+
+
+            //多选项修改
+            this.shortMultiselectSave(survey);
+
+
         }else{
-//            ExhibitionSurvey po = exhibitionSurveyDao.findOne(survey.getId());
-//            if(po.getExhibitionCity()==null ||
-//                    (Validator.isNotNull(survey.getExhibitionCity())
-//                            && survey.getExhibitionCity().intValue()!=po.getExhibitionCity().intValue())){
-//                po.setExhibitionProvince(this.getProvinceId(survey.getExhibitionCity()));
-//            }
-//            SearchFilterUtil.copyBeans(po,survey);
 
             survey.setExhibitionProvince(this.getProvinceId(survey.getExhibitionCity()));
             survey.setUpdateDate(DateUtil.getCurrentDate());
@@ -193,7 +263,7 @@ public class ExhibitionSurveyService extends BaseService{
 
             //其它填写项保存
             exhibitionSurveyOtherOptionDao.deleteBySurveyId(survey.getId());
-            this.otherOptionSave(survey.getId(),survey.getOtherOptionVo());
+            this.otherOptionSave(survey.getId(), survey.getOtherOptionVo());
 
         }
     }
@@ -251,6 +321,33 @@ public class ExhibitionSurveyService extends BaseService{
                             if (Collections3.isNotEmpty(list)) {
                                 this.multiselectSave(survey.getId(), propertyName, list);
                             }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void shortMultiselectSave(ExhibitionSurvey survey) throws Exception{
+        List<String> checkboxNameList = exhibitionSurveyFieldDao.findFieldNameByFieldFormat
+                (KeyWord.FIELD_FORMAT_CHECKBOX,KeyWord.Y);
+        //普通多选
+        BeanInfo beanInfo = Introspector.getBeanInfo(survey.getClass());
+        PropertyDescriptor[] propertyDescriptors =  beanInfo.getPropertyDescriptors();
+        for (int i = 0; i< propertyDescriptors.length; i++) {
+            PropertyDescriptor descriptor = propertyDescriptors[i];
+            String propertyName = descriptor.getName();
+            if(!checkboxNameList.contains(propertyName)) continue;
+
+            Method readMethod = descriptor.getReadMethod();
+            if(readMethod!=null) {
+                Object result = readMethod.invoke(survey, new Object[0]);
+                if (result != null) {
+                    if (result instanceof List) {
+                        List<Integer> list = (List<Integer>)result;
+                        if(Collections3.isNotEmpty(list)){
+                            exhibitionSurveyMultiselectDao.deleteBySurveyIdAndField(survey.getId(), propertyName);
+                            this.multiselectSave(survey.getId(),propertyName,list);
                         }
                     }
                 }
@@ -339,8 +436,11 @@ public class ExhibitionSurveyService extends BaseService{
             vo.setBrandName(brandDao.findNameById(survey.getBrand().longValue()));
         }
         vo.setAddress(survey.getExhibitionAddress());
+        if(Validator.isNotNull(survey.getMarketId())) {
+            vo.setExhibitionName(marketDao.findNameById(survey.getMarketId()));
+        }
         if(Validator.isNotNull(survey.getExhibitionId())) {
-            vo.setExhibitionName(exhibitionDao.findNameById(survey.getExhibitionId()));
+            vo.setMarketName(exhibitionDao.findNameById(survey.getExhibitionId()));
         }
         if(survey.getBusinessNature()!=null) {
             vo.setDealerName(dealerDao.findNameById(survey.getBusinessNature().longValue()));

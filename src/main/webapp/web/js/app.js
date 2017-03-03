@@ -18,6 +18,7 @@ var app = angular.module('app', [
     'app.controllers',
     'app.login.controllers',
     'app.exhibition.survey.controllers',
+    'app.exhibition.surveyShort.controllers',
     'app.exhibition.surveyQuery.controllers',
     'app.console.controllers',
     'app.console.role.controllers',
@@ -75,6 +76,10 @@ var app = angular.module('app', [
             .state('app.exhibition.surveyList', {
                 url: '/surveyList',
                 templateUrl: 'tpl/exhibition/surveyList.html'
+            })
+            .state('app.exhibition.surveyShortInput', {
+                url: '/surveyShortInput/{id}',
+                templateUrl: 'tpl/exhibition/surveyShortInput.html'
             })
 
             // console

@@ -8,6 +8,7 @@ import java.util.Date;
 public class ExhibitionSurveyListVo extends BaseVo {
 
     private Long surveyId;
+    private String marketName;
     private String exhibitionName;
     private String address;
     private String dealerName;
@@ -25,6 +26,14 @@ public class ExhibitionSurveyListVo extends BaseVo {
 
     public void setSurveyId(Long surveyId) {
         this.surveyId = surveyId;
+    }
+
+    public String getMarketName() {
+        return marketName;
+    }
+
+    public void setMarketName(String marketName) {
+        this.marketName = marketName;
     }
 
     public String getExhibitionName() {

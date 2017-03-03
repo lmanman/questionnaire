@@ -47,7 +47,7 @@ public class MarketController extends BaseController{
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-        marketService.deleteMarker(id);
+        marketService.deleteMarket(id);
         return new ResponseEntity<Map<String,String>>(GetSuccMap() , HttpStatus.OK);
     }
 }

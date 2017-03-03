@@ -14,6 +14,7 @@ import com.visionet.letsdesk.app.exhibition.entity.ExhibitionSurveyField;
 import com.visionet.letsdesk.app.exhibition.repository.DealerDao;
 import com.visionet.letsdesk.app.exhibition.repository.ExhibitionSurveyFieldDao;
 import com.visionet.letsdesk.app.exhibition.vo.ExhibitionSurveyFieldVo;
+import com.visionet.letsdesk.app.foundation.KeyWord;
 import com.visionet.letsdesk.app.market.entity.Market;
 import com.visionet.letsdesk.app.market.repository.MarketDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,18 @@ public class ExhibitionSurveyFieldService extends BaseService{
         return voList;
     }
 
+    public List<ExhibitionSurveyFieldVo> findExhibitionFieldShort(Long formId){
+        List<ExhibitionSurveyFieldVo> voList = Lists.newArrayList();
+        List<ExhibitionSurveyField> fieldList = exhibitionSurveyFieldDao.findByFormId(formId, KeyWord.Y);
+        for(ExhibitionSurveyField field:fieldList){
+            ExhibitionSurveyFieldVo vo = BeanConvertMap.map(field, ExhibitionSurveyFieldVo.class);
+            vo.setOptionList(this.findSundry(vo.getFieldName(),vo.getRelationData()));
+            vo.setOtherOptionVo(this.findOtherMap());
+            voList.add(vo);
+        }
+        return voList;
+    }
+
 
     /**
      * 展厅问卷某字段选项说明
@@ -90,8 +103,8 @@ public class ExhibitionSurveyFieldService extends BaseService{
             } else if("d_brand".equals(relationData)){  //品牌
                 return this.findBrandTree();
             } else if("d_city".equals(relationData)){  //省市区
-                List<Province> provinceList = (List<Province>)provinceDao.findAll();
-                List<City> cityList = (List<City>)cityDao.findAll();
+                List<Province> provinceList = provinceDao.findProvince();
+                List<City> cityList = cityDao.findCity();
                 return provinceList.stream().map(p -> {
                     SundryVo s = new SundryVo();
                     s.setId(p.getId());

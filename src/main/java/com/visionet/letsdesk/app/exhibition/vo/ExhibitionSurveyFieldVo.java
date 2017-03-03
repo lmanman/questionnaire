@@ -20,6 +20,7 @@ public class ExhibitionSurveyFieldVo {
     private String relationData;
     private Long formId;
     private Float orderId;
+    private Integer shortFlag;
     private List<SundryVo> optionList;
     private String fieldVal;
     private Map<Long,Boolean> fieldArr = Maps.newHashMap();
@@ -91,6 +92,14 @@ public class ExhibitionSurveyFieldVo {
 
     public void setOrderId(Float orderId) {
         this.orderId = orderId;
+    }
+
+    public Integer getShortFlag() {
+        return shortFlag;
+    }
+
+    public void setShortFlag(Integer shortFlag) {
+        this.shortFlag = shortFlag;
     }
 
     public List<SundryVo> getOptionList() {

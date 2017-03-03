@@ -21,13 +21,13 @@
             <table class="table table-striped b-t b-light table-hover" >
                 <thead>
                 <tr>
-                    <th>展厅名</th>
-                    <th>品牌</th>
-                    <th>品类</th>
-                    <th>经销商</th>
-                    <th>城市</th>
+                    <th>商场／展厅</th>
+                    <th class="hidden-xs">品牌</th>
+                    <th class="hidden-xs">品类</th>
+                    <th class="hidden-xs">经销商</th>
+                    <th class="hidden-xs">城市／地址</th>
                     <!--<th>状态</th>-->
-                    <th>完成度</th>
+                    <th >完成度</th>
                     <th>提交人</th>
                     <th>提交日期</th>
                 </tr>
@@ -35,15 +35,18 @@
                 <tbody>
                 <tr ng-repeat="item in exhibitionSurveyList.content">
                     <td ><a class="text-info-dker block" ui-sref="app.exhibition.surveyInput({id:item.id})" >
+                        <span >{{item.marketName}}</span><br>
                         <span >{{item.exhibitionName}}</span>
                     </a></td>
-                    <td>{{item.brandName}}</td>
-                    <td>{{item.categoryName}}</td>
-                    <td>
+                    <td class="hidden-xs">{{item.brandName}}</td>
+                    <td class="hidden-xs">{{item.categoryName}}</td>
+                    <td class="hidden-xs">
                         <span >{{item.dealerName}}</span><br>
+                    </td>
+                    <td class="hidden-xs">
+                        <span >{{item.cityName}}</span><br>
                         <span>{{item.address}}</span>
                     </td>
-                    <td>{{item.cityName}}</td>
                     <td>
                         <progressbar max="item.schedule[1]" value="item.schedule[0]" ng-init="type1=dynamicType(item.schedule[0],item.schedule[1])" type="{{type1}}" class="progress-sm m-t-sm"><span style="white-space:nowrap;">{{item.schedule[0]}} / {{item.schedule[1]}}</span></progressbar>
                     </td>
@@ -62,11 +65,12 @@
             <div class="row">
                 <div class="col-sm-4">
                     <!--<button class="btn btn-sm btn-default" ui-sref="app.exhibition.surveyInput({id:0})">填写新问卷</button>-->
-                    <button class="btn btn-sm btn-default" ui-toggle-class="show inline" target="#spin" ng-click="newSurvey()">
+                    <button class="hidden-xs btn btn-sm btn-default" ui-toggle-class="show inline" target="#spin" ng-click="newSurvey()">
                         <span class="text">填写新问卷</span>
                         <span class="text-active">问卷打开中...</span>
                     </button>
                     <i class="fa fa-spin fa-spinner hide" id="spin"></i>
+                    <button class="btn btn-sm btn-primary" ui-sref="app.exhibition.surveyShortInput({id:0})" >填写短问卷</button>
                 </div>
                 <div class="col-sm-4 text-center">
                     <small class="text-muted inline m-t-sm m-b-sm">{{exhibitionSurveyList.number * exhibitionSurveyList.totalPages + 1}}-{{exhibitionSurveyList.number * exhibitionSurveyList.totalPages + exhibitionSurveyList.numberOfElements}} 共 {{exhibitionSurveyList.totalElements}}</small>

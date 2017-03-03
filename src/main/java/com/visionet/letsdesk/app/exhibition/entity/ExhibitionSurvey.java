@@ -36,18 +36,18 @@ public class ExhibitionSurvey extends IdEntity{
     private String exhibitionBusinessHours;                    //营业时间
     private Integer exhibitionEntrance;                        //展厅入口数量
     private Integer exhibitionStatus;                          //展厅状态
-    private Integer outerWall;                                 //展厅外墙展示
-    private Integer brandPublicityType;                        //展厅品牌宣传形式
-    private Integer brandStained;                              //品牌是否存在不亮或有污损的情况
-    private Integer spokespersonImage;                         //代言人形象体现在
+    private List<Integer> outerWall = Lists.newArrayList();                                 //展厅外墙展示
+    private List<Integer> brandPublicityType = Lists.newArrayList();                        //展厅品牌宣传形式
+    private List<Integer> brandStained = Lists.newArrayList();                              //品牌是否存在不亮或有污损的情况
+    private List<Integer> spokespersonImage = Lists.newArrayList();                         //代言人形象体现在
     private Integer promotionType2;                            //依据促销的形式划分
     private Integer promotionStyle2;                           //展厅促销物料主色调
     private Integer salesAvgPromotion;                         //展厅促销的平均折扣
-    private Integer seeOffGuest;                               //展厅是否送宾
+    private List<Integer> seeOffGuest = Lists.newArrayList();                               //展厅是否送宾
     private Integer violationWords;                            //展厅内存在违规用语
     private Integer hasWifi;                                   //展厅是否有WIFI
     private List<Integer> customerPicWall = Lists.newArrayList();          //展厅是否有顾客照片墙
-    private Integer featureShow;                               //展厅是否有特色展示
+    private List<Integer> featureShow = Lists.newArrayList();                               //展厅是否有特色展示
     private Integer memberArea;                                //会员活动区域
 
 
@@ -61,11 +61,12 @@ public class ExhibitionSurvey extends IdEntity{
     private Integer smell;                          //气味
     private Integer workbenchHygiene;               //工作台卫生
     private Integer workbenchStyle;                 //工作区风格
-    private Integer workbenchImage;                 //工作台形象
+    private List<Integer> workbenchImage = Lists.newArrayList();                 //工作台形象
     private Integer discussionAreas;                //洽谈区
     private Integer backgroundWallHygiene;          //背景墙卫生
     private Integer designAreaHygiene;              //设计区卫生
     private Integer designAreaImage;                //设计区形象
+    private Integer priceTag;                       //是否有价签
     private List<Integer> salesPromotionMaterials = Lists.newArrayList();  //促销物料
     private Integer shopEmployeesNumber;            //营业员数量
     private Integer designer;                       //有无设计师
@@ -95,6 +96,7 @@ public class ExhibitionSurvey extends IdEntity{
     private Date createDate;                //创建时间
     private Date updateDate;                //修改时间
 
+    private Integer shortFlag;
 
     public Integer getBrand() {
         return brand;
@@ -204,11 +206,12 @@ public class ExhibitionSurvey extends IdEntity{
         this.workbenchStyle = workbenchStyle;
     }
 
-    public Integer getWorkbenchImage() {
+    @Transient
+    public List<Integer> getWorkbenchImage() {
         return workbenchImage;
     }
 
-    public void setWorkbenchImage(Integer workbenchImage) {
+    public void setWorkbenchImage(List<Integer> workbenchImage) {
         this.workbenchImage = workbenchImage;
     }
 
@@ -244,6 +247,13 @@ public class ExhibitionSurvey extends IdEntity{
         this.designAreaImage = designAreaImage;
     }
 
+    public Integer getPriceTag() {
+        return priceTag;
+    }
+
+    public void setPriceTag(Integer priceTag) {
+        this.priceTag = priceTag;
+    }
 
     @Transient
     public List<Integer> getSalesPromotionMaterials() {
@@ -506,35 +516,39 @@ public class ExhibitionSurvey extends IdEntity{
         this.exhibitionStatus = exhibitionStatus;
     }
 
-    public Integer getOuterWall() {
+    @Transient
+    public List<Integer> getOuterWall() {
         return outerWall;
     }
 
-    public void setOuterWall(Integer outerWall) {
+    public void setOuterWall(List<Integer> outerWall) {
         this.outerWall = outerWall;
     }
 
-    public Integer getBrandPublicityType() {
+    @Transient
+    public List<Integer> getBrandPublicityType() {
         return brandPublicityType;
     }
 
-    public void setBrandPublicityType(Integer brandPublicityType) {
+    public void setBrandPublicityType(List<Integer> brandPublicityType) {
         this.brandPublicityType = brandPublicityType;
     }
 
-    public Integer getBrandStained() {
+    @Transient
+    public List<Integer> getBrandStained() {
         return brandStained;
     }
 
-    public void setBrandStained(Integer brandStained) {
+    public void setBrandStained(List<Integer> brandStained) {
         this.brandStained = brandStained;
     }
 
-    public Integer getSpokespersonImage() {
+    @Transient
+    public List<Integer> getSpokespersonImage() {
         return spokespersonImage;
     }
 
-    public void setSpokespersonImage(Integer spokespersonImage) {
+    public void setSpokespersonImage(List<Integer> spokespersonImage) {
         this.spokespersonImage = spokespersonImage;
     }
 
@@ -562,11 +576,12 @@ public class ExhibitionSurvey extends IdEntity{
         this.salesAvgPromotion = salesAvgPromotion;
     }
 
-    public Integer getSeeOffGuest() {
+    @Transient
+    public List<Integer> getSeeOffGuest() {
         return seeOffGuest;
     }
 
-    public void setSeeOffGuest(Integer seeOffGuest) {
+    public void setSeeOffGuest(List<Integer> seeOffGuest) {
         this.seeOffGuest = seeOffGuest;
     }
 
@@ -595,11 +610,12 @@ public class ExhibitionSurvey extends IdEntity{
         this.customerPicWall = customerPicWall;
     }
 
-    public Integer getFeatureShow() {
+    @Transient
+    public List<Integer> getFeatureShow() {
         return featureShow;
     }
 
-    public void setFeatureShow(Integer featureShow) {
+    public void setFeatureShow(List<Integer> featureShow) {
         this.featureShow = featureShow;
     }
 
@@ -660,6 +676,15 @@ public class ExhibitionSurvey extends IdEntity{
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    @Transient
+    public Integer getShortFlag() {
+        return shortFlag;
+    }
+
+    public void setShortFlag(Integer shortFlag) {
+        this.shortFlag = shortFlag;
     }
 
     @Transient

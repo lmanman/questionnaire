@@ -63,9 +63,15 @@ function ctrlFn($scope,$stateParams,$http,$state,$log){
         formData.name = $scope.storeInfo.name;
         formData.marketName = $scope.storeInfo.marketName;
         formData.address = $scope.storeInfo.address;
-        formData.dealerId = $scope.storeInfo.dealer.id;
-        formData.cityId = $scope.storeInfo.city.id;
-        formData.marketId = $scope.storeInfo.market.id;
+        if($scope.storeInfo.dealer!=undefined) {
+            formData.dealerId = $scope.storeInfo.dealer.id;
+        }
+        if($scope.storeInfo.city!=undefined) {
+            formData.cityId = $scope.storeInfo.city.id;
+        }
+        if($scope.storeInfo.market!=undefined) {
+            formData.marketId = $scope.storeInfo.market.id;
+        }
 
         $http.post($scope.app.projectName + '/mobile/exhibition/store/save', formData).success(function (result) {
             if (result.code == '10000') {

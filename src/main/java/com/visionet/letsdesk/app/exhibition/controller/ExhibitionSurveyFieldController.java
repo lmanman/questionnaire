@@ -41,4 +41,11 @@ public class ExhibitionSurveyFieldController extends BaseController{
         return new ResponseEntity<List<ExhibitionSurveyFieldVo>[]>(listArr, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/short/{id}", method= RequestMethod.GET)
+    public ResponseEntity<?> shortDetail(@PathVariable Long id) throws Exception{
+        List<ExhibitionSurveyFieldVo> list = exhibitionSurveyFieldService.findExhibitionFieldShort(id);
+
+        return new ResponseEntity<List<ExhibitionSurveyFieldVo>>(list, HttpStatus.OK);
+    }
+
 }

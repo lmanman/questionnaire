@@ -16,7 +16,7 @@ function ctrlFn($scope,$stateParams,$http,$state,$log){
         var types = ['d_city'];
         $http.post($scope.app.projectName + '/mobile/dictionary/collect/map',types).success(function(map){
             $scope.dictionaryMap = map;
-            $log.info("dealer.length="+$scope.dictionaryMap.s_dealer.length);
+            $log.info("d_city.length="+$scope.dictionaryMap.d_city.length);
 
             if($scope.id!=0 && $scope.id!=''){
                 $http.get($scope.app.projectName + '/mobile/market/'+$scope.id).success(function(detail){

@@ -1,11 +1,14 @@
 package com.visionet.letsdesk.app.exhibition.controller;
 
+import com.google.common.collect.Maps;
 import com.visionet.letsdesk.app.base.controller.BaseController;
 import com.visionet.letsdesk.app.common.modules.validate.Validator;
 import com.visionet.letsdesk.app.dictionary.vo.ExhibitionVo;
 import com.visionet.letsdesk.app.exhibition.entity.Exhibition;
 import com.visionet.letsdesk.app.exhibition.service.ExhibitionInfoService;
 import com.visionet.letsdesk.app.foundation.KeyWord;
+import com.visionet.letsdesk.app.market.entity.Market;
+import com.visionet.letsdesk.app.market.service.MarketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -14,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +27,8 @@ public class ExhibitionInfoController extends BaseController{
 
     @Autowired
     private ExhibitionInfoService exhibitionInfoService;
+    @Autowired
+    private MarketService marketService;
 
     /**
      * @apiDescription 展厅查询
@@ -167,7 +173,10 @@ public class ExhibitionInfoController extends BaseController{
 
     @RequestMapping(value = "/list", method= RequestMethod.GET)
     public ResponseEntity<?> list(){
-        return new ResponseEntity<List<Exhibition>>(exhibitionInfoService.all(), HttpStatus.OK);
+        Map<String,List> map = Maps.newHashMap();
+        map.put("exhibitionList",exhibitionInfoService.all());
+        map.put("marketList",marketService.all());
+        return new ResponseEntity<Map<String,List>>(map, HttpStatus.OK);
     }
 
     /**

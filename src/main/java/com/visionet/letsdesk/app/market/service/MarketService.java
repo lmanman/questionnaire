@@ -78,12 +78,16 @@ public class MarketService extends BaseService {
         }
     }
 
+    public List<Market> all(){
+        return (List<Market>)marketDao.findAll();
+    }
+
     public Market findMarkerById(Long id) {
         return marketDao.findOne(id);
     }
 
     @Transactional(readOnly = false)
-    public void deleteMarker(Long id) {
+    public void deleteMarket(Long id) {
         marketDao.delete(id);
         List<Exhibition> exhibitions = exhibitionDao.findByMarketId(id);
         if(Collections3.isNotEmpty(exhibitions)){

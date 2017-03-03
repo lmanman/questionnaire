@@ -18,6 +18,7 @@ public class City extends IdEntity{
     private String telephoneAreaCode;
     private Long provinceId;
     private String provinceName;
+    private Integer delFlag;
 
     public String getCityName() {
         return cityName;
@@ -49,5 +50,13 @@ public class City extends IdEntity{
 
     public void setProvinceName(String provinceName) {
         this.provinceName = provinceName;
+    }
+
+    public Integer getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(Integer delFlag) {
+        this.delFlag = delFlag;
     }
 }

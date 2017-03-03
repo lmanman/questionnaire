@@ -299,6 +299,11 @@ public class ExhibitionSurveyController extends BaseController{
         return new ResponseEntity<ExhibitionSurveyVo>(exhibitionSurveyService.findById(id), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/short/{id}", method= RequestMethod.GET)
+    public ResponseEntity<?> shortDetail(@PathVariable Long id) throws Exception{
+
+        return new ResponseEntity<ExhibitionSurveyVo>(exhibitionSurveyService.findShortById(id), HttpStatus.OK);
+    }
 
     /**
      * @apiDescription 展厅问卷新增/修改
@@ -415,7 +420,7 @@ public class ExhibitionSurveyController extends BaseController{
         if(exhibitionSurvey.getExhibitionId()==null){
             throwException(BusinessStatus.REQUIRE,"exhibitionId is null!");
         }
-        System.out.println(mapper.toJson(exhibitionSurvey));
+        System.out.println("---save json:"+mapper.toJson(exhibitionSurvey));
 
         exhibitionSurvey.setCreateBy(getCurrentUserId());
         exhibitionSurveyService.save(exhibitionSurvey);

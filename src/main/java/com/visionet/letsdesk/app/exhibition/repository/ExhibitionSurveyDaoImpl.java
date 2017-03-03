@@ -115,7 +115,7 @@ public class ExhibitionSurveyDaoImpl {
         }
 
         String countSql = "select count(distinct t.id) " + query;
-        String listSql = "select t "+ query + " order by t.id asc ";
+        String listSql = "select t "+ query + " order by t.id desc ";
 
         Long count = 0L;
         List<ExhibitionSurvey> list = null;
