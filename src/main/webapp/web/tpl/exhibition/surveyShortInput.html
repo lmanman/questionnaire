@@ -6,7 +6,7 @@
 </div>
 <div class="wrapper-md">
     <div ng-controller="ExhibitionSurveyShortCtrl" ng-init="initData()">
-        <form name="myForm" class="form-validation" ng-submit="surveySubmit()">
+        <form name="myForm" class="form-validation" ng-submit="surveySubmit(false)">
             <div class="row ">
                 <div class="col-sm-10">
                     <div class="panel panel-default">
@@ -85,7 +85,9 @@
                             <div class="line line-dashed b-b line-lg pull-in"></div>
                         </div>
                         <footer class="panel-footer text-left bg-light lter">
-                            <button type="submit" class="btn btn-success" >提交</button>
+                            <button type="submit" class="btn btn-success" >提交返回</button>
+                            <button type="button" class="btn btn-info"ng-click="surveySubmit(true)" >提交复制</button>
+                            <button type="button" class="btn pull-right btn-danger" ng-if="id!=0" ng-click="delete()">删除</button>
                         </footer>
                     </div>
 

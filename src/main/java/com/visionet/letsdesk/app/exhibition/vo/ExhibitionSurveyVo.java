@@ -20,27 +20,27 @@ public class ExhibitionSurveyVo extends BaseVo{
     private Integer categoryImport;                           //品类进口
     private Integer manufacturer;                             //品牌厂商
     private Integer brand;                             //品牌
-    private Integer businessNature;                           //展厅经营性质
+    private Integer businessNature;                            //展厅经营性质(0:直营；其他：经销商 dealerId)
     private Integer standAloneStore;	                       //是否独立店面
 
     private Integer exhibitionProvince;                        //商场所在省／直辖市
     private Integer exhibitionCity;	                           //商场所在市／区
     private String exhibitionAddress;	                       //详细地址
-    private String exhibitionBusinessHours;                   //营业时间
+    private String exhibitionBusinessHours;                    //营业时间
     private Integer exhibitionEntrance;                        //展厅入口数量
     private Integer exhibitionStatus;                          //展厅状态
-    private Integer outerWall;                                 //展厅外墙展示
-    private Integer brandPublicityType;                        //展厅品牌宣传形式
-    private Integer brandStained;                              //品牌是否存在不亮或有污损的情况
-    private Integer spokespersonImage;                         //代言人形象体现在
+    private List<Integer> outerWall = Lists.newArrayList();                                 //展厅外墙展示
+    private List<Integer> brandPublicityType = Lists.newArrayList();                        //展厅品牌宣传形式
+    private List<Integer> brandStained = Lists.newArrayList();                              //品牌是否存在不亮或有污损的情况
+    private List<Integer> spokespersonImage = Lists.newArrayList();                         //代言人形象体现在
     private Integer promotionType2;                            //依据促销的形式划分
     private Integer promotionStyle2;                           //展厅促销物料主色调
     private Integer salesAvgPromotion;                         //展厅促销的平均折扣
-    private Integer seeOffGuest;                               //展厅是否送宾
+    private List<Integer> seeOffGuest = Lists.newArrayList();                               //展厅是否送宾
     private Integer violationWords;                            //展厅内存在违规用语
     private Integer hasWifi;                                   //展厅是否有WIFI
     private List<Integer> customerPicWall = Lists.newArrayList();          //展厅是否有顾客照片墙
-    private Integer featureShow;                               //展厅是否有特色展示
+    private List<Integer> featureShow = Lists.newArrayList();                               //展厅是否有特色展示
     private Integer memberArea;                                //会员活动区域
 
 
@@ -54,7 +54,7 @@ public class ExhibitionSurveyVo extends BaseVo{
     private Integer smell;                          //气味
     private Integer workbenchHygiene;               //工作台卫生
     private Integer workbenchStyle;                 //工作区风格
-    private Integer workbenchImage;                 //工作台形象
+    private List<Integer> workbenchImage = Lists.newArrayList();                 //工作台形象
     private Integer discussionAreas;                //洽谈区
     private Integer backgroundWallHygiene;          //背景墙卫生
     private Integer designAreaHygiene;              //设计区卫生
@@ -65,7 +65,7 @@ public class ExhibitionSurveyVo extends BaseVo{
     private Integer designer;                       //有无设计师
     private List<Integer> shopEmployeesImage = Lists.newArrayList();       //人员形象
     private Integer welcomeGuest;                   //迎送宾客
-    private Integer productionIntroduce;            //产品介绍
+    private List<Integer> productionIntroduce = Lists.newArrayList();            //产品介绍
     private Integer smileHello;                     //微笑问好
     private List<Integer> violations = Lists.newArrayList();               //违规行为
     private Integer gender;                         //性别
@@ -76,17 +76,24 @@ public class ExhibitionSurveyVo extends BaseVo{
     private List<Integer> guestSnack = Lists.newArrayList();               //顾客零食
     private List<Integer> guestDrink = Lists.newArrayList();               //茶水
     private Integer promotionType;                  //依据促销的范围划分
-    private Integer promotionStyle;                 //展厅的主要促销形式
+    private List<Integer> promotionStyle = Lists.newArrayList();                 //展厅的主要促销形式
     private Integer specialOffer;                   //特价款
 
-    private ExhibitionSurveyPublicShow publicShow = new ExhibitionSurveyPublicShow();       //公区摆展
-    private Map<String,String> otherOptionVo = Maps.newHashMap();                           //其它填写
 
+    private Integer hasPromotion;                   //是否有促销
+    private Integer hasPublicShow;                  //是否有公区摆展
+
+    private ExhibitionSurveyPublicShow publicShow;      //公区摆展
+    private Map<String,String> otherOptionVo;           //其它填写
+
+    private Long marketId;                  //商场ID
     private Long exhibitionId;              //展厅ID
     private Long createBy;                  //创建人
     private Long updateBy;                  //修改人
     private Date createDate;                //创建时间
     private Date updateDate;                //修改时间
+
+    private Integer shortFlag;
 
     /*----------VO------------*/
     private String queryName;
@@ -213,35 +220,35 @@ public class ExhibitionSurveyVo extends BaseVo{
         this.exhibitionStatus = exhibitionStatus;
     }
 
-    public Integer getOuterWall() {
+    public List<Integer> getOuterWall() {
         return outerWall;
     }
 
-    public void setOuterWall(Integer outerWall) {
+    public void setOuterWall(List<Integer> outerWall) {
         this.outerWall = outerWall;
     }
 
-    public Integer getBrandPublicityType() {
+    public List<Integer> getBrandPublicityType() {
         return brandPublicityType;
     }
 
-    public void setBrandPublicityType(Integer brandPublicityType) {
+    public void setBrandPublicityType(List<Integer> brandPublicityType) {
         this.brandPublicityType = brandPublicityType;
     }
 
-    public Integer getBrandStained() {
+    public List<Integer> getBrandStained() {
         return brandStained;
     }
 
-    public void setBrandStained(Integer brandStained) {
+    public void setBrandStained(List<Integer> brandStained) {
         this.brandStained = brandStained;
     }
 
-    public Integer getSpokespersonImage() {
+    public List<Integer> getSpokespersonImage() {
         return spokespersonImage;
     }
 
-    public void setSpokespersonImage(Integer spokespersonImage) {
+    public void setSpokespersonImage(List<Integer> spokespersonImage) {
         this.spokespersonImage = spokespersonImage;
     }
 
@@ -269,11 +276,11 @@ public class ExhibitionSurveyVo extends BaseVo{
         this.salesAvgPromotion = salesAvgPromotion;
     }
 
-    public Integer getSeeOffGuest() {
+    public List<Integer> getSeeOffGuest() {
         return seeOffGuest;
     }
 
-    public void setSeeOffGuest(Integer seeOffGuest) {
+    public void setSeeOffGuest(List<Integer> seeOffGuest) {
         this.seeOffGuest = seeOffGuest;
     }
 
@@ -301,11 +308,11 @@ public class ExhibitionSurveyVo extends BaseVo{
         this.customerPicWall = customerPicWall;
     }
 
-    public Integer getFeatureShow() {
+    public List<Integer> getFeatureShow() {
         return featureShow;
     }
 
-    public void setFeatureShow(Integer featureShow) {
+    public void setFeatureShow(List<Integer> featureShow) {
         this.featureShow = featureShow;
     }
 
@@ -397,11 +404,11 @@ public class ExhibitionSurveyVo extends BaseVo{
         this.workbenchStyle = workbenchStyle;
     }
 
-    public Integer getWorkbenchImage() {
+    public List<Integer> getWorkbenchImage() {
         return workbenchImage;
     }
 
-    public void setWorkbenchImage(Integer workbenchImage) {
+    public void setWorkbenchImage(List<Integer> workbenchImage) {
         this.workbenchImage = workbenchImage;
     }
 
@@ -485,11 +492,11 @@ public class ExhibitionSurveyVo extends BaseVo{
         this.welcomeGuest = welcomeGuest;
     }
 
-    public Integer getProductionIntroduce() {
+    public List<Integer> getProductionIntroduce() {
         return productionIntroduce;
     }
 
-    public void setProductionIntroduce(Integer productionIntroduce) {
+    public void setProductionIntroduce(List<Integer> productionIntroduce) {
         this.productionIntroduce = productionIntroduce;
     }
 
@@ -573,11 +580,11 @@ public class ExhibitionSurveyVo extends BaseVo{
         this.promotionType = promotionType;
     }
 
-    public Integer getPromotionStyle() {
+    public List<Integer> getPromotionStyle() {
         return promotionStyle;
     }
 
-    public void setPromotionStyle(Integer promotionStyle) {
+    public void setPromotionStyle(List<Integer> promotionStyle) {
         this.promotionStyle = promotionStyle;
     }
 
@@ -589,6 +596,21 @@ public class ExhibitionSurveyVo extends BaseVo{
         this.specialOffer = specialOffer;
     }
 
+    public Integer getHasPromotion() {
+        return hasPromotion;
+    }
+
+    public void setHasPromotion(Integer hasPromotion) {
+        this.hasPromotion = hasPromotion;
+    }
+
+    public Integer getHasPublicShow() {
+        return hasPublicShow;
+    }
+
+    public void setHasPublicShow(Integer hasPublicShow) {
+        this.hasPublicShow = hasPublicShow;
+    }
 
     public ExhibitionSurveyPublicShow getPublicShow() {
         return publicShow;
@@ -604,6 +626,14 @@ public class ExhibitionSurveyVo extends BaseVo{
 
     public void setOtherOptionVo(Map<String, String> otherOptionVo) {
         this.otherOptionVo = otherOptionVo;
+    }
+
+    public Long getMarketId() {
+        return marketId;
+    }
+
+    public void setMarketId(Long marketId) {
+        this.marketId = marketId;
     }
 
     public Long getExhibitionId() {
@@ -630,7 +660,6 @@ public class ExhibitionSurveyVo extends BaseVo{
         this.updateBy = updateBy;
     }
 
-    @JsonSerialize(using = JsonDateSerializer.class)
     public Date getCreateDate() {
         return createDate;
     }
@@ -639,13 +668,20 @@ public class ExhibitionSurveyVo extends BaseVo{
         this.createDate = createDate;
     }
 
-    @JsonSerialize(using = JsonDateSerializer.class)
     public Date getUpdateDate() {
         return updateDate;
     }
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    public Integer getShortFlag() {
+        return shortFlag;
+    }
+
+    public void setShortFlag(Integer shortFlag) {
+        this.shortFlag = shortFlag;
     }
 
     public String getQueryName() {

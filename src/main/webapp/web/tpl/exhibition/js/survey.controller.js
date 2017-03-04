@@ -1,10 +1,10 @@
 
 angular.module('app.exhibition.survey.controllers', [])
-    .controller('ExhibitionSurveyCtrl', ['$scope','$log','$stateParams','$state','$http',ctrlFn]);
+    .controller('ExhibitionSurveyCtrl', ['$scope','$log','$stateParams','$state','$http','$anchorScroll',ctrlFn]);
 ;
 
 
-function ctrlFn($scope,$log,$stateParams,$state,$http){
+function ctrlFn($scope,$log,$stateParams,$state,$http,$anchorScroll){
     $scope.surveyFieldList1 = [];
     $scope.surveyFieldList2 = [];
     $scope.surveyFieldList3 = [];
@@ -53,8 +53,13 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
                 }
             }
 
-            if($scope.id>0){
-                $http.get($scope.app.projectName + '/mobile/exhibition/survey/'+$scope.id).success(function(result){
+            if($scope.id!=0){
+                var id = $scope.id;
+                if($scope.id<0){
+                    id = -1 * $scope.id;
+                    $scope.id = 0;
+                }
+                $http.get($scope.app.projectName + '/mobile/exhibition/survey/'+id).success(function(result){
                     mergedata($scope.surveyFieldList1,result);
                     mergedata($scope.surveyFieldList2,result);
                     mergedata3($scope.surveyFieldList3,result.publicShow,result.otherOptionVo);
@@ -89,7 +94,10 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
                     }
                 }
             });
-            $scope.fieldVal.exhibitionId=data.exhibitionId;
+            if($scope.id>0) {
+                $scope.fieldVal.marketId = data.marketId;
+                $scope.fieldVal.exhibitionId = data.exhibitionId;
+            }
         }
     };
     function mergedata3(list,pbshow,otherOptionVo){
@@ -146,7 +154,8 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
     $scope.fieldVal={};
     $scope.fieldVal.publicShow={};
     $scope.fieldVal.otherOptionVo={};
-    $scope.surveySubmit = function(){
+    $scope.surveySubmit = function(copyFlag){
+        //$log.info("--copyFlag="+copyFlag);
 
         if($scope.fieldVal.exhibitionId==''){
             alert("请先选择展厅");
@@ -161,8 +170,16 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
 
         $http.post($scope.app.projectName + '/mobile/exhibition/survey/save',$scope.fieldVal).success(function(result){
             if(result.code=='10000'){
-                alert("保存成功");
-                $state.go('app.exhibition.surveyList');
+                if(!copyFlag) {
+                    alert("保存成功");
+                    $state.go('app.exhibition.surveyList');
+                }else{
+                    alert("保存成功，继续填写");
+                    $scope.id = 0;
+                    $scope.fieldVal.marketId = 0;
+                    $scope.fieldVal.exhibitionId = 0;
+                    $anchorScroll();
+                }
             }else{
                 alert(result.msg);
             }
@@ -212,7 +229,6 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
         publicShow['surveyId']=$scope.id;
         $scope.fieldVal.publicShow=publicShow;
     }
-
 
 
     $scope.delete = function(){

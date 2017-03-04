@@ -1,10 +1,10 @@
 
 angular.module('app.exhibition.surveyShort.controllers', [])
-    .controller('ExhibitionSurveyShortCtrl', ['$scope','$log','$stateParams','$state','$http',ctrlFn]);
+    .controller('ExhibitionSurveyShortCtrl', ['$scope','$log','$stateParams','$state','$http','$anchorScroll',ctrlFn]);
 ;
 
 
-function ctrlFn($scope,$log,$stateParams,$state,$http){
+function ctrlFn($scope,$log,$stateParams,$state,$http,$anchorScroll){
     $scope.surveyFieldList1 = [];
 
     $scope.id = 0;
@@ -79,6 +79,7 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
                     }
                 //}
             });
+            $scope.fieldVal.marketId=data.marketId;
             $scope.fieldVal.exhibitionId=data.exhibitionId;
         }
     };
@@ -111,7 +112,8 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
 
     $scope.fieldVal={"shortFlag":1};
     $scope.fieldVal.otherOptionVo={};
-    $scope.surveySubmit = function(){
+    $scope.surveySubmit = function(copyFlag){
+        //$log.info("--copyFlag="+copyFlag);
 
         if($scope.fieldVal.exhibitionId==''){
             alert("请先选择展厅");
@@ -124,8 +126,17 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
 
         $http.post($scope.app.projectName + '/mobile/exhibition/survey/save',$scope.fieldVal).success(function(result){
             if(result.code=='10000'){
-                alert("保存成功");
-                $state.go('app.exhibition.surveyList');
+                if(!copyFlag) {
+                    alert("保存成功");
+                    $state.go('app.exhibition.surveyList');
+                }else{
+                    alert("保存成功，继续填写");
+                    $scope.id = 0;
+                    $scope.fieldVal.marketId = 0;
+                    $scope.fieldVal.exhibitionId = 0;
+                    $anchorScroll();
+                }
+
             }else{
                 alert(result.msg);
             }
@@ -155,5 +166,20 @@ function ctrlFn($scope,$log,$stateParams,$state,$http){
     }
 
 
+    $scope.delete = function(){
+        if($scope.id!='' && confirm("是否确认删除！")) {
+            $http.get($scope.app.projectName+'/mobile/exhibition/survey/delete/'+$scope.id).success(function (result) {
+                if(result.code=='10000'){
+                    alert("删除成功");
+                    $state.go('app.exhibition.surveyList');
+                }else{
+                    alert(result.msg);
+                }
+            }).error(function () {
+                alert('删除失败');
+            });
+
+        }
+    };
 
 }

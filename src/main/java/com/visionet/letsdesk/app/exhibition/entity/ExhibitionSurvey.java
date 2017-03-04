@@ -72,7 +72,7 @@ public class ExhibitionSurvey extends IdEntity{
     private Integer designer;                       //有无设计师
     private List<Integer> shopEmployeesImage = Lists.newArrayList();       //人员形象
     private Integer welcomeGuest;                   //迎送宾客
-    private Integer productionIntroduce;            //产品介绍
+    private List<Integer> productionIntroduce = Lists.newArrayList();            //产品介绍
     private Integer smileHello;                     //微笑问好
     private List<Integer> violations = Lists.newArrayList();               //违规行为
     private Integer gender;                         //性别
@@ -83,8 +83,12 @@ public class ExhibitionSurvey extends IdEntity{
     private List<Integer> guestSnack = Lists.newArrayList();               //顾客零食
     private List<Integer> guestDrink = Lists.newArrayList();               //茶水
     private Integer promotionType;                  //依据促销的范围划分
-    private Integer promotionStyle;                 //展厅的主要促销形式
+    private List<Integer> promotionStyle = Lists.newArrayList();                 //展厅的主要促销形式
     private Integer specialOffer;                   //特价款
+
+
+    private Integer hasPromotion;                   //是否有促销
+    private Integer hasPublicShow;                  //是否有公区摆展
 
     private ExhibitionSurveyPublicShow publicShow;      //公区摆展
     private Map<String,String> otherOptionVo;           //其它填写
@@ -137,6 +141,22 @@ public class ExhibitionSurvey extends IdEntity{
 
     public void setExhibitionArea(Integer exhibitionArea) {
         this.exhibitionArea = exhibitionArea;
+    }
+
+    public Integer getHasPromotion() {
+        return hasPromotion;
+    }
+
+    public void setHasPromotion(Integer hasPromotion) {
+        this.hasPromotion = hasPromotion;
+    }
+
+    public Integer getHasPublicShow() {
+        return hasPublicShow;
+    }
+
+    public void setHasPublicShow(Integer hasPublicShow) {
+        this.hasPublicShow = hasPublicShow;
     }
 
     @Transient
@@ -297,11 +317,12 @@ public class ExhibitionSurvey extends IdEntity{
         this.welcomeGuest = welcomeGuest;
     }
 
-    public Integer getProductionIntroduce() {
+    @Transient
+    public List<Integer> getProductionIntroduce() {
         return productionIntroduce;
     }
 
-    public void setProductionIntroduce(Integer productionIntroduce) {
+    public void setProductionIntroduce(List<Integer> productionIntroduce) {
         this.productionIntroduce = productionIntroduce;
     }
 
@@ -388,11 +409,12 @@ public class ExhibitionSurvey extends IdEntity{
         this.promotionType = promotionType;
     }
 
-    public Integer getPromotionStyle() {
+    @Transient
+    public List<Integer> getPromotionStyle() {
         return promotionStyle;
     }
 
-    public void setPromotionStyle(Integer promotionStyle) {
+    public void setPromotionStyle(List<Integer> promotionStyle) {
         this.promotionStyle = promotionStyle;
     }
 

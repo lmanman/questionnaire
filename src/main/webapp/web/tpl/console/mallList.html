@@ -57,7 +57,7 @@
                         <small class="text-muted inline m-t-sm m-b-sm">{{mallList.number * mallList.totalPages + 1}}-{{mallList.number * mallList.totalPages + mallList.numberOfElements}} 共 {{mallList.totalElements}}</small>
                     </div>
                     <div class="col-sm-4 text-right text-center-xs" ng-if="mallList.content.length > 0">
-                        <pagination boundary-links="true" total-items="mallList.totalElements" ng-model="formData.pageInfo.pageNumber" class="pagination-sm m-t-none m-b" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+                        <pagination boundary-links="true" total-items="mallList.totalElements" ng-model="formData.pageInfo.pageNumber" class="pagination-sm m-t-none m-b" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-click="query()"></pagination>
                     </div>
                 </div>
             </footer>

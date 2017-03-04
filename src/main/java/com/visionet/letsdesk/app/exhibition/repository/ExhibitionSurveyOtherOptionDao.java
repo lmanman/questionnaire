@@ -22,4 +22,8 @@ public interface ExhibitionSurveyOtherOptionDao extends CrudRepository<Exhibitio
     @Modifying
     @Query("delete from ExhibitionSurveyOtherOption o where o.surveyId=?1")
     void deleteBySurveyId(Long surveyId);
+
+    @Modifying
+    @Query("delete from ExhibitionSurveyOtherOption o where surveyId=?1 and surveyField=?2")
+    void deleteBySurveyIdAndField(Long surveyId,String surveyField);
 }

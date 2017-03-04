@@ -21,6 +21,7 @@
             <table class="table table-striped b-t b-light table-hover" >
                 <thead>
                 <tr>
+                    <th style="width:30px;"></th>
                     <th>商场／展厅</th>
                     <th class="hidden-xs">品牌</th>
                     <th class="hidden-xs">品类</th>
@@ -34,6 +35,7 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="item in exhibitionSurveyList.content">
+                    <td><label class="i-checks m-b-none"><input type="radio" ng-model="$parent.checkId"  value="{{item.id}}"  ><i></i></label></td>
                     <td ><a class="text-info-dker block" ui-sref="app.exhibition.surveyInput({id:item.id})" >
                         <span >{{item.marketName}}</span><br>
                         <span >{{item.exhibitionName}}</span>
@@ -52,6 +54,9 @@
                     </td>
                     <td>{{item.userName}}</td>
                     <td>{{item.updateDate | date:'yyyy-MM-dd HH:mm'}}</td>
+                    <!--<td>-->
+                        <!--<a ui-sref="app.exhibition.surveyShortInput({id:item.id})" ><i class="glyphicon glyphicon-edit text-warning"></i></a>-->
+                    <!--</td>-->
                 </tr>
                 <tr ng-show="exhibitionSurveyList.content.length <= 0">
                     <td colspan="5" class="text-center">
@@ -63,20 +68,22 @@
         </div>
         <footer class="panel-footer">
             <div class="row">
-                <div class="col-sm-4">
+                <div class="col-sm-5">
                     <!--<button class="btn btn-sm btn-default" ui-sref="app.exhibition.surveyInput({id:0})">填写新问卷</button>-->
                     <button class="hidden-xs btn btn-sm btn-default" ui-toggle-class="show inline" target="#spin" ng-click="newSurvey()">
                         <span class="text">填写新问卷</span>
                         <span class="text-active">问卷打开中...</span>
                     </button>
                     <i class="fa fa-spin fa-spinner hide" id="spin"></i>
+                    <button class="hidden-xs btn btn-sm btn-info" ng-click="newCopy()" >复制新建</button>
                     <button class="btn btn-sm btn-primary" ui-sref="app.exhibition.surveyShortInput({id:0})" >填写短问卷</button>
+                    <button class="btn btn-sm btn-primary" ng-click="updateShort()" >修改短问卷</button>
                 </div>
-                <div class="col-sm-4 text-center">
+                <div class="col-sm-2 text-center">
                     <small class="text-muted inline m-t-sm m-b-sm">{{exhibitionSurveyList.number * exhibitionSurveyList.totalPages + 1}}-{{exhibitionSurveyList.number * exhibitionSurveyList.totalPages + exhibitionSurveyList.numberOfElements}} 共 {{exhibitionSurveyList.totalElements}}</small>
                 </div>
                 <div class="col-sm-4 text-right text-center-xs" ng-if="exhibitionSurveyList.content.length > 0">
-                    <pagination boundary-links="true" total-items="exhibitionSurveyList.totalElements" ng-model="formData.pageInfo.pageNumber" class="pagination-sm m-t-none m-b" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+                    <pagination boundary-links="true" total-items="exhibitionSurveyList.totalElements" ng-model="formData.pageInfo.pageNumber" class="pagination-sm m-t-none m-b" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-click="query()"></pagination>
                 </div>
             </div>
         </footer>

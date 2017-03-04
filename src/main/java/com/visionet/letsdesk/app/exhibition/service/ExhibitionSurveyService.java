@@ -235,8 +235,8 @@ public class ExhibitionSurveyService extends BaseService{
 
             //多选项修改
             this.shortMultiselectSave(survey);
-
-
+            //其它填写项修改
+            this.shortOtherOptionSave(survey.getId(), survey.getOtherOptionVo());
         }else{
 
             survey.setExhibitionProvince(this.getProvinceId(survey.getExhibitionCity()));
@@ -360,6 +360,23 @@ public class ExhibitionSurveyService extends BaseService{
         if(otherMap!=null) {
             otherMap.forEach((k, v) -> {
                 if(Validator.isNotNull(v)) {
+                    exhibitionSurveyOtherOptionDao.deleteBySurveyIdAndField(surveyId, k);
+
+                    ExhibitionSurveyOtherOption otherOption = new ExhibitionSurveyOtherOption();
+                    otherOption.setSurveyId(surveyId);
+                    otherOption.setSurveyField(k);
+                    otherOption.setOtherOption(v);
+                    exhibitionSurveyOtherOptionDao.save(otherOption);
+                }
+            });
+        }
+    }
+
+    @Transactional(readOnly = false)
+    private void shortOtherOptionSave(Long surveyId,Map<String,String> otherMap){
+        if(otherMap!=null) {
+            otherMap.forEach((k, v) -> {
+                if(Validator.isNotNull(v)) {
                     ExhibitionSurveyOtherOption otherOption = new ExhibitionSurveyOtherOption();
                     otherOption.setSurveyId(surveyId);
                     otherOption.setSurveyField(k);
@@ -384,6 +401,7 @@ public class ExhibitionSurveyService extends BaseService{
     @Transactional(readOnly = false)
     public void delete(Long id){
         exhibitionSurveyMultiselectDao.deleteBySurveyId(id);
+        exhibitionSurveyOtherOptionDao.deleteBySurveyId(id);
         ExhibitionSurveyPublicShow poShow =exhibitionSurveyPublicShowDao.findBySurveyId(id);
         if(poShow!=null){
             exhibitionSurveyPublicShowDao.delete(poShow);

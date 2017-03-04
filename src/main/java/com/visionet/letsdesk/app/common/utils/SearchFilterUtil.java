@@ -107,7 +107,7 @@ public class SearchFilterUtil {
 	                	if(result instanceof Collection && ((Collection) result).isEmpty()){
 	                		continue;
 	                	}
-	                	if(result instanceof Map && ((Collection) result).isEmpty()){
+	                	if(result instanceof Map && ((Map) result).isEmpty()){
 	                		continue;
 	                	}
 	                	Method writeMethod = descriptor.getWriteMethod();
