@@ -47,6 +47,11 @@ function ctrlFn($scope,$location,$log,$stateParams,$http){
     $scope.newSurvey = function() {
         $location.path('/app/exhibition/surveyInput/0');
     };
+    $scope.updateSurvey = function() {
+        if(checkRadio()) {
+            $location.path('/app/exhibition/surveyInput/' + $scope.checkId);
+        }
+    };
 
     $scope.checkId =0;
     $scope.updateShort = function() {
