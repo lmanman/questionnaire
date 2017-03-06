@@ -87,6 +87,9 @@ public class ExhibitionSurveyFieldService extends BaseService{
 
     public List<SundryVo> findSundry(final String type,String relationData){
         if(Validator.isNotNull(relationData)) {
+            if(relationData.startsWith("hide")){    //是否有促销,是否有公区摆展
+                relationData = "yn";
+            }
             if ("yn".equals(relationData) || "exist".equals(relationData)) {
                 return BeanConvertMap.mapList(sundryDao.findByType(relationData), SundryVo.class);
             } else if("d_category".equals(relationData)){   //品类
@@ -141,6 +144,7 @@ public class ExhibitionSurveyFieldService extends BaseService{
                     s.setType(type);
                     return s;
                 }).collect(Collectors.toList());
+
             }
         }else if(Validator.isNotNull(type)) {
             return BeanConvertMap.mapList(sundryDao.findByType(type), SundryVo.class);

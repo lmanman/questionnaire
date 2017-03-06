@@ -23,6 +23,8 @@ import com.visionet.letsdesk.app.exhibition.vo.ExhibitionSurveyListVo;
 import com.visionet.letsdesk.app.exhibition.vo.ExhibitionSurveyVo;
 import com.visionet.letsdesk.app.foundation.KeyWord;
 import com.visionet.letsdesk.app.market.repository.MarketDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -36,9 +38,11 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ExhibitionSurveyService extends BaseService{
+    private static Logger log = LoggerFactory.getLogger(ExhibitionSurveyService.class);
 
     @Autowired
     private ExhibitionSurveyDao exhibitionSurveyDao;
@@ -90,42 +94,13 @@ public class ExhibitionSurveyService extends BaseService{
     }
 
     private void transferExhibitionSurveyVo(ExhibitionSurveyVo vo) throws Exception{
-        vo.setPublicShow(exhibitionSurveyPublicShowDao.findBySurveyId(vo.getId()));
-        List<ExhibitionSurveyMultiselect> list = exhibitionSurveyMultiselectDao.findBySurveyId(vo.getId());
-        for(ExhibitionSurveyMultiselect multiselect:list){
-            if(multiselect.getSurveyField().equals("peripheryFacility")){
-                vo.getPeripheryFacility().add(multiselect.getSundryId());
-            }
-            if(multiselect.getSurveyField().equals("hygiene")){
-                vo.getHygiene().add(multiselect.getSundryId());
-            }
-            if(multiselect.getSurveyField().equals("salesPromotionMaterials")){
-                vo.getSalesPromotionMaterials().add(multiselect.getSundryId());
-            }
-            if(multiselect.getSurveyField().equals("shopEmployeesImage")){
-                vo.getShopEmployeesImage().add(multiselect.getSundryId());
-            }
-            if(multiselect.getSurveyField().equals("violations")){
-                vo.getViolations().add(multiselect.getSundryId());
-            }
-            if(multiselect.getSurveyField().equals("guestSnack")){
-                vo.getGuestSnack().add(multiselect.getSundryId());
-            }
-            if(multiselect.getSurveyField().equals("guestDrink")){
-                vo.getGuestDrink().add(multiselect.getSundryId());
-            }
-            if(multiselect.getSurveyField().equals("customerPicWall")){
-                vo.getCustomerPicWall().add(multiselect.getSundryId());
-            }
-            if(vo.getPublicShow()!=null){
-                if(multiselect.getSurveyField().equals("publicAdType")){
-                    vo.getPublicShow().getPublicAdType().add(multiselect.getSundryId());
-                }
-                if(multiselect.getSurveyField().equals("brandSponsorType")){
-                    vo.getPublicShow().getBrandSponsorType().add(multiselect.getSundryId());
-                }
-            }
-        }
+        ExhibitionSurveyPublicShow publicShow = exhibitionSurveyPublicShowDao.findBySurveyId(vo.getId());
+        publicShow.setHasPublicShow(vo.getHasPublicShow());
+        vo.setPublicShow(publicShow);
+
+        List<String> checkboxNameList = exhibitionSurveyFieldDao.findFieldNameByFieldFormat
+                (KeyWord.FIELD_FORMAT_CHECKBOX);
+        this.selectMultiVal(vo,checkboxNameList);
 
         List<ExhibitionSurveyOtherOption> otherList = exhibitionSurveyOtherOptionDao.findBySurveyId(vo.getId());
         Map<String,String> otherMap = Maps.newHashMap();
@@ -134,43 +109,56 @@ public class ExhibitionSurveyService extends BaseService{
         }
         vo.setOtherOptionVo(otherMap);
     }
+    private void selectMultiVal(ExhibitionSurveyVo vo,List<String> checkboxNameList) throws Exception{
+        List<ExhibitionSurveyMultiselect> multiselectList = exhibitionSurveyMultiselectDao.findBySurveyId(vo.getId());
 
-    private void transferExhibitionSurveyShortVo(ExhibitionSurveyVo vo) throws Exception{
-        List<ExhibitionSurveyMultiselect> list = exhibitionSurveyMultiselectDao.findByShortSurveyId(vo.getId());
-        for(ExhibitionSurveyMultiselect multiselect:list){
-            if(multiselect.getSurveyField().equals("peripheryFacility")){
-                vo.getPeripheryFacility().add(multiselect.getSundryId());
+        //普通多选
+        BeanInfo beanInfo = Introspector.getBeanInfo(vo.getClass());
+        PropertyDescriptor[] propertyDescriptors =  beanInfo.getPropertyDescriptors();
+        for (int i = 0; i< propertyDescriptors.length; i++) {
+            PropertyDescriptor descriptor = propertyDescriptors[i];
+            String propertyName = descriptor.getName();
+            if(!checkboxNameList.contains(propertyName)) continue;
+
+            Method writeMethod = descriptor.getWriteMethod();
+            if(writeMethod!=null) {
+                List<Integer> vals = multiselectList.parallelStream().filter(m->m.getSurveyField().equals(propertyName))
+                        .map(m->m.getSundryId()).collect(Collectors.toList());
+
+                writeMethod.invoke(vo, vals);
             }
-            if(multiselect.getSurveyField().equals("hygiene")){
-                vo.getHygiene().add(multiselect.getSundryId());
-            }
-            if(multiselect.getSurveyField().equals("salesPromotionMaterials")){
-                vo.getSalesPromotionMaterials().add(multiselect.getSundryId());
-            }
-            if(multiselect.getSurveyField().equals("shopEmployeesImage")){
-                vo.getShopEmployeesImage().add(multiselect.getSundryId());
-            }
-            if(multiselect.getSurveyField().equals("violations")){
-                vo.getViolations().add(multiselect.getSundryId());
-            }
-            if(multiselect.getSurveyField().equals("guestSnack")){
-                vo.getGuestSnack().add(multiselect.getSundryId());
-            }
-            if(multiselect.getSurveyField().equals("guestDrink")){
-                vo.getGuestDrink().add(multiselect.getSundryId());
-            }
-            if(multiselect.getSurveyField().equals("customerPicWall")){
-                vo.getCustomerPicWall().add(multiselect.getSundryId());
-            }
-            if(vo.getPublicShow()!=null){
-                if(multiselect.getSurveyField().equals("publicAdType")){
-                    vo.getPublicShow().getPublicAdType().add(multiselect.getSundryId());
-                }
-                if(multiselect.getSurveyField().equals("brandSponsorType")){
-                    vo.getPublicShow().getBrandSponsorType().add(multiselect.getSundryId());
+        }
+
+        if(vo.getPublicShow()!=null) {
+            //公区多选
+            BeanInfo beanInfo2 = Introspector.getBeanInfo(vo.getPublicShow().getClass());
+            PropertyDescriptor[] propertyDescriptors2 = beanInfo2.getPropertyDescriptors();
+            for (int i = 0; i < propertyDescriptors2.length; i++) {
+                PropertyDescriptor descriptor = propertyDescriptors2[i];
+                String propertyName = descriptor.getName();
+                if (!checkboxNameList.contains(propertyName)) continue;
+
+                Method writeMethod = descriptor.getWriteMethod();
+                if (writeMethod != null) {
+                    List<Integer> vals = multiselectList.parallelStream().filter(m -> m.getSurveyField().equals(propertyName))
+                            .map(m -> m.getSundryId()).collect(Collectors.toList());
+
+                    try {
+                        writeMethod.invoke(vo.getPublicShow(), vals);
+                    } catch (Exception e) {
+                        log.error("propertyName=" + propertyName + "---vals=" + vals.stream().map(x -> x + "").reduce((a, b) -> a + "," + b));
+                    }
                 }
             }
         }
+    }
+
+    private void transferExhibitionSurveyShortVo(ExhibitionSurveyVo vo) throws Exception{
+
+        List<String> checkboxNameList = exhibitionSurveyFieldDao.findFieldNameByFieldFormat
+                (KeyWord.FIELD_FORMAT_CHECKBOX,KeyWord.Y);
+        this.selectMultiVal(vo,checkboxNameList);
+
 
         List<ExhibitionSurveyOtherOption> otherList = exhibitionSurveyOtherOptionDao.findByShortSurveyId(vo.getId());
         Map<String,String> otherMap = Maps.newHashMap();
@@ -192,10 +180,14 @@ public class ExhibitionSurveyService extends BaseService{
             throwException(BusinessStatus.REQUIRE,"exhibitionId is null!");
         }
 
+
         if(Validator.isNull(survey.getId())){
             if(survey.getId()!=null && survey.getId().longValue()==0){
                 survey.setId(null);
             }
+            int[] schedule = this.getSchedule(survey);
+            survey.setAnswerNum(schedule[0]);
+            survey.setQuestionNum(schedule[1]);
 
 //            Exhibition store = exhibitionDao.findOne(survey.getExhibitionId());
 //            if(store==null){
@@ -228,16 +220,33 @@ public class ExhibitionSurveyService extends BaseService{
             }
             SearchFilterUtil.copyBeans(po, survey);
 
-            survey.setExhibitionProvince(this.getProvinceId(survey.getExhibitionCity()));
-            survey.setUpdateDate(DateUtil.getCurrentDate());
-            exhibitionSurveyDao.save(survey);
+            po.setExhibitionProvince(this.getProvinceId(po.getExhibitionCity()));
+            po.setUpdateDate(DateUtil.getCurrentDate());
+            exhibitionSurveyDao.save(po);
 
 
             //多选项修改
             this.shortMultiselectSave(survey);
             //其它填写项修改
             this.shortOtherOptionSave(survey.getId(), survey.getOtherOptionVo());
+
+            ExhibitionSurveyVo vo = BeanConvertMap.map(po,ExhibitionSurveyVo.class);
+            ExhibitionSurveyPublicShow publicShow = exhibitionSurveyPublicShowDao.findBySurveyId(vo.getId());
+            publicShow.setHasPublicShow(vo.getHasPublicShow());
+            vo.setPublicShow(publicShow);
+
+            List<String> checkboxNameList = exhibitionSurveyFieldDao.findFieldNameByFieldFormat
+                    (KeyWord.FIELD_FORMAT_CHECKBOX);
+            this.selectMultiVal(vo,checkboxNameList);
+
+            int[] schedule = this.getSchedule(BeanConvertMap.map(vo,ExhibitionSurvey.class));
+            po.setAnswerNum(schedule[0]);
+            po.setQuestionNum(schedule[1]);
+            exhibitionSurveyDao.save(po);
         }else{
+            int[] schedule = this.getSchedule(survey);
+            survey.setAnswerNum(schedule[0]);
+            survey.setQuestionNum(schedule[1]);
 
             survey.setExhibitionProvince(this.getProvinceId(survey.getExhibitionCity()));
             survey.setUpdateDate(DateUtil.getCurrentDate());
@@ -455,10 +464,10 @@ public class ExhibitionSurveyService extends BaseService{
         }
         vo.setAddress(survey.getExhibitionAddress());
         if(Validator.isNotNull(survey.getMarketId())) {
-            vo.setExhibitionName(marketDao.findNameById(survey.getMarketId()));
+            vo.setMarketName(marketDao.findNameById(survey.getMarketId()));
         }
         if(Validator.isNotNull(survey.getExhibitionId())) {
-            vo.setMarketName(exhibitionDao.findNameById(survey.getExhibitionId()));
+            vo.setExhibitionName(exhibitionDao.findNameById(survey.getExhibitionId()));
         }
         if(survey.getBusinessNature()!=null) {
             vo.setDealerName(dealerDao.findNameById(survey.getBusinessNature().longValue()));
@@ -472,16 +481,100 @@ public class ExhibitionSurveyService extends BaseService{
                 vo.setCityName((city.getProvinceName()==null?"":city.getProvinceName())+"/"+city.getCityName());
             }
         }
-        vo.setSchedule(new int[]{GetAnswerNum(survey),64});
+        vo.setSchedule(new int[]{survey.getAnswerNum(),survey.getQuestionNum()});
         vo.setUpdateDate(survey.getUpdateDate());
         vo.setCreateBy(survey.getCreateBy());
         return vo;
     }
 
-    public static int GetAnswerNum(ExhibitionSurvey survey){
-        return 64;
+
+
+    private int[] getSchedule(ExhibitionSurvey survey) throws Exception{
+        int questionNum = exhibitionSurveyFieldDao.findNumByformId(survey.getFormId()) + 2;
+        int answerNum = 0;
+        if(Validator.isNotNull(survey.getMarketId())){
+            answerNum++;
+        }
+        if(Validator.isNotNull(survey.getExhibitionId())) {
+            answerNum++;
+        }
+        if(survey.getBusinessNature()!=null && survey.getBusinessNature().intValue() == 0){
+            answerNum++;
+        }
+        if(survey.getHasPromotion()!= null && survey.getHasPromotion().intValue() == 2){
+            answerNum +=3;
+        }
+        if(survey.getHasPublicShow()!= null && survey.getHasPublicShow().intValue() == 2){
+            answerNum +=6;
+        }
+
+        List<String> nameList = exhibitionSurveyFieldDao.findFieldName();
+
+        //普通选项
+        BeanInfo beanInfo = Introspector.getBeanInfo(survey.getClass());
+        PropertyDescriptor[] propertyDescriptors =  beanInfo.getPropertyDescriptors();
+        for (int i = 0; i< propertyDescriptors.length; i++) {
+            PropertyDescriptor descriptor = propertyDescriptors[i];
+            String propertyName = descriptor.getName();
+            if(!nameList.contains(propertyName)) continue;
+
+            Method readMethod = descriptor.getReadMethod();
+            if(readMethod!=null) {
+                Object result = readMethod.invoke(survey, new Object[0]);
+                if (result != null) {
+                    if (result instanceof List) {
+                        if(Collections3.isNotEmpty((List)result)){
+                            answerNum++;
+                        }
+                    }else if (result instanceof Integer){
+                        if(Validator.isNotNull((Integer)result)){
+                            answerNum++;
+                        }
+                    }else if (result instanceof Long){
+                        if(Validator.isNotNull((Long)result)){
+                            answerNum++;
+                        }
+                    }else if (result instanceof String){
+                        if(Validator.isNotNull((String)result)){
+                            answerNum++;
+                        }
+                    }
+                }
+            }
+        }
+        if(survey.getPublicShow()!=null) {
+            //公区选项
+            BeanInfo beanInfo2 = Introspector.getBeanInfo(survey.getPublicShow().getClass());
+            PropertyDescriptor[] propertyDescriptors2 = beanInfo2.getPropertyDescriptors();
+            for (int i = 0; i < propertyDescriptors2.length; i++) {
+                PropertyDescriptor descriptor = propertyDescriptors2[i];
+                String propertyName = descriptor.getName();
+                if (!nameList.contains(propertyName)) continue;
+                if (propertyName.equals("hasPublicShow")) continue;
+
+                Method readMethod = descriptor.getReadMethod();
+                if (readMethod != null) {
+                    Object result = readMethod.invoke(survey.getPublicShow(), new Object[0]);
+                    if (result != null) {
+                        if (result instanceof List) {
+                            if(Collections3.isNotEmpty((List)result)){
+                                answerNum++;
+                            }
+                        }else if (result instanceof Integer){
+                            if(Validator.isNotNull((Integer)result)){
+                                answerNum++;
+                            }
+                        }else if (result instanceof Long){
+                            if(Validator.isNotNull((Long)result)){
+                                answerNum++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return new int[]{answerNum,questionNum};
     }
-
-
 
 }

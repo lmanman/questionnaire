@@ -93,12 +93,16 @@ public class ExhibitionSurvey extends IdEntity{
     private ExhibitionSurveyPublicShow publicShow;      //公区摆展
     private Map<String,String> otherOptionVo;           //其它填写
 
+    private Long formId;                    //表单ID
     private Long marketId;                  //商场ID
     private Long exhibitionId;              //展厅ID
     private Long createBy;                  //创建人
     private Long updateBy;                  //修改人
     private Date createDate;                //创建时间
     private Date updateDate;                //修改时间
+
+    private Integer answerNum;
+    private Integer questionNum;
 
     private Integer shortFlag;
 
@@ -649,6 +653,14 @@ public class ExhibitionSurvey extends IdEntity{
         this.memberArea = memberArea;
     }
 
+    public Long getFormId() {
+        return formId;
+    }
+
+    public void setFormId(Long formId) {
+        this.formId = formId;
+    }
+
     public Long getMarketId() {
         return marketId;
     }
@@ -707,6 +719,22 @@ public class ExhibitionSurvey extends IdEntity{
 
     public void setShortFlag(Integer shortFlag) {
         this.shortFlag = shortFlag;
+    }
+
+    public Integer getAnswerNum() {
+        return answerNum;
+    }
+
+    public void setAnswerNum(Integer answerNum) {
+        this.answerNum = answerNum;
+    }
+
+    public Integer getQuestionNum() {
+        return questionNum;
+    }
+
+    public void setQuestionNum(Integer questionNum) {
+        this.questionNum = questionNum;
     }
 
     @Transient

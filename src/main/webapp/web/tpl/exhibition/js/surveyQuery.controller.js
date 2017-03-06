@@ -1,10 +1,10 @@
 
 angular.module('app.exhibition.surveyQuery.controllers', [])
-    .controller('SurveyQueryCtrl', ['$scope','$location','$log','$stateParams','$http',ctrlFn]);
+    .controller('SurveyQueryCtrl', ['$scope','$log','$http','$state',ctrlFn]);
 ;
 
 
-function ctrlFn($scope,$location,$log,$stateParams,$http){
+function ctrlFn($scope,$log,$http,$state){
 
     $scope.dynamicType = function(a,b){
         var type;
@@ -45,24 +45,28 @@ function ctrlFn($scope,$location,$log,$stateParams,$http){
 
 
     $scope.newSurvey = function() {
-        $location.path('/app/exhibition/surveyInput/0');
+        //$location.path('/app/exhibition/surveyInput/0');
+        $state.go("app.exhibition.surveyInput", {id:0});
     };
     $scope.updateSurvey = function() {
         if(checkRadio()) {
-            $location.path('/app/exhibition/surveyInput/' + $scope.checkId);
+            //$location.path('/app/exhibition/surveyInput/' + $scope.checkId);
+            $state.go("app.exhibition.surveyInput", {id:$scope.checkId});
         }
     };
 
     $scope.checkId =0;
     $scope.updateShort = function() {
-        console.info("checkId="+$scope.checkId);
+        //console.info("checkId="+$scope.checkId);
         if(checkRadio()) {
-            $location.path('/app/exhibition/surveyShortInput/' + $scope.checkId);
+            //$location.path('/app/exhibition/surveyShortInput/' + $scope.checkId);
+            $state.go("app.exhibition.surveyShortInput", {id:$scope.checkId});
         }
     };
     $scope.newCopy = function() {
         if(checkRadio()) {
-            $location.path('/app/exhibition/surveyInput/' + (-1 * $scope.checkId));
+            var id =  (-1 * $scope.checkId);
+            $state.go("app.exhibition.surveyInput", {id:id});
         }
     };
 

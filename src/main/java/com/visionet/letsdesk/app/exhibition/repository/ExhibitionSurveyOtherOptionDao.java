@@ -19,6 +19,9 @@ public interface ExhibitionSurveyOtherOptionDao extends CrudRepository<Exhibitio
             " from ExhibitionSurveyField f where f.delFlag=0 and EXISTS (SELECT 1 from Sundry d where d.type = f.fieldName and d.code = 'Z') ")
     List<Object[]> findTemplateBySurveyId(Long surveyId);
 
+//    @Query("select count(distinct m.surveyField) from ExhibitionSurveyOtherOption m where m.surveyId = ?1")
+//    Long findFieldNumBySurveyId(Long surveyId);
+
     @Modifying
     @Query("delete from ExhibitionSurveyOtherOption o where o.surveyId=?1")
     void deleteBySurveyId(Long surveyId);

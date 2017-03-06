@@ -21,6 +21,7 @@ public class ExhibitionSurveyFieldVo {
     private Long formId;
     private Float orderId;
     private Integer shortFlag;
+    private boolean hideFlag = false;
     private List<SundryVo> optionList;
     private String fieldVal;
     private Map<Long,Boolean> fieldArr = Maps.newHashMap();
@@ -100,6 +101,14 @@ public class ExhibitionSurveyFieldVo {
 
     public void setShortFlag(Integer shortFlag) {
         this.shortFlag = shortFlag;
+    }
+
+    public boolean isHideFlag() {
+        return hideFlag;
+    }
+
+    public void setHideFlag(boolean hideFlag) {
+        this.hideFlag = hideFlag;
     }
 
     public List<SundryVo> getOptionList() {

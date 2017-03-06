@@ -8,6 +8,7 @@ function ctrlFn($scope,$log,$stateParams,$state,$http,$anchorScroll){
     $scope.surveyFieldList1 = [];
 
     $scope.id = 0;
+    $scope.formId = 1;
     $scope.init = function(){
         $scope.id = $stateParams.id;
     };
@@ -23,7 +24,7 @@ function ctrlFn($scope,$log,$stateParams,$state,$http,$anchorScroll){
             $scope.exhibitionList=result.exhibitionList;
         });
 
-        $http.get($scope.app.projectName + '/mobile/exhibition/survey/field/short/1').success(function(result){
+        $http.get($scope.app.projectName + '/mobile/exhibition/survey/field/short/'+$scope.formId).success(function(result){
             //$log.info(result);
 
             $scope.surveyFieldList1 = result;
@@ -119,7 +120,8 @@ function ctrlFn($scope,$log,$stateParams,$state,$http,$anchorScroll){
             alert("请先选择展厅");
         }
         submitDate($scope.surveyFieldList1);
-        $scope.fieldVal['id']=$scope.id;
+        $scope.fieldVal.id=$scope.id;
+        $scope.fieldVal.formId=$scope.formId;
 
 
         //$log.info($scope.fieldVal);

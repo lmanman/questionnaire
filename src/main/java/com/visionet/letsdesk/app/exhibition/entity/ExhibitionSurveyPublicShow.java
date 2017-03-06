@@ -25,6 +25,8 @@ public class ExhibitionSurveyPublicShow extends IdEntity{
     private List<Integer> publicAdType = Lists.newArrayList();             //公区广告类型
     private List<Integer> brandSponsorType = Lists.newArrayList();         //品牌赞助类型
 
+    private Integer hasPublicShow;
+
     public Long getSurveyId() {
         return surveyId;
     }
@@ -84,4 +86,12 @@ public class ExhibitionSurveyPublicShow extends IdEntity{
         this.brandSponsorType = brandSponsorType;
     }
 
+    @Transient
+    public Integer getHasPublicShow() {
+        return hasPublicShow;
+    }
+
+    public void setHasPublicShow(Integer hasPublicShow) {
+        this.hasPublicShow = hasPublicShow;
+    }
 }

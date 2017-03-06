@@ -10,6 +10,7 @@ function ctrlFn($scope,$log,$stateParams,$state,$http,$anchorScroll){
     $scope.surveyFieldList3 = [];
 
     $scope.id = 0;
+    $scope.formId = 1;
     $scope.init = function(){
         $scope.id = $stateParams.id;
     };
@@ -25,7 +26,7 @@ function ctrlFn($scope,$log,$stateParams,$state,$http,$anchorScroll){
             $scope.exhibitionList=result.exhibitionList;
         });
 
-        $http.get($scope.app.projectName + '/mobile/exhibition/survey/field/1').success(function(result){
+        $http.get($scope.app.projectName + '/mobile/exhibition/survey/field/'+$scope.formId).success(function(result){
             //$log.info(result);
 
             $scope.surveyFieldList1 = result[0];
@@ -38,6 +39,7 @@ function ctrlFn($scope,$log,$stateParams,$state,$http,$anchorScroll){
             for(var i=0;i<$scope.surveyFieldList1.length;i++) {
                 var field = $scope.surveyFieldList1[i];
                 if (field.fieldName == 'brand') {
+                    //$log.info("brand.optionList="+field.optionList);
                     angular.forEach(field.optionList, function (option) {
                         newOptionList.push({"id":option.id,"name":option.name,"type":option.type});
                         angular.forEach(option.childDataList, function (child) {
@@ -127,18 +129,22 @@ function ctrlFn($scope,$log,$stateParams,$state,$http,$anchorScroll){
         //$log.info("marketId:"+marketId);
         $scope.fieldVal.exhibitionId='';
 
-        if($scope.marketList!=null) {
-            $scope.marketList.forEach(function (m) {
-                if (marketId == m.id) {
-                    //$log.info("m.cityId:" + m.cityId);
-                    angular.forEach($scope.surveyFieldList1, function (field) {
+        angular.forEach($scope.surveyFieldList1, function (field) {
+            if($scope.marketList!=null) {
+                $scope.marketList.forEach(function (m) {
+                    if (marketId == m.id) {
+                        //$log.info("m.cityId:" + m.cityId);
                         if (field.fieldName == 'exhibitionCity') {
                             field.fieldVal = m.cityId;
                         }
-                    });
-                }
-            })
-        }
+                        if(field.fieldName=='standAloneStore'){
+                            field.fieldVal=2;
+                        }
+                    }
+                });
+            }
+
+        });
 
     };
     $scope.ehbComparator = function(expected, actual){
@@ -146,6 +152,34 @@ function ctrlFn($scope,$log,$stateParams,$state,$http,$anchorScroll){
         return expected==actual;
     };
 
+    $scope.radioHide = function(name,val,orderId,relationData){
+        if(name=='hasPromotion' || name=='hasPublicShow'){
+            var hideNum = relationData.substring(4);
+            var hideFrom =parseInt(orderId) + 1;
+            var hideTo = parseInt(orderId) + parseInt(hideNum) ;
+            //console.info("--name="+name+"--val="+val+"--num="+hideNum +"--from="+hideFrom+"---to="+hideTo);
+            angular.forEach($scope.surveyFieldList3, function (field) {
+                if (parseInt(field.orderId) >= hideFrom && parseInt(field.orderId) <= hideTo) {
+                    disabledFn(field,val);
+                }
+            });
+            angular.forEach($scope.surveyFieldList2, function (field) {
+                if (parseInt(field.orderId) >= hideFrom && parseInt(field.orderId) <= hideTo) {
+                    disabledFn(field,val);
+                }
+            });
+        }
+    };
+
+    function disabledFn(field,val){
+        //console.info("--xx:" + field.fieldName+"---val="+field.fieldVal);
+        if (val == 2) {
+            field.fieldVal = null;
+            field.hideFlag = true;
+        } else {
+            field.hideFlag = false;
+        }
+    }
 
 
 
@@ -163,7 +197,8 @@ function ctrlFn($scope,$log,$stateParams,$state,$http,$anchorScroll){
         submitDate($scope.surveyFieldList1);
         submitDate($scope.surveyFieldList2);
         submitDate3($scope.surveyFieldList3);
-        $scope.fieldVal['id']=$scope.id;
+        $scope.fieldVal.id=$scope.id;
+        $scope.fieldVal.formId=$scope.formId;
 
 
         //$log.info($scope.fieldVal);
@@ -228,6 +263,7 @@ function ctrlFn($scope,$log,$stateParams,$state,$http,$anchorScroll){
         });
         publicShow['surveyId']=$scope.id;
         $scope.fieldVal.publicShow=publicShow;
+        $scope.fieldVal.hasPublicShow = publicShow.hasPublicShow;
     }
 
 

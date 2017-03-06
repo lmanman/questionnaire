@@ -1,9 +1,6 @@
 package com.visionet.letsdesk.app.exhibition.vo;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.visionet.letsdesk.app.base.entity.JsonDateSerializer;
 import com.visionet.letsdesk.app.base.vo.BaseVo;
 import com.visionet.letsdesk.app.exhibition.entity.ExhibitionSurveyPublicShow;
 
@@ -86,12 +83,16 @@ public class ExhibitionSurveyVo extends BaseVo{
     private ExhibitionSurveyPublicShow publicShow;      //公区摆展
     private Map<String,String> otherOptionVo;           //其它填写
 
+    private Long formId;                    //表单ID
     private Long marketId;                  //商场ID
     private Long exhibitionId;              //展厅ID
     private Long createBy;                  //创建人
     private Long updateBy;                  //修改人
     private Date createDate;                //创建时间
     private Date updateDate;                //修改时间
+
+    private Integer answerNum;
+    private Integer questionNum;
 
     private Integer shortFlag;
 
@@ -628,6 +629,14 @@ public class ExhibitionSurveyVo extends BaseVo{
         this.otherOptionVo = otherOptionVo;
     }
 
+    public Long getFormId() {
+        return formId;
+    }
+
+    public void setFormId(Long formId) {
+        this.formId = formId;
+    }
+
     public Long getMarketId() {
         return marketId;
     }
@@ -674,6 +683,22 @@ public class ExhibitionSurveyVo extends BaseVo{
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    public Integer getAnswerNum() {
+        return answerNum;
+    }
+
+    public void setAnswerNum(Integer answerNum) {
+        this.answerNum = answerNum;
+    }
+
+    public Integer getQuestionNum() {
+        return questionNum;
+    }
+
+    public void setQuestionNum(Integer questionNum) {
+        this.questionNum = questionNum;
     }
 
     public Integer getShortFlag() {

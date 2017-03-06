@@ -18,6 +18,9 @@ public interface ExhibitionSurveyMultiselectDao extends CrudRepository<Exhibitio
             " where f.fieldName = m.surveyField and m.surveyId = ?1 and f.shortFlag=1")
     List<ExhibitionSurveyMultiselect> findByShortSurveyId(Long surveyId);
 
+//    @Query("select count(distinct m.surveyField) from ExhibitionSurveyMultiselect m where m.surveyId = ?1")
+//    Long findFieldNumBySurveyId(Long surveyId);
+
     @Modifying
     @Query("delete from ExhibitionSurveyMultiselect m where surveyId=?1")
     void deleteBySurveyId(Long surveyId);
