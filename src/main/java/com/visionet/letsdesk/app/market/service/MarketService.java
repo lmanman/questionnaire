@@ -103,6 +103,9 @@ public class MarketService extends BaseService {
         if (Validator.isNull(dealer.getName())) {
             throwException(BusinessStatus.REQUIRE, "name is null!");
         }
+        if (Validator.isNull(dealer.getAddress())) {
+            throwException(BusinessStatus.REQUIRE, "address is null!");
+        }
         if(Validator.isNotNull(dealer.getCityId())) {
             dealer.setProvinceId(exhibitionSurveyService.getProvinceId(dealer.getCityId().intValue()).longValue());
         }

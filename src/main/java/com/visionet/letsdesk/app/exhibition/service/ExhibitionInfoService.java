@@ -210,9 +210,9 @@ public class ExhibitionInfoService extends BaseService{
             if(Validator.isNull(dealer.getName())){
                 throwException(BusinessStatus.REQUIRE,"name is null!");
             }
-            if(Validator.isNull(dealer.getLinkman())){
-                throwException(BusinessStatus.REQUIRE,"linkman is null!");
-            }
+//            if(Validator.isNull(dealer.getLinkman())){
+//                throwException(BusinessStatus.REQUIRE,"linkman is null!");
+//            }
             dealerDao.save(dealer);
         }else{
             Dealer po = dealerDao.findOne(dealer.getId());

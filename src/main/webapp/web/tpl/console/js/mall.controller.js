@@ -65,6 +65,12 @@ function ctrlFn($scope,$stateParams,$http,$state,$log){
         formData.businessHours = $scope.mallInfo.businessHours;
 
         $http.post($scope.app.projectName + '/mobile/market/save', formData).success(function (result) {
+            if(result!=null && result.code == undefined){
+                result = angular.fromJson(result);
+                if(result.code == undefined){
+                    result = angular.fromJson(result);
+                }
+            }
             if (result.code == '10000') {
                 alert("保存成功");
                 $state.go('app.console.mallList');

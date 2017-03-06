@@ -74,6 +74,12 @@ function ctrlFn($scope,$stateParams,$http,$state,$log){
         }
 
         $http.post($scope.app.projectName + '/mobile/exhibition/store/save', formData).success(function (result) {
+            if(result!=null && result.code == undefined){
+                result = angular.fromJson(result);
+                if(result.code == undefined){
+                    result = angular.fromJson(result);
+                }
+            }
             if (result.code == '10000') {
                 alert("保存成功");
                 $state.go('app.console.exhibitionList');

@@ -76,7 +76,7 @@ public class ExceptionHandler implements HandlerExceptionResolver {
     	
     	if(uri.contains("/mobile/") || uri.contains("/console/")
     			|| uri.contains("/help") || uri.contains("/api/")
-                || uri.contains("/register/") || uri.contains("/snap/")){
+                || uri.contains("/register/") || uri.contains("/open/")){
         	
     		String code = BusinessStatus.ERROR;
     		String err = ex.getMessage()==null?ex.toString():ex.getMessage();

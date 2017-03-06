@@ -94,6 +94,12 @@ function ctrlFn($scope,$stateParams,$http,$state,$log){
         $log.info(formData.roleSet);
 
         $http.post(url, formData).success(function (result) {
+            if(result!=null && result.code == undefined){
+                result = angular.fromJson(result);
+                if(result.code == undefined){
+                    result = angular.fromJson(result);
+                }
+            }
             if (result.code == '10000') {
                 alert("保存成功");
                 if($scope.uid>0) {

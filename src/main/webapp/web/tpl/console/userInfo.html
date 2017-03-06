@@ -11,26 +11,26 @@
                     </div>
                     <div class="list-group bg-white">
                         <li class="list-group-item">
-                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-star"></i></span>
+                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-star"></i><span class="text-danger">*</span></span>
                             <div class="media-body">
                                 <input type="text" name="loginName" ng-model="userInfo.loginName" class="input-sm form-control" placeholder="登录账号('a-zA-Z0-9', 长度3-20)" ng-pattern="/^[a-zA-Z0-9]{3,20}$/" required>
                             </div>
                         </li>
                         <li class="list-group-item">
-                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-user"></i></span>
+                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-user"></i><span class="text-danger">*</span></span>
                             <div class="media-body">
                                 <input type="text" name="aliasName" ng-model="userInfo.aliasName" class="input-sm form-control" placeholder="用户名" required>
                             </div>
                         </li>
 
                         <li class="list-group-item" ng-show="uid == 0">
-                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-lock"></i></span>
+                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-lock"></i><span class="text-danger">*</span></span>
                             <div class="media-body">
                                 <input type="password" class="form-control" name="password2" ng-model="password2" placeholder="登录密码" required >
                             </div>
                         </li>
                         <li class="list-group-item" ng-show="uid == 0">
-                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-lock"></i></span>
+                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-lock"></i><span class="text-danger">*</span></span>
                             <div class="media-body">
                                 <input type="password" class="form-control" name="confirm_password2" required ng-model="confirm_password2" ui-validate=" '$value==password2' " ui-validate-watch=" 'password2' " placeholder="密码确认">
                                 <span ng-show='infoForm.confirm_password2.$error.validator'>密码不匹配!</span>
@@ -38,7 +38,7 @@
                         </li>
 
                         <li class="list-group-item">
-                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-mobile-phone"></i></span>
+                            <span class="pull-left thumb-sm"><i class="fa fa-fw fa-mobile"></i></span>
                             <div class="media-body">
                                 <input type="text" ng-model="userInfo.phoneNumber" class="input-sm form-control" placeholder="手机" ng-pattern="/^1[34578]\d{9}$/" >
                             </div>

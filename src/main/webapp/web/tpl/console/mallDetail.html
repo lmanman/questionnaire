@@ -11,20 +11,20 @@
                 </div>
                 <div class="list-group bg-white">
                     <li class="list-group-item">
-                        <span class="pull-left thumb-sm"><i class="fa fa-fw fa-star"></i></span>
+                        <span class="pull-left thumb-sm"><i class="fa fa-fw fa-star"></i><span class="text-danger">*</span></span>
                         <div class="media-body">
                             <input type="text" ng-model="mallInfo.name" class="input-sm form-control" placeholder="名称" required>
                         </div>
                     </li>
                     <li class="list-group-item">
-                        <span class="pull-left thumb-sm"><i class="fa fa-map-signs fa-user"></i></span>
+                        <span class="pull-left thumb-sm"><i class="fa fa-map-signs fa-user"></i><span class="text-danger">*</span></span>
                         <div class="media-body">
-                            <input type="text" ng-model="mallInfo.address" class="input-sm form-control" placeholder="地址" >
+                            <input type="text" ng-model="mallInfo.address" class="input-sm form-control" placeholder="地址" required>
                         </div>
                     </li>
                     <li class="list-group-item">
-                        <span class="pull-left thumb-sm"><i class="fa fa-map-marker"></i></span>
-                        <select  ng-model="mallInfo.cityId" data-placeholder="城市" class="w-md">
+                        <span class="pull-left thumb-sm"><i class="fa fa-fw fa-map-marker"></i><span class="text-danger">*</span></span>
+                        <select  ng-model="mallInfo.cityId" data-placeholder="城市" class="w-md" required>
                             <optgroup ng-repeat="province in dictionaryMap.d_city" label="{{province.name}}">
                                 <option ng-repeat="city in province.childDataList" value="{{city.id}}">{{city.name}}</option>
                             </optgroup>

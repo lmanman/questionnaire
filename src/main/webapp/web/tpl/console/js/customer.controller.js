@@ -55,6 +55,12 @@ function ctrlFn($scope,$stateParams,$http,$state,$log){
         formData.telephone = $scope.dealerInfo.telephone;
 
         $http.post($scope.app.projectName + '/mobile/dealer/save', formData).success(function (result) {
+            if(result!=null && result.code == undefined){
+                result = angular.fromJson(result);
+                if(result.code == undefined){
+                    result = angular.fromJson(result);
+                }
+            }
             if (result.code == '10000') {
                 alert("保存成功");
                 $state.go('app.console.dealerList');

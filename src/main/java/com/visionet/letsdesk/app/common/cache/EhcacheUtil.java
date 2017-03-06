@@ -25,7 +25,6 @@ public class EhcacheUtil {
 	private static Logger log = LoggerFactory.getLogger(EhcacheUtil.class);
 	private static final String CACHE_NAME = "sloth2Cache";
 	private static final String USER_KEY = "user_";
-	private static final String CHANNEL_KEY = "channel_";
 	public static final String DICT_KEY = "dict_";
 
 //    public static final String PLUG_KEY = "plug_";
