@@ -159,7 +159,7 @@ public class UserService extends BaseController{
 
 
     @Transactional(readOnly = false)
-    public void updateUserImg(Map<String, Object> params, Long currentUserId)
+    public void updateUserImg(Map<String, Object> params, Long currentUserId,Long orgId)
             throws Exception {
         String xStr = params.get("x") + "";
         String yStr = params.get("y") + "";
@@ -194,7 +194,7 @@ public class UserService extends BaseController{
         }
         realFilePath = realFilePath + userImage;
 
-        String userCuttedImgPath = ImageUtil.saveImgByPoint(x, y, w, h, realFilePath, fileType);
+        String userCuttedImgPath = ImageUtil.saveImgByPoint(x, y, w, h, realFilePath, fileType,orgId);
 
         //保存用户信息
         User user = userDao.findOne(currentUserId);

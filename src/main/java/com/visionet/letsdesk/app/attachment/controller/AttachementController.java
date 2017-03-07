@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping(value = "/common/attachment")
+@RequestMapping(value = "/mobile/attachment")
 public class AttachementController extends BaseController {
 
     @Autowired
@@ -27,7 +27,7 @@ public class AttachementController extends BaseController {
 
     /**
      * @apiDescription 问卷附件上传
-     * @api {post} /common/attachment/upload/:refId /common/attachment/upload/:refId
+     * @api {post} /mobile/attachment/survey/upload/:refId /mobile/attachment/survey/upload/:refId
      * @apiVersion 2.0.0
      * @apiName upload
      * @apiGroup Common
@@ -69,12 +69,12 @@ public class AttachementController extends BaseController {
      *     }
      *   ]
      */
-    @RequestMapping(value = "/upload/{refId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/survey/upload/{refId}", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> upload(HttpServletRequest request,@PathVariable Long refId)	throws Exception {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
-        List<Map<String, Object>> resultList = attachmentService.upload(fileMap, refId);
+        List<Map<String, Object>> resultList = attachmentService.upload(fileMap, refId,getCurrentOrgId());
         return new ResponseEntity<List<Map<String,Object>>>(resultList, HttpStatus.OK);
     }
 

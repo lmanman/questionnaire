@@ -2,6 +2,9 @@ package com.visionet.letsdesk.app.exhibition.service;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.visionet.letsdesk.app.attachment.entity.Photo;
+import com.visionet.letsdesk.app.attachment.repository.PhotoDao;
+import com.visionet.letsdesk.app.attachment.vo.PhotoVo;
 import com.visionet.letsdesk.app.base.service.BaseService;
 import com.visionet.letsdesk.app.common.constant.BusinessStatus;
 import com.visionet.letsdesk.app.common.modules.time.DateUtil;
@@ -68,6 +71,8 @@ public class ExhibitionSurveyService extends BaseService{
     private CategoryDao categoryDao;
     @Autowired
     private CityDao cityDao;
+    @Autowired
+    private PhotoDao photoDao;
 
     /**
      * 展厅问卷明细
@@ -93,22 +98,46 @@ public class ExhibitionSurveyService extends BaseService{
         return vo;
     }
 
+    /**
+     * 问卷多选项、其它项、图片数量查询，公区摆展拼装
+     * @param vo
+     * @throws Exception
+     */
     private void transferExhibitionSurveyVo(ExhibitionSurveyVo vo) throws Exception{
+        //公区摆展
         ExhibitionSurveyPublicShow publicShow = exhibitionSurveyPublicShowDao.findBySurveyId(vo.getId());
         publicShow.setHasPublicShow(vo.getHasPublicShow());
         vo.setPublicShow(publicShow);
 
+        //多选项
         List<String> checkboxNameList = exhibitionSurveyFieldDao.findFieldNameByFieldFormat
                 (KeyWord.FIELD_FORMAT_CHECKBOX);
         this.selectMultiVal(vo,checkboxNameList);
 
+        //其它项
         List<ExhibitionSurveyOtherOption> otherList = exhibitionSurveyOtherOptionDao.findBySurveyId(vo.getId());
         Map<String,String> otherMap = Maps.newHashMap();
         if(Collections3.isNotEmpty(otherList)){
             otherList.parallelStream().forEach(o -> otherMap.put(o.getSurveyField(), o.getOtherOption()));
         }
         vo.setOtherOptionVo(otherMap);
+
+        //图片数量
+        List<Photo> photoList = photoDao.findByRefId(vo.getId());
+        Map<String,List<PhotoVo>> photoNumMap = Maps.newHashMap();
+        if(Collections3.isNotEmpty(photoList)){
+            photoList.parallelStream().forEach(p->{
+                if(photoNumMap.containsKey(p.getRefType())){
+                    photoNumMap.get(p.getRefType()).add(BeanConvertMap.map(p, PhotoVo.class));
+                }else {
+                    photoNumMap.put(p.getRefType(), Lists.newArrayList(BeanConvertMap.map(p, PhotoVo.class)));
+                }
+            });
+        }
+        vo.setPhotoListVo(photoNumMap);
+
     }
+
     private void selectMultiVal(ExhibitionSurveyVo vo,List<String> checkboxNameList) throws Exception{
         List<ExhibitionSurveyMultiselect> multiselectList = exhibitionSurveyMultiselectDao.findBySurveyId(vo.getId());
 
@@ -152,7 +181,6 @@ public class ExhibitionSurveyService extends BaseService{
             }
         }
     }
-
     private void transferExhibitionSurveyShortVo(ExhibitionSurveyVo vo) throws Exception{
 
         List<String> checkboxNameList = exhibitionSurveyFieldDao.findFieldNameByFieldFormat

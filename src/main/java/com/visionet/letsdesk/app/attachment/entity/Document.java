@@ -1,35 +1,29 @@
 package com.visionet.letsdesk.app.attachment.entity;
 
 import com.visionet.letsdesk.app.base.entity.IdEntity;
-import com.visionet.letsdesk.app.common.modules.props.PropsKeys;
-import com.visionet.letsdesk.app.common.modules.props.PropsUtil;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import java.util.Date;
 
 /**
- * 照片
+ * 文档
  *
  * @author xt
  */
 @Entity
-@Table(name = "s_photo")
-public class Photo extends IdEntity{
+@Table(name = "s_document")
+public class Document extends IdEntity {
 
     private String realName;
     private String fileType;
     private String fileUrl;
-    private String minUrl;      //缩略图url
-    private Integer width;      //图片宽度
-    private Integer heigth;     //图片高度
     private Long refId;
-    private String refType;     //s_exhibition_survey_field.field_name
+    private String refType;
     private Long size;          //文件大小
+    private String remark;
     private Date createDate;
     private Long createBy;
-    private String remark;
 
     public String getRealName() {
         return realName;
@@ -53,14 +47,6 @@ public class Photo extends IdEntity{
 
     public void setFileUrl(String fileUrl) {
         this.fileUrl = fileUrl;
-    }
-
-    public String getMinUrl() {
-        return minUrl;
-    }
-
-    public void setMinUrl(String minUrl) {
-        this.minUrl = minUrl;
     }
 
     public Long getRefId() {
@@ -87,20 +73,12 @@ public class Photo extends IdEntity{
         this.size = size;
     }
 
-    public Integer getWidth() {
-        return width;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setWidth(Integer width) {
-        this.width = width;
-    }
-
-    public Integer getHeigth() {
-        return heigth;
-    }
-
-    public void setHeigth(Integer heigth) {
-        this.heigth = heigth;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public Date getCreateDate() {
@@ -117,22 +95,5 @@ public class Photo extends IdEntity{
 
     public void setCreateBy(Long createBy) {
         this.createBy = createBy;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    @Transient
-    public String getDownloadFileUri() {
-        if(fileUrl==null){
-            return null;
-        }else {
-            return PropsUtil.getProperty(PropsKeys.UPLOAD_FILE_DOWNLOAD_PATH) + fileUrl;
-        }
     }
 }

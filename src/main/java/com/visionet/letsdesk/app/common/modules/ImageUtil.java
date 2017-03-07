@@ -66,7 +66,7 @@ public class ImageUtil {
 		ImageIO.write(bsmall, type , new File(destPath));
 	}
 	
-	public static String saveImgByPoint(int x, int y, int w, int h, String filePath, String fileType) throws Exception {
+	public static String saveImgByPoint(int x, int y, int w, int h, String filePath, String fileType,Long orgId) throws Exception {
         try {
             BufferedImage bi = ImageIO.read(new File(filePath));
 
@@ -79,7 +79,7 @@ public class ImageUtil {
 
             out = resizeImage(out, BufferedImage.TYPE_INT_RGB, 150, 150);
 
-            String[] destPathArr = UploadUtil.GetCreatePathWithSuffix(filePath, null);
+            String[] destPathArr = UploadUtil.GetCreatePathWithSuffix(filePath, null,"Org"+orgId);
 
             String fileFinalPath = destPathArr[0];
 

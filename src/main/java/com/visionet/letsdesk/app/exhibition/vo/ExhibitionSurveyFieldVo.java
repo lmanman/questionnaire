@@ -1,6 +1,7 @@
 package com.visionet.letsdesk.app.exhibition.vo;
 
 import com.google.common.collect.Maps;
+import com.visionet.letsdesk.app.attachment.vo.PhotoVo;
 import com.visionet.letsdesk.app.dictionary.vo.SundryVo;
 
 import java.util.List;
@@ -25,7 +26,8 @@ public class ExhibitionSurveyFieldVo {
     private List<SundryVo> optionList;
     private String fieldVal;
     private Map<Long,Boolean> fieldArr = Maps.newHashMap();
-    private Map<String,String> otherOptionVo = Maps.newHashMap();                           //其它填写
+    private Map<String,String> otherOptionVo = Maps.newHashMap();       //其它填写
+    private Map<String,List<PhotoVo>> photoListVo= Maps.newHashMap();   //每项图片数量
 
 
 //    private static class Option {
@@ -141,5 +143,13 @@ public class ExhibitionSurveyFieldVo {
 
     public void setOtherOptionVo(Map<String, String> otherOptionVo) {
         this.otherOptionVo = otherOptionVo;
+    }
+
+    public Map<String, List<PhotoVo>> getPhotoListVo() {
+        return photoListVo;
+    }
+
+    public void setPhotoListVo(Map<String, List<PhotoVo>> photoListVo) {
+        this.photoListVo = photoListVo;
     }
 }

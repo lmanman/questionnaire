@@ -64,7 +64,7 @@ function ctrlFn($scope,$log,$stateParams,$state,$http,$anchorScroll){
                 $http.get($scope.app.projectName + '/mobile/exhibition/survey/'+id).success(function(result){
                     mergedata($scope.surveyFieldList1,result);
                     mergedata($scope.surveyFieldList2,result);
-                    mergedata3($scope.surveyFieldList3,result.publicShow,result.otherOptionVo);
+                    mergedata3($scope.surveyFieldList3,result.publicShow,result.otherOptionVo,result.photoListVo);
 
                 }).error(function(){
                     alert('问卷数据获取失败');
@@ -94,6 +94,9 @@ function ctrlFn($scope,$log,$stateParams,$state,$http,$anchorScroll){
                     if(data.otherOptionVo!=null) {
                         field.otherOptionVo[field.fieldName] = data.otherOptionVo[field.fieldName];
                     }
+                    if(data.photoListVo!=null) {
+                        field.photoListVo[field.fieldName] = data.photoListVo[field.fieldName];
+                    }
                 }
             });
             if($scope.id>0) {
@@ -102,7 +105,7 @@ function ctrlFn($scope,$log,$stateParams,$state,$http,$anchorScroll){
             }
         }
     };
-    function mergedata3(list,pbshow,otherOptionVo){
+    function mergedata3(list,pbshow,otherOptionVo,photoListVo){
         if(pbshow!=null) {
             angular.forEach(list, function (field) {
                 //$log.info(field.otherOptionVo);
@@ -118,6 +121,9 @@ function ctrlFn($scope,$log,$stateParams,$state,$http,$anchorScroll){
                     }
                     if(otherOptionVo!=null) {
                         field.otherOptionVo[field.fieldName] = otherOptionVo[field.fieldName];
+                    }
+                    if(photoListVo!=null) {
+                        field.photoListVo[field.fieldName] = photoListVo[field.fieldName];
                     }
                 }
             });

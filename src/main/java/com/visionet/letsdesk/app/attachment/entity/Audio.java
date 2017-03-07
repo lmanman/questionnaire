@@ -27,6 +27,7 @@ public class Audio extends IdEntity{
     private Integer duration;   //播放时长(秒)
     private String remark;
     private Date createDate;
+    private Long createBy;
 
     public String getRealName() {
         return realName;
@@ -98,6 +99,14 @@ public class Audio extends IdEntity{
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Long getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(Long createBy) {
+        this.createBy = createBy;
     }
 
     @Transient

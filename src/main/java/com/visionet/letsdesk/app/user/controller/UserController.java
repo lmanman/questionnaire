@@ -424,7 +424,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/update/avatar", method = RequestMethod.POST)
     public ResponseEntity<?> updateUserImg(@RequestBody Map<String, Object> params) throws Exception {
         params.put("isAdmin",AccountService.isSupervisor(getCurrentUserId()) ? "1" : "0");
-        userService.updateUserImg(params, getCurrentUserId());
+        userService.updateUserImg(params, getCurrentUserId(),getCurrentOrgId());
 
         return new ResponseEntity<Map<String,String>>(GetSuccMap() , HttpStatus.OK);
     }

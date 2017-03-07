@@ -1,6 +1,7 @@
 package com.visionet.letsdesk.app.exhibition.vo;
 
 import com.google.common.collect.Lists;
+import com.visionet.letsdesk.app.attachment.vo.PhotoVo;
 import com.visionet.letsdesk.app.base.vo.BaseVo;
 import com.visionet.letsdesk.app.exhibition.entity.ExhibitionSurveyPublicShow;
 
@@ -82,6 +83,7 @@ public class ExhibitionSurveyVo extends BaseVo{
 
     private ExhibitionSurveyPublicShow publicShow;      //公区摆展
     private Map<String,String> otherOptionVo;           //其它填写
+    private Map<String,List<PhotoVo>> photoListVo;      //每项图片数量
 
     private Long formId;                    //表单ID
     private Long marketId;                  //商场ID
@@ -627,6 +629,14 @@ public class ExhibitionSurveyVo extends BaseVo{
 
     public void setOtherOptionVo(Map<String, String> otherOptionVo) {
         this.otherOptionVo = otherOptionVo;
+    }
+
+    public Map<String, List<PhotoVo>> getPhotoListVo() {
+        return photoListVo;
+    }
+
+    public void setPhotoListVo(Map<String, List<PhotoVo>> photoListVo) {
+        this.photoListVo = photoListVo;
     }
 
     public Long getFormId() {

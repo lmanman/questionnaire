@@ -19,6 +19,7 @@ import com.visionet.letsdesk.app.common.modules.string.StringPool;
 import com.visionet.letsdesk.app.common.modules.time.DateUtil;
 import com.visionet.letsdesk.app.common.modules.validate.Validator;
 import com.visionet.letsdesk.app.common.utils.UploadUtil;
+import com.visionet.letsdesk.app.foundation.service.FileUploadService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ public class AttachmentService extends BaseService{
      * @return
      * @throws Exception
      */
-    public List<Map<String,Object>> upload(Map<String, MultipartFile> fileMap,Long refId) throws Exception{
+    public List<Map<String,Object>> upload(Map<String, MultipartFile> fileMap,Long refId,Long orgId) throws Exception{
         List<Map<String, Object>> resultList = Lists.newArrayList();
         for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
 //            String[] filePath = FileUploadService.Upload();
@@ -61,7 +62,7 @@ public class AttachmentService extends BaseService{
             MultipartFile file = entity.getValue();
             System.out.println(fieldName+"-------------"+file.getOriginalFilename());
             String fileName = URLDecoder.decode(file.getOriginalFilename(), "UTF-8");
-            String[] filePath = UploadUtil.GetCreatePathWithSuffix(fileName, null);
+            String[] filePath = UploadUtil.GetCreatePathWithSuffix(fileName, null, "Org" + orgId);
             File file1 = new File(filePath[0]);
             file.transferTo(file1);
             if(Validator.isNull(fieldName)){
@@ -83,8 +84,17 @@ public class AttachmentService extends BaseService{
 
                 try{
                     int minWidth = Integer.parseInt(PropsUtil.getProperty(PropsKeys.UPLOAD_IMG_SIZE_MIN_WIDTH));
-                    ImageUtil.losslessCut(file1.getAbsolutePath(), file1.getParent() + File.separatorChar + FileUtil.appendMark(file1.getName(), "-min"), minWidth);
-                    photo.setMinUrl(FileUtil.appendMark(photo.getFileUrl(),"-min"));
+                    int[] size= FileUploadService.GeneratePicWidthHgight(file1);
+                    if(size!=null && size.length==2 ) {
+                        photo.setWidth(size[0]);
+                        photo.setHeigth(size[1]);
+
+                        if(size[0]>minWidth && size[1]>minWidth) {
+                            String suffix = StringPool.UNDERLINE + minWidth + StringPool.STAR + minWidth;
+                            ImageUtil.losslessCut(file1.getAbsolutePath(), file1.getParent() + File.separatorChar + FileUtil.appendMark(file1.getName(), suffix), minWidth);
+                            photo.setMinUrl(FileUtil.appendMark(photo.getFileUrl(), suffix));
+                        }
+                    }
                 }catch (Exception e){
                     log.error("ImageUtil.losslessCut:{}",e.toString());
                 }
