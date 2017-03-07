@@ -16,7 +16,29 @@ import java.util.List;
 import java.util.UUID;
 
 public class ExcelUtil {
-	
+
+	public static String createExcel(List<String[]> data) throws Exception{
+		String filePath = createExcelFilePath();
+		FileOutputStream fileos = null;
+		try {
+			XSSFWorkbook workbook = new XSSFWorkbook();
+
+			XSSFSheet sheet = workbook.createSheet();
+
+			writeStringRows(data, sheet, 0);
+
+			fileos = new FileOutputStream(filePath);
+			workbook.write(fileos);
+
+		} catch (Exception e) {
+			throw e;
+		} finally{
+			if(fileos!=null) fileos.close();
+		}
+
+		return filePath;
+	}
+
 	public static String createExcel(List<Object[]> data,String[] title) throws Exception{
 		String filePath = createExcelFilePath();
 		FileOutputStream fileos = null;
@@ -68,4 +90,12 @@ public class ExcelUtil {
 			cell.setCellValue(data[i]==null?"":data[i].toString());
 		}
 	}
+
+	private static void writeStringRows(List<String[]> data,XSSFSheet sheet,int offset){
+		for (int i = 0; i < data.size(); i++) {
+			XSSFRow row = sheet.createRow(offset + i);
+			writeRow(data.get(i), row);
+		}
+	}
+
 }

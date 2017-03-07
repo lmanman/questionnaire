@@ -35,6 +35,9 @@ public interface KeyWord {
     public static String FIELD_FORMAT_CHECKBOX="checkbox";
     public static String FIELD_FORMAT_RADIO="radio";
     public static String FIELD_FORMAT_TEXTAREA="textarea";
+    public static String FIELD_FORMAT_NUMBER="number";
+    public static String FIELD_FORMAT_INPUT="input";
+    public static String FIELD_FORMAT_SELECT="select";
 
     public static String FIELD_INDICATOR_BASE="base";
     public static String FIELD_INDICATOR_ENVIRONMENT="environment";
