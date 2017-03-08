@@ -1,7 +1,6 @@
 package com.visionet.letsdesk.app.exhibition.service;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.visionet.letsdesk.app.base.service.BaseService;
 import com.visionet.letsdesk.app.common.constant.BusinessStatus;
 import com.visionet.letsdesk.app.common.modules.string.StringPool;
@@ -171,23 +170,37 @@ public class ExhibitionSurveyExportService extends BaseService{
         String val=null;
         if(Validator.isNotNull(relationData)) {
             if("d_category".equals(relationData)){   //品类
-                val = categoryList.parallelStream().filter(c->c.getId().intValue()==sundryId).findFirst().map(c->c.getName()).get();
+                Optional<Category> optional = categoryList.parallelStream().filter(c -> c.getId().intValue() == sundryId).findFirst();
+                if(optional!=null && optional.isPresent()) {
+                    val = optional.map(c->c.getName()).get();
+                }
             } else if("d_brand".equals(relationData)){  //品牌
-                val = brandList.parallelStream().filter(b->b.getId().intValue()==sundryId).findAny().map(b->b.getName()).get();
+                Optional<Brand> optional = brandList.parallelStream().filter(b -> b.getId().intValue() == sundryId).findFirst();
+                if(optional!=null && optional.isPresent()) {
+                    val = optional.map(b->b.getName()).get();
+                }
             } else if("d_city".equals(relationData)){  //省市区
-                val = cityList.parallelStream().filter(c->c.getId().intValue()==sundryId).findFirst().map(c->c.getProvinceName()+"/"+c.getCityName()).get();
+                Optional<City> optional = cityList.parallelStream().filter(c->c.getId().intValue()==sundryId).findFirst();
+                if(optional!=null && optional.isPresent()) {
+                    val = optional.map(c->c.getProvinceName()+"/"+c.getCityName()).get();
+                }
             } else if("s_dealer".equals(relationData)){ //经销商
-                val = dealerList.parallelStream().filter(d->d.getId().intValue()==sundryId).findFirst().map(d->d.getName()).get();
+                Optional<Dealer> optional = dealerList.parallelStream().filter(d->d.getId().intValue()==sundryId).findFirst();
+                if(optional!=null && optional.isPresent()) {
+                    val = optional.map(d -> d.getName()).get();
+                }
             }
         }
         if(val==null){
-            Optional<Sundry> optional = sundryList.parallelStream().filter(s -> s.getId().intValue() == sundryId).findFirst();
-            if(optional!=null && optional.isPresent()){
-                Sundry sundry = optional.get();
+            Optional<Sundry> optional1 = sundryList.parallelStream().filter(s -> s.getId().intValue() == sundryId).findFirst();
+            if(optional1!=null && optional1.isPresent()){
+                Sundry sundry = optional1.get();
                 if (sundry != null) {
                     if (sundry.getCode().equals("Z")) {
-                        val = otherOptionList.parallelStream().filter(o -> o.getSurveyField().equals(fieldName))
-                                .findFirst().map(o -> o.getOtherOption()).get();
+                        Optional<ExhibitionSurveyOtherOption> optional2 = otherOptionList.parallelStream().filter(o -> o.getSurveyField().equals(fieldName)).findFirst();
+                        if(optional2!=null && optional2.isPresent()) {
+                            val = optional2.map(o -> o.getOtherOption()).get();
+                        }
                     } else {
                         val = sundry.getName();
                     }
