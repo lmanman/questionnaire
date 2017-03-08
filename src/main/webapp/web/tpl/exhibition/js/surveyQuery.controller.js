@@ -1,10 +1,10 @@
 
 angular.module('app.exhibition.surveyQuery.controllers', [])
-    .controller('SurveyQueryCtrl', ['$scope','$log','$http','$state',ctrlFn]);
+    .controller('SurveyQueryCtrl', ['$scope','$log','$http','$state','$window',ctrlFn]);
 ;
 
 
-function ctrlFn($scope,$log,$http,$state){
+function ctrlFn($scope,$log,$http,$state,$window){
 
     $scope.dynamicType = function(a,b){
         var type;
@@ -21,7 +21,7 @@ function ctrlFn($scope,$log,$http,$state){
         return type;
     };
 
-
+    $scope.formId = 1;
     $scope.formData = {
         pageInfo: {
             pageNumber: 1,
@@ -76,6 +76,10 @@ function ctrlFn($scope,$log,$http,$state){
             return false;
         }
         return true;
+    }
+
+    $scope.excel = function() {
+        $window.location = $scope.app.projectName + '/mobile/exhibition/survey/export/'+$scope.formId;
     }
 
 }
