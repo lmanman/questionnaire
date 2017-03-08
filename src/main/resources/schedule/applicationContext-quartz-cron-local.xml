@@ -20,8 +20,8 @@
 				<prop key="org.quartz.threadPool.threadCount">15</prop>
 			</props>
 		</property>
-		<!-- 启动时延期60秒开始任务-->
-		<property name="startupDelay" value="60" />
+		<!-- 启动时延期10秒开始任务-->
+		<property name="startupDelay" value="10" />
 	</bean>
 
 

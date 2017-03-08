@@ -21,6 +21,7 @@ function ctrlFn($scope,$log,$http,$state,$window){
         return type;
     };
 
+    $scope.isDisabled = false;
     $scope.formId = 1;
     $scope.formData = {
         pageInfo: {
@@ -33,9 +34,8 @@ function ctrlFn($scope,$log,$http,$state,$window){
         var formData = {};
         formData.pageInfo = $scope.formData.pageInfo;
         formData.queryName = $scope.queryName;
-
         $http.post($scope.app.projectName + '/mobile/exhibition/survey/search',formData).success(function(result){
-
+            $scope.isDisabled = false;
             $scope.exhibitionSurveyList = result;
         }).error(function(){
             alert('查询失败');
@@ -79,6 +79,7 @@ function ctrlFn($scope,$log,$http,$state,$window){
     }
 
     $scope.excel = function() {
+        $scope.isDisabled = true;
         $window.location = $scope.app.projectName + '/mobile/exhibition/survey/export/'+$scope.formId;
     }
 
