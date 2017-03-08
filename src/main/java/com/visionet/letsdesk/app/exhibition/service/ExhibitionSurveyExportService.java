@@ -1,6 +1,7 @@
 package com.visionet.letsdesk.app.exhibition.service;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.visionet.letsdesk.app.base.service.BaseService;
 import com.visionet.letsdesk.app.common.constant.BusinessStatus;
 import com.visionet.letsdesk.app.common.modules.string.StringPool;
@@ -49,6 +50,8 @@ public class ExhibitionSurveyExportService extends BaseService{
     @Autowired
     private ExhibitionSurveyOtherOptionDao exhibitionSurveyOtherOptionDao;
     @Autowired
+    private ExhibitionSurveyPublicShowDao exhibitionSurveyPublicShowDao;
+    @Autowired
     private ExhibitionDao exhibitionDao;
     @Autowired
     private MarketDao marketDao;
@@ -73,6 +76,7 @@ public class ExhibitionSurveyExportService extends BaseService{
         List<Exhibition> exhibitionList = exhibitionDao.findAllExhibition();
         List<ExhibitionSurveyOtherOption> otherOptionList = (List<ExhibitionSurveyOtherOption>)exhibitionSurveyOtherOptionDao.findAll();
         List<ExhibitionSurveyMultiselect> multiselectList = (List<ExhibitionSurveyMultiselect>)exhibitionSurveyMultiselectDao.findAll();
+        List<ExhibitionSurveyPublicShow> publicShowList = (List<ExhibitionSurveyPublicShow>)exhibitionSurveyPublicShowDao.findAll();
         sundryList = (List<Sundry>)sundryDao.findAll();
         categoryList = (List<Category>)categoryDao.findAll();
         brandList = (List<Brand>)brandDao.findAll();
@@ -104,11 +108,19 @@ public class ExhibitionSurveyExportService extends BaseService{
 
             List<ExhibitionSurveyMultiselect> multiselectListRow=null;
             if(Collections3.isNotEmpty(multiselectList)){
-                multiselectListRow = multiselectList.parallelStream().filter(m->m.getSurveyId().longValue()==survey.getId().longValue()).collect(Collectors.toList());
+                multiselectListRow = multiselectList.stream().filter(m->m.getSurveyId().longValue()==survey.getId().longValue()).collect(Collectors.toList());
             }
             List<ExhibitionSurveyOtherOption> tempList=null;
             if(Collections3.isNotEmpty(otherOptionList)){
                 tempList = otherOptionList.parallelStream().filter(m->m.getSurveyId().longValue()==survey.getId().longValue()).collect(Collectors.toList());
+            }
+
+            Map<String,Object> publicShowMap = null;
+            if(Collections3.isNotEmpty(publicShowList)){
+                Optional<ExhibitionSurveyPublicShow> optional = publicShowList.parallelStream().filter(p->p.getSurveyId().longValue()==survey.getId().longValue()).findFirst();
+                if(optional!=null && optional.isPresent()){
+                    publicShowMap = mapper.fromJson(mapper.toJson(optional.get()),Map.class);
+                }
             }
             final List<ExhibitionSurveyOtherOption> otherOptionRowList = tempList;
             Map<String,Object> map = this.transferVoToMap(survey);
@@ -119,17 +131,25 @@ public class ExhibitionSurveyExportService extends BaseService{
                         List<String> multi = multiselectListRow.stream().filter(m->m.getSurveyField().equals(f.getFieldName()))
                                 .map(m -> GetSundryVal(m.getSundryId(), otherOptionRowList, f.getFieldName(), f.getRelationData())).collect(Collectors.toList());
                         if(Collections3.isNotEmpty(multi)){
-                            data[j+3] = multi.stream().reduce((a, b) -> a + StringPool.RETURN_NEW_LINE + b).get();
+                            data[j+3] = multi.stream().reduce((a, b) -> a + StringPool.SEMICOLON + b).get();
                         }
                     }
-                }else if(f.getFieldFormat().equals(KeyWord.FIELD_FORMAT_RADIO) || f.getFieldFormat().equals(KeyWord.FIELD_FORMAT_SELECT)){
-                    Object obj = map.get(f.getFieldName());
-                    if(obj!=null&&Collections3.isNotEmpty(sundryList)) {
-                        data[j+3] = GetSundryVal((Integer)obj,otherOptionRowList,f.getFieldName(),f.getRelationData());
-                    }
                 }else {
-                    Object obj = map.get(f.getFieldName());
-                    data[j+3] = obj==null?null:obj.toString();
+                    Object obj = null;
+                    if(f.getIndicator().equals(KeyWord.FIELD_INDICATOR_PUBLIC_RESOURCE)) {
+                        if(publicShowMap!=null) {
+                            obj = publicShowMap.get(f.getFieldName());
+                        }
+                    }else {
+                        obj = map.get(f.getFieldName());
+                    }
+                    if(f.getFieldFormat().equals(KeyWord.FIELD_FORMAT_RADIO) || f.getFieldFormat().equals(KeyWord.FIELD_FORMAT_SELECT)){
+                        if(obj!=null&&Collections3.isNotEmpty(sundryList)) {
+                            data[j+3] = GetSundryVal((Integer)obj,otherOptionRowList,f.getFieldName(),f.getRelationData());
+                        }
+                    }else {
+                        data[j + 3] = obj == null ? null : obj.toString();
+                    }
                 }
             }
             list.add(data);

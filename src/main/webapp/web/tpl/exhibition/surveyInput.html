@@ -17,7 +17,7 @@
                             <div class="form-group">
                                 <label >1. 商场</label>
                                 <div ui-module="select2">
-                                    <select ui-select2="{allowClear: true}" ng-model="fieldVal.marketId" data-placeholder="商场" class="form-control input-sm w-md" required ng-change="selectEhb(fieldVal.marketId)">
+                                    <select ui-select2="{allowClear: true}" ng-model="fieldVal.marketId" data-placeholder="商场" class="form-control input-sm w-md"  ng-change="selectEhb(fieldVal.marketId)">
                                         <option value=""></option>
                                         <option ng-repeat="market in marketList" value="{{market.id}}">{{market.name}}</option>
                                     </select>
@@ -27,7 +27,7 @@
                             <div class="form-group">
                                 <label >2. 展厅</label>
                                 <div ui-module="select2">
-                                    <select ui-select2="{allowClear: true}" ng-model="fieldVal.exhibitionId" data-placeholder="展厅" class="form-control input-sm w-md"  >
+                                    <select ui-select2="{allowClear: true}" ng-model="fieldVal.exhibitionId" data-placeholder="展厅" class="form-control input-sm w-md" required >
                                         <option value=""></option>
                                         <option ng-repeat="store in exhibitionList | filter:{marketId: fieldVal.marketId}:ehbComparator" value="{{store.id}}">{{store.name}}</option>
                                     </select>
