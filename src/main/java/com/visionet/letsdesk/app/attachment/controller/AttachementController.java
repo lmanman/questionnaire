@@ -79,4 +79,11 @@ public class AttachementController extends BaseController {
     }
 
 
+    @RequestMapping(value = "/delete/{refId}", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<?> delete(@PathVariable Long refId)	throws Exception {
+        //TODO
+        return new ResponseEntity<Map<String,String>>(GetSuccMap(), HttpStatus.OK);
+    }
+
 }

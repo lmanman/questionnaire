@@ -1,7 +1,6 @@
 package com.visionet.letsdesk.app.foundation.service;
 
 import com.google.common.collect.Lists;
-import com.visionet.letsdesk.app.common.modules.time.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -19,8 +18,6 @@ public class DashboardStatisticsService {
     private static final ConcurrentHashMap<Long, Long> CustomerTalkingIdMap = new ConcurrentHashMap<>();
     //客服当前会话数 <kefuId,<channelId,talkNum>>
     private static final ConcurrentHashMap<Long, ConcurrentHashMap<Long,AtomicInteger>> KefuTalkingNumMap = new ConcurrentHashMap<>();
-    //各渠道排队数 <orgId,<channelId,queueNum>>
-    private static final ConcurrentHashMap<Long, ConcurrentHashMap<Long,AtomicInteger>> ChannelQueueNumMap = new ConcurrentHashMap<>();
     //客户当前排队时间 <WaitingEntity>
     private static final ArrayBlockingQueue<WaitingEntity> CustomerWaitingQueue = new ArrayBlockingQueue<>(100000);
 
@@ -194,34 +191,6 @@ public class DashboardStatisticsService {
     }
 
 
-    /**
-     * sum所有公司的排队数
-     * @return
-     */
-    public static int GetChannelQueueNum() {
-        ConcurrentHashMap<Long,ConcurrentHashMap<Long,AtomicInteger>> orglMap = ChannelQueueNumMap;
-        if(!orglMap.isEmpty()){
-            return orglMap.reduce(1, (key, value) -> value.reduce(1, (key2, value2) -> value2.get(), (a2, b2) -> a2 + b2), (a, b) -> a + b);
-        }
-        return 0;
-    }
-    public static int GetChannelQueueNum(Long orgId) {
-        ConcurrentHashMap<Long,AtomicInteger> channelMap = ChannelQueueNumMap.get(orgId);
-        if(channelMap!=null){
-            return channelMap.reduce(1, (key, value) -> value.get(), (a, b) -> a + b);
-        }
-        return 0;
-    }
-    public static int GetChannelQueueNum(Long orgId,Long channelId) {
-        ConcurrentHashMap<Long,AtomicInteger> channelMap = ChannelQueueNumMap.get(orgId);
-        if(channelMap!=null){
-            return channelMap.getOrDefault(channelId,new AtomicInteger(0)).get();
-        }
-        return 0;
-    }
-    public static ConcurrentHashMap<Long,AtomicInteger> GetChannelQueueMap(Long orgId) {
-        return ChannelQueueNumMap.get(orgId);
-    }
     public static List<WaitingEntity> GetCustomerWaitingList(Long orgId){
         List<WaitingEntity> list = Lists.newArrayList();
         CustomerWaitingQueue.iterator().forEachRemaining(e -> {
@@ -241,59 +210,6 @@ public class DashboardStatisticsService {
         return list;
     }
 
-    /**
-     * 排队+1
-     * @param orgId
-     * @param channelId
-     */
-    public static synchronized void AddChannelQueueNum(Long orgId,Long channelId,Long customerId,int num){
-        try {
-            WaitingEntity entity = new WaitingEntity(customerId, channelId, orgId,DateUtil.getCurrentDate().getTime());
-            if (!CustomerWaitingQueue.contains(entity)) {
-                CustomerWaitingQueue.put(entity);
-
-                ConcurrentHashMap<Long, AtomicInteger> channelMap = ChannelQueueNumMap.get(orgId);
-                if (channelMap != null) {
-                    AtomicInteger ai = channelMap.get(channelId);
-                    if (ai == null) {
-                        channelMap.put(channelId, new AtomicInteger(num));
-                    } else {
-                        ai.addAndGet(num);
-                    }
-                } else {
-                    ChannelQueueNumMap.put(orgId, new ConcurrentHashMap<Long, AtomicInteger>() {{
-                        put(channelId, new AtomicInteger(num));
-                    }});
-                }
-            }
-        }catch (Exception e){
-            log.error("AddChannelQueueNum error!",e);
-        }
-    }
-    public static void AddChannelQueueNum(Long orgId,Long channelId,Long customerId) {
-        AddChannelQueueNum(orgId,channelId,customerId,1);
-    }
-
-    /**
-     * 排队-1
-     * @param orgId
-     * @param channelId
-     */
-    public static synchronized void SubtractionChannelQueueNum(Long orgId,Long channelId,Long customerId) {
-        WaitingEntity entity = new WaitingEntity(customerId, channelId, orgId,DateUtil.getCurrentDate().getTime());
-        if(CustomerWaitingQueue.contains(entity)) {
-            CustomerWaitingQueue.remove(entity);
-            ConcurrentHashMap<Long, AtomicInteger> channelMap = ChannelQueueNumMap.get(orgId);
-            if (channelMap != null) {
-                AtomicInteger ai = channelMap.get(channelId);
-                if (ai == null || ai.get() == 0) {
-                    channelMap.put(channelId, new AtomicInteger(0));
-                } else {
-                    channelMap.get(channelId).addAndGet(-1);
-                }
-            }
-        }
-    }
 
     /**
      * 将统计各数据，从DB同步到缓存

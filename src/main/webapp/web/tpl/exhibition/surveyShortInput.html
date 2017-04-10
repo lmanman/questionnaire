@@ -59,9 +59,12 @@
                                             </select>
                                         </div>
                                     </div>
-
                                 </div>
                                 <div class="radio list-group-item wrapper bg-light clearfix" ng-show="field1.fieldFormat=='radio'">
+                                    <span class="pull-right thumb-sm" ng-click="photoUpload('md',field1.photoListVo[field1.fieldName],field1.fieldName)">
+                                        <i ng-class="{true: 'fa fa-fw fa-photo text-info', false: 'fa fa-fw fa-photo'}[field1.photoListVo[field1.fieldName].length>0]"></i>
+                                        <b class="label bg-warning pull-right">{{field1.photoListVo[field1.fieldName].length}}</b>
+                                    </span>
                                     <div ng-class="{true: 'form-group col-sm-5', false: 'form-group col-sm-3'}[field1.optionList.length<=2]" ng-repeat="item in field1.optionList">
                                         <label class="i-checks"  >
                                             <input type="radio" ng-model="field1.fieldVal" ng-value="item.id" >
@@ -90,7 +93,9 @@
                             <button type="button" class="btn pull-right btn-danger" ng-if="id!=0" ng-click="delete()">删除</button>
                         </footer>
                     </div>
-
+                    <script type="text/ng-template" id="photoList">
+                        <div ng-include="'tpl/exhibition/photoList.html'"></div>
+                    </script>
                 </div>
             </div>
         </form>

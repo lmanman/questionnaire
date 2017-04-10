@@ -10,17 +10,11 @@
 	<!-- Special objects setting. -->
 	<cache name="com.visionet.letsdesk.app.user.entity.User" maxEntriesLocalHeap="500" eternal="true"
 		overflowToDisk="true" maxEntriesLocalDisk="10000" />
-	<cache name="com.visionet.letsdesk.app.user.entity.User.roleList" maxEntriesLocalHeap="1000" eternal="true"
+	<cache name="com.visionet.letsdesk.app.user.entity.User.roleSet" maxEntriesLocalHeap="1000" eternal="true"
 		overflowToDisk="true" maxEntriesLocalDisk="10000" />
     <cache name="com.visionet.letsdesk.app.user.entity.Role" maxEntriesLocalHeap="100"
            eternal="true" overflowToDisk="true" maxEntriesLocalDisk="1000" />
 	<cache name="com.visionet.letsdesk.app.user.entity.Resource" maxEntriesLocalHeap="100" eternal="true"
 		overflowToDisk="true" maxEntriesLocalDisk="10000" />
 
-    <cache name="com.visionet.letsdesk.app.channel.entity.ChannelAuthorizerInfo" maxEntriesLocalHeap="1000"
-           eternal="true" overflowToDisk="true" maxEntriesLocalDisk="10000" />
-	<cache name="com.visionet.letsdesk.app.channel.entity.allocate.AllocateLogicOrg" maxEntriesLocalHeap="1000" eternal="true"
-		overflowToDisk="true" maxEntriesLocalDisk="10000" />
-	<cache name="com.visionet.letsdesk.app.channel.entity.allocate.ChannelConfig" maxEntriesLocalHeap="1000" eternal="true"
-		   overflowToDisk="true" maxEntriesLocalDisk="10000" />
 </ehcache>

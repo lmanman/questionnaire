@@ -190,22 +190,6 @@ public class CollectionsUtil {
 //		System.out.println(DashboardStatisticsService.GetKefuTalkingNum(1L,12L));
 //		System.out.println(DashboardStatisticsService.GetKefuTalkingNum(1L,11L));
 
-		DashboardStatisticsService.AddChannelQueueNum(1L,2L,11L);
-		DashboardStatisticsService.AddChannelQueueNum(1L,2L,12L);
-		DashboardStatisticsService.AddChannelQueueNum(1L,2L,12L);
-		DashboardStatisticsService.AddChannelQueueNum(2L,2L,14L);
-		DashboardStatisticsService.AddChannelQueueNum(1L,3L,15L);
-		DashboardStatisticsService.AddChannelQueueNum(1L,3L,16L);
-		DashboardStatisticsService.AddChannelQueueNum(1L,4L,17L);
-		DashboardStatisticsService.AddChannelQueueNum(1L,4L,18L);
-		DashboardStatisticsService.SubtractionChannelQueueNum(1L, 3L,16L);
-		DashboardStatisticsService.SubtractionChannelQueueNum(2L, 4L,17L);
-//		System.out.println(DashboardStatisticsService.GetChannelQueueNum(1L, 2L));
-//		System.out.println("----------");
-//		DashboardStatisticsService.GetCustomerWaitingList(1L).forEach(e -> System.out.println(e.customerId));
-		System.out.println(DashboardStatisticsService.GetChannelQueueNum(1L,3L));
-		System.out.println(DashboardStatisticsService.GetCustomerWaitingList(1L,3L).size());
-
 
 	}
 	public static void testList(){

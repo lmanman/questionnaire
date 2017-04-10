@@ -1,5 +1,9 @@
 package com.visionet.letsdesk.app.attachment.vo;
 
+import com.visionet.letsdesk.app.common.modules.props.PropsKeys;
+import com.visionet.letsdesk.app.common.modules.props.PropsUtil;
+import com.visionet.letsdesk.app.common.modules.validate.Validator;
+
 public class PhotoVo {
 
     private Long id;
@@ -26,6 +30,9 @@ public class PhotoVo {
     }
 
     public String getFileUrl() {
+        if(Validator.isNotNull(fileUrl)){
+            return PropsUtil.getProperty(PropsKeys.UPLOAD_FILE_DOWNLOAD_PATH)+fileUrl;
+        }
         return fileUrl;
     }
 
@@ -34,6 +41,9 @@ public class PhotoVo {
     }
 
     public String getMinUrl() {
+        if(Validator.isNotNull(minUrl)){
+            return PropsUtil.getProperty(PropsKeys.UPLOAD_FILE_DOWNLOAD_PATH)+minUrl;
+        }
         return minUrl;
     }
 

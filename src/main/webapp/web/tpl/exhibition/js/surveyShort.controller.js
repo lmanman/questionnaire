@@ -1,10 +1,10 @@
 
 angular.module('app.exhibition.surveyShort.controllers', [])
-    .controller('ExhibitionSurveyShortCtrl', ['$scope','$log','$stateParams','$state','$http','$anchorScroll',ctrlFn]);
+    .controller('ExhibitionSurveyShortCtrl', ['$scope','$log','$stateParams','$state','$http','$anchorScroll','$modal','$window',ctrlFn]);
 ;
 
 
-function ctrlFn($scope,$log,$stateParams,$state,$http,$anchorScroll){
+function ctrlFn($scope,$log,$stateParams,$state,$http,$anchorScroll,$modal,$window){
     $scope.surveyFieldList1 = [];
 
     $scope.id = 0;
@@ -77,6 +77,9 @@ function ctrlFn($scope,$log,$stateParams,$state,$http,$anchorScroll){
                     }
                     if(data.otherOptionVo!=null) {
                         field.otherOptionVo[field.fieldName] = data.otherOptionVo[field.fieldName];
+                    }
+                    if(data.photoListVo!=null) {
+                        field.photoListVo[field.fieldName] = data.photoListVo[field.fieldName];
                     }
                 //}
             });
@@ -180,8 +183,60 @@ function ctrlFn($scope,$log,$stateParams,$state,$http,$anchorScroll){
             }).error(function () {
                 alert('删除失败');
             });
-
         }
     };
 
+    $scope.photoList;
+    $scope.projectName;
+    $scope.fieldDesc;
+    var ModalInstanceCtrl = function ($scope, $modalInstance, photoList,projectName,fieldDesc) {
+
+        $scope.photoList = photoList;
+        $scope.projectName = projectName;
+        $scope.fieldDesc = fieldDesc;
+
+        $scope.uploadOne = function () {
+            $scope.photoList.push({"id":0,"realName":"test1","minUrl" : "/uploadFile/2016-09-01/photo/c13372a0-460f-435f-871f-6328ca38ad24-1347-min.gif","fileUrl" : "/uploadFile/2016-09-01/photo/c13372a0-460f-435f-871f-6328ca38ad24-1347.gif"});
+        };
+
+        $scope.photoOpen = function (url) {
+            $window.open(url, '', 'width=800,height=600');
+        };
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+        $scope.deletePhoto = function (photoId) {
+            if(confirm("是否确认删除！")) {
+                $log.info("photoId=" + photoId);
+                angular.forEach($scope.photoList, function (photo, idx) {
+                    if (photo.id == photoId) {
+                        $scope.photoList.splice(idx, 1);
+                    }
+                });
+            }
+        };
+    };
+
+    $scope.photoUpload = function (size,photoList,fieldDesc) {
+        var modalInstance = $modal.open({
+            templateUrl: 'photoList',
+            controller: ModalInstanceCtrl,
+            size: size,
+            resolve: {
+                photoList: function () {
+                    return photoList;
+                },fieldDesc: function () {
+                    return fieldDesc;
+                },projectName: function () {
+                    return $scope.app.projectName;
+                }
+            }
+        });
+
+        modalInstance.result.then(function (selectedItem) {
+            $log.info(selectedItem);
+        }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+        });
+    };
 }

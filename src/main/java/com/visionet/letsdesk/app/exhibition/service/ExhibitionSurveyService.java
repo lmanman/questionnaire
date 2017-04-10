@@ -182,18 +182,32 @@ public class ExhibitionSurveyService extends BaseService{
         }
     }
     private void transferExhibitionSurveyShortVo(ExhibitionSurveyVo vo) throws Exception{
-
+        //多选项
         List<String> checkboxNameList = exhibitionSurveyFieldDao.findFieldNameByFieldFormat
                 (KeyWord.FIELD_FORMAT_CHECKBOX,KeyWord.Y);
         this.selectMultiVal(vo,checkboxNameList);
 
-
+        //其它项
         List<ExhibitionSurveyOtherOption> otherList = exhibitionSurveyOtherOptionDao.findByShortSurveyId(vo.getId());
         Map<String,String> otherMap = Maps.newHashMap();
         if(Collections3.isNotEmpty(otherList)){
             otherList.parallelStream().forEach(o -> otherMap.put(o.getSurveyField(), o.getOtherOption()));
         }
         vo.setOtherOptionVo(otherMap);
+
+        //图片数量
+        List<Photo> photoList = photoDao.findByShortRefId(vo.getId());
+        Map<String,List<PhotoVo>> photoNumMap = Maps.newHashMap();
+        if(Collections3.isNotEmpty(photoList)){
+            photoList.parallelStream().forEach(p->{
+                if(photoNumMap.containsKey(p.getRefType())){
+                    photoNumMap.get(p.getRefType()).add(BeanConvertMap.map(p, PhotoVo.class));
+                }else {
+                    photoNumMap.put(p.getRefType(), Lists.newArrayList(BeanConvertMap.map(p, PhotoVo.class)));
+                }
+            });
+        }
+        vo.setPhotoListVo(photoNumMap);
     }
 
 

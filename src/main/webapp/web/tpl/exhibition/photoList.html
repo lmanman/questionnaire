@@ -1,0 +1,28 @@
+<div class="modal-header">
+    <h3 class="modal-title">照片:{{fieldDesc}}</h3>
+</div>
+<div class="modal-body">
+    <div class="panel-body">
+        <ul>
+            <li ng-repeat="photo in photoList">
+                <a ng-click="photoOpen(projectName + photo.fileUrl)"><img  ng-src="{{projectName + photo.minUrl}}" class="img-rounded"></a>
+                <a href ng-click="deletePhoto(photo.id)"><i class="fa fa-times text-danger text"></i></a>
+                {{photo.realName}}
+            </li>
+        </ul>
+    </div>
+    <div class="line line-dashed b-b line-lg pull-in"></div>
+    <div class="panel-body">
+        <div class="form-group">
+            <div class="col-sm-10">
+                <input ui-jq="filestyle" type="file" data-icon="false" data-classButton="btn btn-default" data-classInput="form-control inline v-middle input-s">
+            </div>
+        </div>
+        <a href ng-click="uploadOne()"><span class="pull-left thumb-lg"><i class="fa fa-fw fa-cloud-upload"></i></span></a>
+    </div>
+</div>
+<div class="modal-footer">
+    <footer class="panel-footer text-left bg-light lter">
+        <button class="btn btn-default" ng-click="cancel()">关闭</button>
+    </footer>
+</div>
